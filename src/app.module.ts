@@ -17,6 +17,8 @@ import { CategoriasModule } from './categorias/categorias.module';
 import { MovimientosModule } from './movimientos/movimientos.module';
 import { ProveedoresModule } from './proveedores/proveedores.module';
 import { StockModule } from './stock/stock.module';
+import { ServiciosModule } from './servicios/servicios.module';
+import { CalificacionesModule } from './calificaciones/calificaciones.module';
 import { User } from './users/entities/user.entity';
 import { Role } from './roles/entities/role.entity';
 import { Pet } from './pets/entities/pet.entity';
@@ -30,6 +32,8 @@ import { Producto } from './productos/entities/producto.entity';
 import { Categoria } from './categorias/entities/categoria.entity';
 import { MovimientoInventario } from './movimientos/entities/movimiento-inventario.entity';
 import { Proveedor } from './proveedores/entities/proveedor.entity';
+import { Servicio } from './servicios/entities/servicio.entity';
+import { Calificacion } from './calificaciones/entities/calificacion.entity';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 @Module({
@@ -44,7 +48,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [User, Role, Pet, Veterinaria, Cita, PerfilVeterinario, Emergencia, HistorialCita, Adopcion, Producto, Categoria, MovimientoInventario, Proveedor],
+      entities: [User, Role, Pet, Veterinaria, Cita, PerfilVeterinario, Emergencia, HistorialCita, Adopcion, Producto, Categoria, MovimientoInventario, Proveedor, Servicio, Calificacion],
       synchronize: true,
     }),
     AuthModule,
@@ -62,6 +66,8 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     MovimientosModule,
     ProveedoresModule,
     StockModule,
+    ServiciosModule,
+    CalificacionesModule,
   ],
   providers: [
     {
