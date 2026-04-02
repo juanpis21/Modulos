@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Clinic Pet - Dashboard Veterinario</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+		rel="stylesheet">
+	<link rel="stylesheet" href="CSS/Css-Veterinario.css">
+</head>
+
+<body>
+	<nav class="sidebar">
+		<div class="user-profile">
+			<img src="IMG/veterinario1.png" alt="Dr. Pérez">
+			<div>
+				<h5>Dr. Pérez</h5>
+				<small>Veterinario</small>
+			</div>
+			<button class="btn-close-menu"><i class="fas fa-times"></i></button>
+		</div>
+		<ul class="menu-items">
+			<li><a href="#inicio" class="active"><i class="fas fa-home"></i> <span>Inicio</span></a></li>
+			<li><a href="#agenda"><i class="fas fa-calendar-alt"></i> <span>Agenda</span></a></li>
+			<li><a href="#historias"><i class="fas fa-paw"></i> <span>Historias Clínicas</span></a></li>
+			<li><a href="#tratamientos"><i class="fas fa-pills"></i> <span>Tratamientos</span></a></li>
+			<li><a href="#adopciones"><i class="fas fa-heart"></i> <span>Adopciones</span></a></li>
+			<li><a href="#petshop"><i class="fas fa-shopping-bag"></i> <span>Pet Shop</span></a></li>
+			<li><a href="#reportes"><i class="fas fa-chart-bar"></i> <span>Reportes</span></a></li>
+			<li><a href="#configuracion"><i class="fas fa-cog"></i> <span>Configuración</span></a></li>
+		</ul>
+	</nav>
+	<main class="main-content">
+		<header class="top-bar">
+			<button class="btn btn-menu"><i class="fas fa-bars"></i></button>
+			<div class="search-bar">
+				<input type="text" placeholder="Buscar...">
+				<i class="fas fa-search"></i>
+			</div>
+			<div class="user-actions">
+				<div class="notifications">
+					<i class="fas fa-bell"></i>
+					<span class="badge">3</span>
+				</div>
+				<div class="user-dropdown">
+					<img src="IMG/veterinario1.png" alt="Usuario">
+					<span>Dr. Pérez</span>
+				</div>
+			</div>
+		</header>
+		<div class="content-sections">
+			<section id="inicio" class="content-section active">
+				<div class="welcome-section">
+					<h1>Hola, <span class="vet-name">Dr. Pérez</span> 👋</h1>
+					<p class="welcome-message">Bienvenido a tu panel de control. Aquí puedes gestionar todas las
+						actividades de la clínica.</p>
+
+					<div class="summary-cards">
+						<div class="card card-summary bg-primary">
+							<i class="fas fa-calendar-day"></i>
+							<h3>5</h3>
+							<p>Citas hoy</p>
+							<a href="#agenda">Ver agenda <i class="fas fa-arrow-right"></i></a>
+						</div>
+						<div class="card card-summary bg-success">
+							<i class="fas fa-paw"></i>
+							<h3>42</h3>
+							<p>Mascotas este mes</p>
+							<a href="#historias">Ver historias <i class="fas fa-arrow-right"></i></a>
+						</div>
+						<div class="card card-summary bg-warning">
+							<i class="fas fa-heart"></i>
+							<h3>8</h3>
+							<p>Adopciones</p>
+							<a href="#adopciones">Ver seguimientos <i class="fas fa-arrow-right"></i></a>
+						</div>
+						<div class="card card-summary bg-info">
+							<i class="fas fa-shopping-bag"></i>
+							<h3>15</h3>
+							<p>Productos</p>
+							<a href="#petshop">Ver tienda <i class="fas fa-arrow-right"></i></a>
+						</div>
+					</div>
+
+					<div class="quick-actions">
+						<h3>Acciones rápidas</h3>
+						<div class="actions-grid">
+							<button class="btn-action" onclick="openModal('new-appointment')">
+								<i class="fas fa-plus-circle"></i>
+								<span>Nueva cita</span>
+							</button>
+							<button class="btn-action" onclick="openModal('new-treatment')">
+								<i class="fas fa-file-medical"></i>
+								<span>Registrar tratamiento</span>
+							</button>
+							<button class="btn-action" onclick="openModal('new-product')">
+								<i class="fas fa-box-open"></i>
+								<span>Agregar producto</span>
+							</button>
+							<button class="btn-action" onclick="openModal('new-pet')">
+								<i class="fas fa-dog"></i>
+								<span>Registrar mascota</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section id="agenda" class="content-section">
+				<div class="section-header">
+					<h2><i class="fas fa-calendar-alt"></i> Agenda de Citas</h2>
+					<button class="btn btn-primary" onclick="openModal('new-appointment')">
+						<i class="fas fa-plus"></i> Nueva cita
+					</button>
+				</div>
+				<div class="filters">
+					<button class="btn btn-filter active" data-filter="all">Todas</button>
+					<button class="btn btn-filter" data-filter="pending">Pendientes</button>
+					<button class="btn btn-filter" data-filter="in-progress">En curso</button>
+					<button class="btn btn-filter" data-filter="completed">Finalizadas</button>
+					<button class="btn btn-filter" data-filter="canceled">Canceladas</button>
+				</div>
+
+				<div class="table-responsive">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th>Hora</th>
+								<th>Mascota</th>
+								<th>Dueño</th>
+								<th>Motivo</th>
+								<th>Estado</th>
+								<th>Acciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr data-status="pending">
+								<td>09:00 AM</td>
+								<td class="pet-cell">
+									<img src="IMG/golden.jpg" alt="Max">
+									<div>
+										<strong>Max</strong>
+										<small>Golden Retriever, 3 años</small>
+									</div>
+								</td>
+								<td>Ana López</td>
+								<td>Control anual</td>
+								<td><span class="badge bg-warning">Pendiente</span></td>
+								<td>
+									<button class="btn btn-sm btn-primary"
+										onclick="startAppointment(1)">Iniciar</button>
+									<button class="btn btn-sm btn-danger">Cancelar</button>
+								</td>
+							</tr>
+							<tr data-status="in-progress">
+								<td>10:30 AM</td>
+								<td class="pet-cell">
+									<img src="IMG/gata.jpg" alt="Luna">
+									<div>
+										<strong>Luna</strong>
+										<small>Siamesa, 2 años</small>
+									</div>
+								</td>
+								<td>Carlos Ruiz</td>
+								<td>Vacunación</td>
+								<td><span class="badge bg-info">En curso</span></td>
+								<td>
+									<button class="btn btn-sm btn-success"
+										onclick="completeAppointment(2)">Finalizar</button>
+									<button class="btn btn-sm btn-secondary">Posponer</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</section>
+			<section id="historias" class="content-section">
+				<div class="section-header">
+					<h2><i class="fas fa-paw"></i> Historias Clínicas</h2>
+					<div class="search-container">
+						<input type="text" placeholder="Buscar mascota..." class="search-input">
+						<button class="btn btn-primary"><i class="fas fa-search"></i></button>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-4">
+						<div class="pet-list-container">
+							<div class="pet-list-header">
+								<h4>Mascotas atendidas</h4>
+								<span class="badge bg-primary">42</span>
+							</div>
+							<div class="pet-list">
+								<div class="pet-item active" data-pet-id="1">
+									<img src="IMG/golden.jpg" alt="Max">
+									<div>
+										<h5>Max</h5>
+										<small>Golden Retriever · 3 años</small>
+										<small>Dueño: Ana López</small>
+									</div>
+									<i class="fas fa-chevron-right"></i>
+								</div>
+								<div class="pet-item" data-pet-id="2">
+									<img src="IMG/gata.jpg" alt="Luna">
+									<div>
+										<h5>Luna</h5>
+										<small>Siamesa · 2 años</small>
+										<small>Dueño: Carlos Ruiz</small>
+									</div>
+									<i class="fas fa-chevron-right"></i>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-8">
+						<div class="medical-history-container">
+							<div class="pet-profile-header">
+								<img src="IMG/golden.jpg" alt="Max">
+								<div>
+									<h3>Max</h3>
+									<p>Golden Retriever · Macho · 3 años</p>
+									<p>Dueño: Ana López · Tel: 555-1234</p>
+								</div>
+							</div>
+							<div class="medical-tabs">
+								<button class="tab-btn active" data-tab="general">Datos Generales</button>
+								<button class="tab-btn" data-tab="history">Historial</button>
+								<button class="tab-btn" data-tab="treatments">Tratamientos</button>
+								<button class="tab-btn" data-tab="vaccines">Vacunas</button>
+							</div>
+
+							<div class="tab-content active" id="general-tab">
+								<div class="row">
+									<div class="col-md-6">
+										<div class="info-card">
+											<h5>Información Básica</h5>
+											<ul>
+												<li><strong>Especie:</strong> Canino</li>
+												<li><strong>Raza:</strong> Golden Retriever</li>
+												<li><strong>Edad:</strong> 3 años</li>
+												<li><strong>Peso:</strong> 28 kg</li>
+												<li><strong>Color:</strong> Dorado</li>
+											</ul>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="info-card">
+											<h5>Datos del Dueño</h5>
+											<ul>
+												<li><strong>Nombre:</strong> Ana López</li>
+												<li><strong>Teléfono:</strong> 555-1234</li>
+												<li><strong>Email:</strong> ana.lopez@example.com</li>
+												<li><strong>Dirección:</strong> Calle Principal 123</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="info-card">
+									<h5>Notas Importantes</h5>
+									<p>Alergia a la penicilina. Requiere dieta especial por problemas digestivos.</p>
+								</div>
+							</div>
+
+							<div class="tab-content" id="history-tab">
+								<div class="timeline">
+									<div class="timeline-item">
+										<div class="timeline-date">15 Mar 2023</div>
+										<div class="timeline-content">
+											<h5>Control anual</h5>
+											<p>Examen físico completo. Todo normal. Peso estable.</p>
+											<div class="timeline-actions">
+												<button class="btn btn-sm btn-outline-primary">Ver detalles</button>
+											</div>
+										</div>
+									</div>
+									<div class="timeline-item">
+										<div class="timeline-date">10 Ene 2023</div>
+										<div class="timeline-content">
+											<h5>Problemas digestivos</h5>
+											<p>Diagnóstico: Gastritis. Tratamiento con omeprazol y dieta blanda por 5
+												días.</p>
+											<div class="timeline-actions">
+												<button class="btn btn-sm btn-outline-primary">Ver receta</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section id="tratamientos" class="content-section">
+				<div class="section-header">
+					<h2><i class="fas fa-pills"></i> Tratamientos</h2>
+					<button class="btn btn-primary" onclick="openModal('new-treatment')">
+						<i class="fas fa-plus"></i> Nuevo tratamiento
+					</button>
+				</div>
+				<div class="treatment-filters">
+					<div class="row">
+						<div class="col-md-3">
+							<label>Filtrar por mascota</label>
+							<select class="form-select">
+								<option>Todas las mascotas</option>
+								<option>Max (Golden Retriever)</option>
+								<option>Luna (Siamesa)</option>
+							</select>
+						</div>
+						<div class="col-md-3">
+							<label>Filtrar por estado</label>
+							<select class="form-select">
+								<option>Todos los estados</option>
+								<option>En curso</option>
+								<option>Completado</option>
+								<option>Interrumpido</option>
+							</select>
+						</div>
+						<div class="col-md-3">
+							<label>Fecha inicio</label>
+							<input type="date" class="form-control">
+						</div>
+						<div class="col-md-3">
+							<label>Fecha fin</label>
+							<input type="date" class="form-control">
+						</div>
+					</div>
+				</div>
+
+				<div class="treatment-list">
+					<div class="treatment-card">
+						<div class="treatment-header">
+							<div class="pet-info">
+								<img src="IMG/golden.jpg" alt="Max">
+								<div>
+									<h5>Max</h5>
+									<small>Golden Retriever · Ana López</small>
+								</div>
+							</div>
+							<span class="badge bg-info">En curso</span>
+						</div>
+						<div class="treatment-body">
+							<h5>Tratamiento para gastritis</h5>
+							<p><strong>Diagnóstico:</strong> Gastritis crónica leve</p>
+							<p><strong>Medicación:</strong> Omeprazol 20mg (1/2 tableta cada 24h), Probiótico Vet</p>
+							<p><strong>Duración:</strong> 15/03/2023 - 30/03/2023</p>
+						</div>
+						<div class="treatment-footer">
+							<button class="btn btn-sm btn-primary">Ver detalles</button>
+							<button class="btn btn-sm btn-success">Marcar como completado</button>
+							<button class="btn btn-sm btn-outline-secondary">Editar</button>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section id="adopciones" class="content-section">
+				<div class="section-header">
+					<h2><i class="fas fa-heart"></i> Seguimiento de Adopciones</h2>
+					<button class="btn btn-primary" onclick="openModal('new-adoption')">
+						<i class="fas fa-plus"></i> Registrar adopción
+					</button>
+				</div>
+				<div class="adoption-filters">
+					<button class="btn btn-filter active">Todas</button>
+					<button class="btn btn-filter">Primer control</button>
+					<button class="btn btn-filter">Control mensual</button>
+					<button class="btn btn-filter">Finalizadas</button>
+				</div>
+
+				<div class="adoption-list">
+					<div class="adoption-card">
+						<div class="adoption-header">
+							<div class="pet-info">
+								<img src="IMG/rocky.jpg" alt="Rocky">
+								<div>
+									<h5>Rocky</h5>
+									<small>Mezcla · 1 año</small>
+								</div>
+							</div>
+							<span class="badge bg-warning">Primer control pendiente</span>
+						</div>
+						<div class="adoption-body">
+							<div class="row">
+								<div class="col-md-6">
+									<h6>Información de adopción</h6>
+									<p><strong>Fecha:</strong> 10/03/2023</p>
+									<p><strong>Adoptante:</strong> María González</p>
+									<p><strong>Teléfono:</strong> 555-5678</p>
+								</div>
+								<div class="col-md-6">
+									<h6>Seguimiento</h6>
+									<p><strong>Próximo control:</strong> 25/03/2023</p>
+									<p><strong>Estado:</strong> Primer control</p>
+									<p><strong>Notas:</strong> Requiere seguimiento especial por ansiedad</p>
+								</div>
+							</div>
+						</div>
+						<div class="adoption-footer">
+							<button class="btn btn-sm btn-primary">Agendar control</button>
+							<button class="btn btn-sm btn-success">Registrar visita</button>
+							<button class="btn btn-sm btn-outline-secondary">Ver historial</button>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section id="petshop" class="content-section">
+				<div class="section-header">
+					<h2><i class="fas fa-shopping-bag"></i> Pet Shop</h2>
+					<button class="btn btn-primary" onclick="openModal('new-product')">
+						<i class="fas fa-plus"></i> Agregar producto
+					</button>
+				</div>
+				<div class="product-filters">
+					<div class="row">
+						<div class="col-md-3">
+							<label>Categoría</label>
+							<select class="form-select">
+								<option>Todas las categorías</option>
+								<option>Alimentos</option>
+								<option>Medicamentos</option>
+								<option>Juguetes</option>
+								<option>Accesorios</option>
+							</select>
+						</div>
+						<div class="col-md-3">
+							<label>Estado</label>
+							<select class="form-select">
+								<option>Todos</option>
+								<option>Disponible</option>
+								<option>Agotado</option>
+								<option>Destacado</option>
+							</select>
+						</div>
+						<div class="col-md-6">
+							<label>Buscar</label>
+							<div class="input-group">
+								<input type="text" class="form-control" placeholder="Nombre del producto...">
+								<button class="btn btn-primary"><i class="fas fa-search"></i></button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="product-grid">
+					<div class="product-card">
+						<div class="product-badge featured">Destacado</div>
+						<div class="product-image">
+							<img src="IMG/alimentoP.jpg" alt="Alimento para perros">
+							<div class="product-actions">
+								<button class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></button>
+								<button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+							</div>
+						</div>
+						<div class="product-info">
+							<h5>Alimento Premium para Perros</h5>
+							<p class="product-description">Alimento balanceado para perros adultos de razas grandes.</p>
+							<div class="product-meta">
+								<span class="price">$25.99</span>
+								<span class="stock"><i class="fas fa-box"></i> 15 unidades</span>
+							</div>
+							<button class="btn btn-sm btn-success btn-block">Actualizar stock</button>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section id="reportes" class="content-section">
+				<div class="section-header">
+					<h2><i class="fas fa-chart-bar"></i> Reportes y Estadísticas</h2>
+					<div class="report-actions">
+						<button class="btn btn-primary">
+							<i class="fas fa-file-pdf"></i> Exportar PDF
+						</button>
+						<button class="btn btn-success">
+							<i class="fas fa-file-excel"></i> Exportar Excel
+						</button>
+					</div>
+				</div>
+				<div class="report-tabs">
+					<button class="tab-btn active" data-tab="general">General</button>
+					<button class="tab-btn" data-tab="clinical">Clínico</button>
+					<button class="tab-btn" data-tab="sales">Ventas</button>
+					<button class="tab-btn" data-tab="adoptions">Adopciones</button>
+				</div>
+				<div class="tab-content active" id="general-report">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="chart-container">
+								<h5>Citas por mes</h5>
+								<div class="chart-placeholder" id="appointments-chart"></div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="chart-container">
+								<h5>Tipos de consulta</h5>
+								<div class="chart-placeholder" id="consultations-chart"></div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="stats-card">
+								<h5>Estadísticas rápidas</h5>
+								<div class="stats-grid">
+									<div class="stat-item">
+										<i class="fas fa-paw"></i>
+										<div>
+											<h3>42</h3>
+											<small>Mascotas atendidas</small>
+										</div>
+									</div>
+									<div class="stat-item">
+										<i class="fas fa-calendar-check"></i>
+										<div>
+											<h3>86%</h3>
+											<small>Citas completadas</small>
+										</div>
+									</div>
+									<div class="stat-item">
+										<i class="fas fa-shopping-bag"></i>
+										<div>
+											<h3>$1,250</h3>
+											<small>Ventas mensuales</small>
+										</div>
+									</div>
+									<div class="stat-item">
+										<i class="fas fa-heart"></i>
+										<div>
+											<h3>8</h3>
+											<small>Adopciones</small>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="chart-container">
+								<h5>Ventas por categoría</h5>
+								<div class="chart-placeholder" id="sales-chart"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section id="configuracion" class="content-section">
+				<div class="section-header">
+					<h2><i class="fas fa-cog"></i> Configuración</h2>
+				</div>
+				<div class="settings-tabs">
+					<button class="tab-btn active" data-tab="profile">Perfil</button>
+					<button class="tab-btn" data-tab="account">Cuenta</button>
+					<button class="tab-btn" data-tab="notifications">Notificaciones</button>
+					<button class="tab-btn" data-tab="schedule">Horario</button>
+				</div>
+
+				<div class="tab-content active" id="profile-tab">
+					<div class="settings-card">
+						<h5>Información personal</h5>
+						<form>
+							<div class="row">
+								<div class="col-md-6">
+									<div class="mb-3">
+										<label class="form-label">Nombre</label>
+										<input type="text" class="form-control" value="Dr. Juan Pérez">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="mb-3">
+										<label class="form-label">Especialidad</label>
+										<input type="text" class="form-control" value="Cirugía veterinaria">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<div class="mb-3">
+										<label class="form-label">Email</label>
+										<input type="email" class="form-control" value="dr.perez@clinicpet.com">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="mb-3">
+										<label class="form-label">Teléfono</label>
+										<input type="tel" class="form-control" value="+1 555-1234">
+									</div>
+								</div>
+							</div>
+							<div class="mb-3">
+								<label class="form-label">Foto de perfil</label>
+								<div class="profile-picture-upload">
+									<img src="IMG/veterinario1.png" alt="Foto de perfil">
+									<div>
+										<button class="btn btn-sm btn-primary">Cambiar foto</button>
+										<small>Formatos: JPG, PNG (Max. 2MB)</small>
+									</div>
+								</div>
+							</div>
+							<button type="submit" class="btn btn-primary">Guardar cambios</button>
+						</form>
+					</div>
+				</div>
+				<div class="tab-content" id="account-tab">
+					<div class="settings-card">
+						<h5>Seguridad de la cuenta</h5>
+						<form>
+							<div class="mb-3">
+								<label class="form-label">Contraseña actual</label>
+								<input type="password" class="form-control">
+							</div>
+							<div class="mb-3">
+								<label class="form-label">Nueva contraseña</label>
+								<input type="password" class="form-control">
+							</div>
+							<div class="mb-3">
+								<label class="form-label">Confirmar nueva contraseña</label>
+								<input type="password" class="form-control">
+							</div>
+							<button type="submit" class="btn btn-primary">Cambiar contraseña</button>
+						</form>
+					</div>
+				</div>
+			</section>
+		</div>
+	</main>
+	<div class="modal-overlay" id="modal-overlay"></div>
+	<div class="modal" id="new-appointment-modal">
+		<div class="modal-header">
+			<h3><i class="fas fa-calendar-plus"></i> Nueva Cita</h3>
+			<button class="btn-close-modal" onclick="closeModal()"><i class="fas fa-times"></i></button>
+		</div>
+		<div class="modal-body">
+			<form>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="mb-3">
+							<label class="form-label">Mascota</label>
+							<select class="form-select">
+								<option>Seleccionar mascota...</option>
+								<option>Max (Golden Retriever) - Ana López</option>
+								<option>Luna (Siamesa) - Carlos Ruiz</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="mb-3">
+							<label class="form-label">Fecha</label>
+							<input type="date" class="form-control">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="mb-3">
+							<label class="form-label">Hora</label>
+							<input type="time" class="form-control">
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="mb-3">
+							<label class="form-label">Duración</label>
+							<select class="form-select">
+								<option>30 minutos</option>
+								<option>1 hora</option>
+								<option>1.5 horas</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="mb-3">
+					<label class="form-label">Motivo</label>
+					<textarea class="form-control" rows="3"></textarea>
+				</div>
+				<div class="mb-3">
+					<label class="form-label">Notas adicionales</label>
+					<textarea class="form-control" rows="2"></textarea>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+					<button type="submit" class="btn btn-primary">Agendar cita</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script src="JS/Scrip-Veterinario.js"></script>
+</body>
+
+</html>

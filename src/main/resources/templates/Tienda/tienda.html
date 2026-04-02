@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>PetShop - Tienda para Mascotas</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+	<!-- Bootstrap CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<!-- Bootstrap Icons -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+	<link
+		href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Fredoka:wght@300..700&display=swap"
+		rel="stylesheet">
+	<link
+		href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Fredoka:wght@300..700&display=swap"
+		rel="stylesheet">
+	<link rel="stylesheet" th:href="@{/assets/CSS/Estilos-Tienda.css}">
+	<link rel="stylesheet" th:href="@{/assets/CSS/Estilos-Tienda-Store.css}">
+	<link rel="icon" th:href="@{/assets/IMG/logo.png}" type="image/png">
+
+</head>
+
+<body>
+
+	<!-- Navbar -->
+	<nav class="navbar">
+		<div class="navbar-container">
+			<!-- Logo y nombre -->
+			<div class="brand-section">
+				<div class="logo">
+					<img th:src="@{/assets/IMG/logo.png}" alt="logo" class="logo">
+				</div>
+				<a th:href="@{/usuarios/inicio}" style="text-decoration: none; "><span
+						class="brand-name">HelpYourPet</span></a>
+			</div>
+
+			<div class="d-flex align-items-center">
+
+				<!-- Botones principales -->
+				<div class="botones-finales">
+					<div class="nav-buttons">
+						<button class="nav-buttone">
+							<a th:href="@{/adopciones}" style="text-decoration: none;"> <i class="fas fa-dog"></i>
+								<span>Adopciones</span></a>
+						</button>
+
+
+
+						<!-- Toggle Modo Oscuro/Claro -->
+						<div class="theme-toggle-container">
+							<input type="checkbox" id="themeToggle" class="theme-toggle-checkbox">
+							<label for="themeToggle" class="theme-toggle-label">
+								<div class="toggle-circle">
+									<i class="bi bi-moon-stars-fill toggle-icon moon-icon"></i>
+									<i class="bi bi-sun-fill toggle-icon sun-icon"></i>
+								</div>
+							</label>
+						</div>
+
+						<!-- Carrito en navbar -->
+						<button class="cart-nav-button" id="openCart">
+							<i class="fas fa-shopping-cart"></i>
+							<span class="cart-badge" id="cartBadge">0</span>
+						</button>
+						<!-- Modal Emergencias -->
+						<div id="modalemergencias" class="modal" style="display:none;">
+							<div class="modal-content">
+								<div class="modal-header">
+									<span class="close" onclick="cerrarModal()">&times;</span>
+									<h2>Emergencias Veterinarias</h2>
+								</div>
+								<div class="modal-body">
+									<div class="Emergencia">
+										<h3>Consulta Virtual</h3>
+										<div class="text-button-group">
+											<h4>Videollamada directa con profesionales especializados</h4>
+											<div class="button-container">
+												<button class="contactarse" onclick="redirigirVideollamada()">
+													videollamada <i class="fas fa-chalkboard"></i>
+												</button>
+											</div>
+										</div>
+									</div>
+									<div class="Emergencia">
+										<h3>Respuesta Inmediata</h3>
+										<div class="text-button-group">
+											<h4>Nuestro veterinario de guardia responderá en menos de 5 minutos</h4>
+											<div class="button-container">
+												<button class="whatsapp" onclick="redirigirWhatsApp()">
+													whatsapp <i class="fab fa-whatsapp"></i>
+												</button>
+											</div>
+										</div>
+									</div>
+
+									<div class="Emergencia">
+										<h3>Primeros Auxilios</h3>
+										<div class="text-button-group">
+											<h4>Instrucciones paso a paso mientras esperas</h4>
+											<div class="button-container">
+												<button class="whatsapp" onclick="redirigirWhatsApp2()">
+													whatsapp <i class="fab fa-whatsapp"></i>
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Menú Hamburguesa -->
+				<div class="hamburger-menu">
+					<button class="hamburger-btn">
+						<i class="fas fa-bars"></i>
+					</button>
+					<div class="menu-content">
+						<div class="menu-item">
+							<a th:href="@{/usuarios/perfilusuario}" style="text-decoration: none;">
+								<i class="fas fa-user-plus"></i>
+								<span>Perfil</span>
+							</a>
+						</div>
+						<!--<div class="menu-item">
+							<a href="Reporte.html" style="text-decoration: none;">
+								<i class="fas fa-clinic-medical"></i>
+								<span>Reporte Maltrato</span>
+							</a>
+						</div>
+						<div class="menu-item">
+							<a href="Calificaciones.html" style="text-decoration: none;">
+								<i class="fas fa-star"></i>
+								<span>Calificaciones</span>
+							</a>
+						</div>-->
+						<div class="menu-item">
+							<a th:href="@{/usuarios/sobrenosotros}" style="text-decoration: none;"> <i
+									class="fas fa-users"></i>
+								<span>Acerca de Nosotros</span></a>
+						</div>
+						<div class="menu-item">
+							<a th:href="@{/usuarios/index}" style="text-decoration: none;"> <i
+									class="fas fa-arrow-right"></i>
+								<span>Cerrar Sesión</span></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</nav>
+
+	<!-- Sección de Selección de Tienda -->
+	<section class="store-selection-section" id="storeSelection">
+		<div class="store-selection-container">
+			<div class="store-selection-header">
+				<h1 class="store-selection-title">
+					<i class="fas fa-store"></i> Selecciona tu Tienda Preferida
+				</h1>
+				<p class="store-selection-subtitle">Elige la tienda más cercana para ver sus productos disponibles</p>
+			</div>
+			<div class="stores-grid" id="storesGrid">
+				<!-- Las tiendas se cargarán dinámicamente aquí -->
+			</div>
+		</div>
+	</section>
+
+	<!-- Botón para volver a selección de tiendas -->
+	<button class="btn-back-to-stores" id="btnBackToStores" style="display: none;" onclick="backToStoreSelection()">
+		<i class="fas fa-store"></i>
+		<span>Ver Tiendas</span>
+	</button>
+
+	<!-- Hero Section  -->
+	<div class="hero-section" id="inicio" style="display: none;">
+		<div class="hero-carousel">
+			<div class="carousel-slide active">
+				<div class="hero-content">
+					<h1 class="hero-title">¡Bienvenidos a Nuestra PetShop!</h1>
+					<p class="hero-subtitle">Tu mascota merece lo mejor, nosotros te lo ofrecemos</p>
+				</div>
+				<img th:src="@{/assets/IMG/carrusel1 (2).jpg}" alt="Perro feliz" class="img-hero">
+				<div class="hero-overlay"></div>
+			</div>
+			<div class="carousel-slide">
+				<div class="hero-content">
+					<h1 class="hero-title">Productos de Calidad </h1>
+					<p class="hero-subtitle">Encuentra todo lo que tu mascota necesita</p>
+				</div>
+				<img th:src="@{/assets/IMG/carrusel2.jpg}" alt="Gato jugando" class="img-hero">
+				<div class="hero-overlay"></div>
+			</div>
+			<div class="carousel-slide">
+				<div class="hero-content">
+					<h1 class="hero-title">Ofertas Especiales </h1>
+					<p class="hero-subtitle">Descuentos exclusivos cada semana</p>
+				</div>
+				<img th:src="@{/assets/IMG/carrusel3.jpg}" alt="Mascotas felices" class="img-hero">
+				<div class="hero-overlay"></div>
+			</div>
+		</div>
+		<div class="carousel-controls">
+			<button class="carousel-btn prev-btn" onclick="prevSlide()">
+				<i class="fas fa-chevron-left"></i>
+			</button>
+			<button class="carousel-btn next-btn" onclick="nextSlide()">
+				<i class="fas fa-chevron-right"></i>
+			</button>
+		</div>
+		<div class="carousel-indicators">
+			<span class="indicator active" onclick="goToSlide(0)"></span>
+			<span class="indicator" onclick="goToSlide(1)"></span>
+			<span class="indicator" onclick="goToSlide(2)"></span>
+		</div>
+	</div>
+
+	<!-- Sección de Beneficios -->
+	<section class="benefits-section" id="benefitsSection" style="display: none;">
+		<div class="benefits-grid">
+			<div class="benefit-card">
+				<div class="benefit-icon">
+					<i class="fas fa-shield-heart"></i>
+				</div>
+				<h3 class="benefit-title">Calidad Garantizada</h3>
+				<p>Productos certificados y seguros</p>
+			</div>
+			<div class="benefit-card">
+				<div class="benefit-icon">
+					<i class="fas fa-headset"></i>
+				</div>
+				<h3 class="benefit-title">Atención 24/7</h3>
+				<p>Siempre disponibles para ayudarte</p>
+			</div>
+			<div class="benefit-card">
+				<div class="benefit-icon">
+					<i class="fas fa-percent"></i>
+				</div>
+				<h3 class="benefit-title">Ofertas Exclusivas</h3>
+				<p>Descuentos especiales cada semana</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- Filtros Modernos -->
+	<section class="filters-section" id="filtersSection" style="display: none;">
+		<div class="filters-container">
+			<div class="filter-group">
+				<label class="filter-label">
+					<i class="fas fa-filter"></i> Categoría
+				</label>
+				<select class="filter-select" id="categoryFilter">
+					<option value="all">Todas las categorías</option>
+					<option value="food">Alimentos</option>
+					<option value="accessories">Accesorios</option>
+					<option value="medicine">Medicamentos</option>
+				</select>
+			</div>
+
+			<div class="filter-group">
+				<label class="filter-label">
+					<i class="fas fa-sort-amount-down"></i> Ordenar por
+				</label>
+				<select class="filter-select" id="sortFilter">
+					<option value="featured">Destacados</option>
+					<option value="price-low">Precio: Menor a Mayor</option>
+					<option value="price-high">Precio: Mayor a Menor</option>
+					<option value="name">Nombre A-Z</option>
+				</select>
+			</div>
+
+			<div class="filtro-group">
+				<button id="filtrar" class="btn-filtrar">
+					<i class="fas fa-search"></i> Buscar productos
+				</button>
+			</div>
+		</div>
+	</section>
+
+	<!-- Productos Destacados -->
+	<section class="featured-section" id="featuredSection" style="display: none;">
+		<div class="section-header">
+			<h2 class="section-title">🌟 Productos Destacados</h2>
+			<p class="section-subtitle">Los favoritos de nuestros clientes</p>
+		</div>
+		<div class="products-grid" id="featuredProducts"></div>
+	</section>
+
+	<!-- Todos los Productos -->
+	<section class="featured-section" id="allProductsSection" style="display: none;">
+		<div class="section-header">
+			<h2 class="section-title">🛍️ Todos Nuestros Productos</h2>
+			<p class="section-subtitle">Explora nuestro catálogo completo</p>
+		</div>
+		<div class="products-grid" id="allProducts"></div>
+	</section>
+
+	<!-- Carrito Lateral Mejorado -->
+	<div class="cart-overlay" id="cartOverlay"></div>
+	<div class="cart-sidebar" id="cartSidebar">
+		<div class="cart-header">
+			<h2><i class="fas fa-shopping-bag"></i> Mi Carrito</h2>
+			<button class="close-cart" id="closeCart">
+				<i class="fas fa-times"></i>
+			</button>
+		</div>
+		<div class="cart-items" id="cartItems">
+			<div class="empty-cart-message">
+				<div class="empty-cart-icon">
+					<i class="fas fa-shopping-cart"></i>
+				</div>
+				<p>Tu carrito está vacío</p>
+				<p style="font-size: 0.9rem; color: #999;">¡Agrega productos para empezar!</p>
+			</div>
+		</div>
+		<div class="cart-footer">
+			<div class="cart-summary">
+				<div class="summary-row">
+					<span>Subtotal:</span>
+					<span id="subtotal">$0.00</span>
+				</div>
+				<div class="summary-row total">
+					<span>Total:</span>
+					<span id="total">$0.00</span>
+				</div>
+			</div>
+			<button class="checkout-btn" id="checkoutBtn">
+				<i class="fas fa-credit-card"></i> Proceder al Pago
+			</button>
+		</div>
+	</div>
+	<!-- Footer -->
+	<footer class="footer">
+		<div class="footer-container">
+			<div class="footer-top">
+				<div class="footer-logo">
+					<img th:src="@{/assets/IMG/logofotter.png}" alt="logo" style="height: 90px;">
+					<div class="footer-brand" style="font-family: 'fira sans'; font-size: 1.8rem; margin-top: 10px;">
+						HelpYourPet</div>
+				</div>
+
+				<div class="footer-about" style="max-width: 400px;">
+					<p style="font-style: italic; opacity: 0.8;">"Simplifica tu trabajo, mejora su salud"</p>
+					<p>Nuestra plataforma digital está diseñada para optimizar la gestión clínica.</p>
+					<!--<div class="social-links" style="margin-top: 20px;">
+						<a href="#"><i class="fab fa-facebook-f"></i></a>
+						<a href="#"><i class="fab fa-instagram"></i></a>
+						<a href="#"><i class="fab fa-twitter"></i></a>
+						<a href="#"><i class="fab fa-youtube"></i></a>
+						<a href="#"><i class="fab fa-whatsapp"></i></a>
+					</div>-->
+				</div>
+
+				<div class="footer-contact">
+					<h5 style="font-size: 1.3rem; margin-bottom: 15px;">Contacto</h5>
+					<div style="display: flex; flex-direction: column; gap: 10px;">
+						<a href="#" style="color: #ccc; text-decoration: none;"><i class="fas fa-map-marker-alt"></i>
+							Duitama, Boyacá</a>
+						<a href="tel:018000457890" style="color: #ccc; text-decoration: none;"><i
+								class="fas fa-phone"></i> 018000 45 78 90</a>
+						<a href="mailto:info@clinicpet.com" style="color: #ccc; text-decoration: none;"><i
+								class="fas fa-envelope"></i> info@clinicpet.com</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="copyright">
+				<p>&copy; 2025 HelpYourPet. Todos los derechos reservados. Desarrollado en Duitama, Boyacá</p>
+			</div>
+		</div>
+	</footer>
+</body>
+
+
+<script th:src="@{/assets/JS/JS-Tienda.js}"></script>
+
+</html>

@@ -1,0 +1,80 @@
+import { 
+  Controller, 
+  Get, 
+  Post, 
+  Body, 
+  Patch, 
+  Param, 
+  Delete,
+  HttpCode,
+  HttpStatus,
+  UseGuards
+} from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
+import { PetsService } from './pets.service';
+import { CreatePetDto } from './dto/create-pet.dto';
+import { UpdatePetDto } from './dto/update-pet.dto';
+import { Pet } from './entities/pet.entity';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { Public } from '../auth/decorators/public.decorator';
+
+@ApiTags('pets')
+@Controller('pets')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
+export class PetsController {
+  constructor(private readonly petsService: PetsService) {}
+
+  @Post()
+  @Public()
+  @ApiOperation({ summary: 'Crear una nueva mascota' })
+  @ApiResponse({ status: 201, description: 'Mascota creada exitosamente', type: Pet })
+  @ApiResponse({ status: 409, description: 'La mascota ya existe' })
+  create(@Body() createPetDto: CreatePetDto) {
+    return this.petsService.create(createPetDto);
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'Obtener todas las mascotas' })
+  @ApiResponse({ status: 200, description: 'Lista de mascotas', type: [Pet] })
+  findAll() {
+    return this.petsService.findAll();
+  }
+
+  @Get('owner/:ownerId')
+  @ApiOperation({ summary: 'Obtener mascotas por dueño' })
+  @ApiParam({ name: 'ownerId', description: 'ID del dueño' })
+  @ApiResponse({ status: 200, description: 'Lista de mascotas del dueño', type: [Pet] })
+  @ApiResponse({ status: 404, description: 'Dueño no encontrado' })
+  findByOwner(@Param('ownerId') ownerId: string) {
+    return this.petsService.findByOwnerId(+ownerId);
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Obtener una mascota por ID' })
+  @ApiParam({ name: 'id', description: 'ID de la mascota' })
+  @ApiResponse({ status: 200, description: 'Mascota encontrada', type: Pet })
+  @ApiResponse({ status: 404, description: 'Mascota no encontrada' })
+  findOne(@Param('id') id: string) {
+    return this.petsService.findOne(+id);
+  }
+
+  @Patch(':id')
+  @ApiOperation({ summary: 'Actualizar una mascota' })
+  @ApiParam({ name: 'id', description: 'ID de la mascota' })
+  @ApiResponse({ status: 200, description: 'Mascota actualizada', type: Pet })
+  @ApiResponse({ status: 404, description: 'Mascota no encontrada' })
+  update(@Param('id') id: string, @Body() updatePetDto: UpdatePetDto) {
+    return this.petsService.update(+id, updatePetDto);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Eliminar una mascota' })
+  @ApiParam({ name: 'id', description: 'ID de la mascota' })
+  @ApiResponse({ status: 204, description: 'Mascota eliminada' })
+  @ApiResponse({ status: 404, description: 'Mascota no encontrada' })
+  remove(@Param('id') id: string) {
+    return this.petsService.remove(+id);
+  }
+}

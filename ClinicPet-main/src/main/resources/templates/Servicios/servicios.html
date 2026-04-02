@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios Veterinarios - VetSoft Pro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="CSS/CSS-Servicios.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <!-- Logo y nombre -->
+            <div class="brand-section">
+                <div class="logo">
+                    <img src="img/logo.png" alt="logo" class="logo">
+                </div>
+                <span class="brand-name">CLINIC PET</span>
+            </div>
+
+            <!-- Buscador -->
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" id="searchInput" placeholder="Buscar en la página...">
+                <div class="search-results" id="searchResults"></div>
+            </div>
+
+            <div class="d-flex align-items-center">
+
+                <!-- Botones principales -->
+                <div class="botones-finales">
+                    <div class="nav-buttons">
+                        <button class="nav-button btn-registro">
+                            <i class="fas fa-user-plus"></i> Registrarse
+                        </button>
+                        <button class="nav-button">
+                            <i class="fas fa-dog"></i> Adopciones
+                        </button>
+                        <button class="nav-button">
+                            <i class="fas fa-ambulance"></i> Emergencias
+                        </button>
+
+                        <!-- Botón Calendario -->
+                        <div class="position-relative">
+                            <button class="btn-calendar" id="calendarButton">
+                                <i class="far fa-calendar-alt"></i>
+                            </button>
+
+                            <!-- Popup del Calendario -->
+                            <div class="calendar-popup" id="calendarPopup">
+                                <div class="calendar-header">
+                                    <h6 class="calendar-title mb-0" id="currentMonthYear">Junio 2023</h6>
+                                    <div>
+                                        <button class="btn btn-sm btn-outline-secondary" id="prevMonth"><i
+                                                class="fas fa-chevron-left"></i></button>
+                                        <button class="btn btn-sm btn-outline-secondary" id="nextMonth"><i
+                                                class="fas fa-chevron-right"></i></button>
+                                    </div>
+                                </div>
+
+                                <div class="calendar-grid mb-2">
+                                    <div class="calendar-day-header">Dom</div>
+                                    <div class="calendar-day-header">Lun</div>
+                                    <div class="calendar-day-header">Mar</div>
+                                    <div class="calendar-day-header">Mié</div>
+                                    <div class="calendar-day-header">Jue</div>
+                                    <div class="calendar-day-header">Vie</div>
+                                    <div class="calendar-day-header">Sáb</div>
+                                </div>
+
+                                <div class="calendar-grid" id="calendarDays"></div>
+
+                                <div class="d-flex justify-content-between mt-3">
+                                    <button class="btn btn-sm btn-outline-primary" id="todayBtn">Hoy</button>
+                                    <button class="btn btn-sm btn-agendar text-white" id="agendarCitaBtn">
+                                        <i class="fab fa-whatsapp me-1"></i> Agendar Cita
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Menú Hamburguesa -->
+                <div class="hamburger-menu">
+                    <button class="hamburger-btn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="menu-content">
+                        <div class="menu-item">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <span>Login</span>
+                        </div>
+                        <div class="menu-item">
+                            <i class="fas fa-globe"></i>
+                            <span>Idioma</span>
+                        </div>
+                        <div class="menu-divider"></div>
+                        <div class="menu-item">
+                            <i class="fas fa-clinic-medical"></i>
+                            <span>Servicios</span>
+                        </div>
+                        <div class="menu-item">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Pet Shop</span>
+                        </div>
+                        <div class="menu-item">
+                            <i class="fas fa-star"></i>
+                            <span>Calificaciones</span>
+                        </div>
+                        <div class="menu-item">
+                            <i class="fas fa-users"></i>
+                            <span>Acerca de Nosotros</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </nav>
+    <!-- Hero Section -->
+    <header class="hero-section">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold mb-4">NUESTROS SERVICIOS.</h1>
+            <p class="lead mb-5">Todo lo que tu mascota necesita, en un solo lugar. Conoce los servicios que ofrecemos
+                para el bienestar de tu mascota </p>
+        </div>
+    </header>
+
+    <!-- Software Features -->
+    <section id="services" class="py-5">
+        <div class="container">
+            <h2 class="text-center section-title mb-5">Funcionalidades Principales</h2>
+
+            <div class="row g-4">
+                <!-- Card 1 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card service-card bg-soft-blue">
+                        <div class="card-body p-4">
+                            <div class="service-icon">
+                                <i class="fas fa-file-medical"></i>
+                            </div>
+                            <h3 class="card-title">Historias Clínicas Digitales</h3>
+                            <p class="card-text">Gestión completa de registros médicos con:</p>
+                            <ul>
+                                <li>Historial médico completo</li>
+                                <li>Registro de vacunas</li>
+                                <li>Alergias y condiciones</li>
+                                <li>Archivos multimedia</li>
+                                <li>Acceso remoto seguro</li>
+                            </ul>
+                            <a href="#" class="btn btn-outline-primary mt-3">Saber más</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card service-card bg-soft-green">
+                        <div class="card-body p-4">
+                            <div class="service-icon">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <h3 class="card-title">Agenda Inteligente</h3>
+                            <p class="card-text">Sistema de citas avanzado con:</p>
+                            <ul>
+                                <li>Reservas online 24/7</li>
+                                <li>Recordatorios automáticos</li>
+                                <li>Calendario por veterinario</li>
+                                <li>Confirmación de citas</li>
+                                <li>Videoconsultas integradas</li>
+                            </ul>
+                            <a href="#" class="btn btn-outline-success mt-3">Saber más</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card service-card bg-soft-purple">
+                        <div class="card-body p-4">
+                            <div class="service-icon">
+                                <i class="fas fa-pills"></i>
+                            </div>
+                            <h3 class="card-title">Gestión de Farmacia</h3>
+                            <p class="card-text">Control completo de medicamentos:</p>
+                            <ul>
+                                <li>Inventario automatizado</li>
+                                <li>Alertas de caducidad</li>
+                                <li>Recetas electrónicas</li>
+                                <li>Interacción de medicamentos</li>
+                                <li>Historial de prescripciones</li>
+                            </ul>
+                            <a href="#" class="btn btn-outline-primary mt-3">Saber más</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card service-card bg-soft-orange">
+                        <div class="card-body p-4">
+                            <div class="service-icon">
+                                <i class="fas fa-cash-register"></i>
+                            </div>
+                            <h3 class="card-title">Punto de Venta</h3>
+                            <p class="card-text">Sistema de ventas completo:</p>
+                            <ul>
+                                <li>Facturación electrónica</li>
+                                <li>Control de inventario</li>
+                                <li>Múltiples métodos de pago</li>
+                                <li>Reportes de ventas</li>
+                                <li>Integración con contabilidad</li>
+                            </ul>
+                            <a href="#" class="btn btn-outline-warning mt-3">Saber más</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Medical Services -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center section-title mb-5">Servicios Médicos</h2>
+
+            <div class="row g-4">
+                <!-- Card 1 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card service-card bg-soft-red">
+                        <div class="card-body p-4">
+                            <div class="service-icon">
+                                <i class="fas fa-heartbeat"></i>
+                            </div>
+                            <h3 class="card-title">Medicina Preventiva</h3>
+                            <ul>
+                                <li>Exámenes de bienestar</li>
+                                <li>Programas de vacunación</li>
+                                <li>Control de parásitos</li>
+                                <li>Nutrición y dieta</li>
+                                <li>Chequeos geriátricos</li>
+                            </ul>
+                            <div class="price-badge">Desde $50</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card service-card bg-soft-blue">
+                        <div class="card-body p-4">
+                            <div class="service-icon">
+                                <i class="fas fa-bone"></i>
+                            </div>
+                            <h3 class="card-title">Cirugías</h3>
+                            <ul>
+                                <li>Esterilización/castración</li>
+                                <li>Cirugía dental</li>
+                                <li>Procedimientos ortopédicos</li>
+                                <li>Cirugía de tejidos blandos</li>
+                                <li>Cirugía reconstructiva</li>
+                            </ul>
+                            <div class="price-badge">Desde $120</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card service-card bg-soft-green">
+                        <div class="card-body p-4">
+                            <div class="service-icon">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <h3 class="card-title">Diagnóstico Avanzado</h3>
+                            <ul>
+                                <li>Radiografía digital</li>
+                                <li>Ecografía</li>
+                                <li>Endoscopia</li>
+                                <li>Análisis de laboratorio</li>
+                                <li>Electrocardiograma</li>
+                            </ul>
+                            <div class="price-badge">Desde $75</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card service-card bg-soft-purple">
+                        <div class="card-body p-4">
+                            <div class="service-icon">
+                                <i class="fas fa-ambulance"></i>
+                            </div>
+                            <h3 class="card-title">Urgencias 24/7</h3>
+                            <ul>
+                                <li>Atención inmediata</li>
+                                <li>Hospitalización</li>
+                                <li>Fluidoterapia</li>
+                                <li>Monitoreo constante</li>
+                                <li>Cuidados intensivos</li>
+                            </ul>
+                            <div class="price-badge">Desde $100</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Grooming Services -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center section-title mb-5">Estética y Bienestar</h2>
+
+            <div class="row g-4">
+                <!-- Card 1 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card service-card bg-soft-pink">
+                        <div class="card-body p-4">
+                            <div class="service-icon">
+                                <i class="fas fa-bath"></i>
+                            </div>
+                            <h3 class="card-title">Baño Profesional</h3>
+                            <ul>
+                                <li>Baño higiénico</li>
+                                <li>Baño medicado</li>
+                                <li>Tratamientos dermatológicos</li>
+                                <li>Secado profesional</li>
+                                <li>Control de olores</li>
+                            </ul>
+                            <div class="price-badge">Desde $30</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card service-card bg-soft-yellow">
+                        <div class="card-body p-4">
+                            <div class="service-icon">
+                                <i class="fas fa-cut"></i>
+                            </div>
+                            <h3 class="card-title">Peluquería</h3>
+                            <ul>
+                                <li>Corte por raza</li>
+                                <li>Arreglo estético</li>
+                                <li>Deslanado</li>
+                                <li>Corte sanitario</li>
+                                <li>Estilizado creativo</li>
+                            </ul>
+                            <div class="price-badge">Desde $40</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card service-card bg-soft-teal">
+                        <div class="card-body p-4">
+                            <div class="service-icon">
+                                <i class="fas fa-spa"></i>
+                            </div>
+                            <h3 class="card-title">Spa Mascotas</h3>
+                            <ul>
+                                <li>Masajes relajantes</li>
+                                <li>Aromaterapia</li>
+                                <li>Tratamientos capilares</li>
+                                <li>Terapia de relajación</li>
+                                <li>Paquetes premium</li>
+                            </ul>
+                            <div class="price-badge">Desde $50</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card service-card bg-soft-orange">
+                        <div class="card-body p-4">
+                            <div class="service-icon">
+                                <i class="fas fa-paw"></i>
+                            </div>
+                            <h3 class="card-title">Cuidados Especiales</h3>
+                            <ul>
+                                <li>Limpieza dental</li>
+                                <li>Corte de uñas</li>
+                                <li>Limpieza de oídos</li>
+                                <li>Extracción de garrapatas</li>
+                                <li>Tratamiento antipulgas</li>
+                            </ul>
+                            <div class="price-badge">Desde $25</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-logo">
+                <img src="img/logofotter.png" alt="logo">
+            </div>
+            <div class="footer-brand">CLINIC PET</div>
+            <div class="row">
+                <div class="col-lg-4 mb-5 mb-lg-0">
+                    <p class="footer-lema">"Simplifica tu trabajo, mejora su salud"</p>
+                    <p>Nuestra plataforma digital está diseñada para <br> optimizar la gestión clínica, conectando a
+                        <br>
+                        veterinarios y
+                        propietarios de mascotas a través <br> de un sistema eficiente, seguro y personalizado.
+                    </p>
+                    <div class="social-links mt-4">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-5 mb-md-0">
+                    <h5 class="footer-title">Contacto</h5>
+                    <div class="footer-links">
+                        <a href="#"><i class="fas fa-map-marker-alt me-2"></i> Duitama, Boyacá</a>
+                        <a href="tel: 01 8000 45 78 90"><i class="fas fa-phone me-2"></i> 018000 45 78 90</a>
+                        <a href="mailto:info@clinicpet.com"><i class="fas fa-envelope me-2"></i> info@clinicpet.com</a>
+                    </div>
+                </div>
+
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 CLINIC PET. Todos los derechos reservados. Desarrollado en Duitama, Boyacá</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="JS/JS-Servicios.js"></script>
+</body>
+
+</html>
