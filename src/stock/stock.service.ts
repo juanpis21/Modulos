@@ -55,7 +55,7 @@ export class StockService {
   async getReporteStockPorVeterinaria(): Promise<any[]> {
     return this.productosRepository
       .createQueryBuilder('producto')
-      .leftJoin('producto.veterinaria', 'veterinaria')
+      .leftJoin('veterinarias', 'veterinaria', 'veterinaria.id = producto.veterinariaId')
       .select('veterinaria.nombre', 'veterinaria')
       .addSelect('COUNT(producto.id)', 'totalProductos')
       .addSelect('SUM(producto.stockActual)', 'stockTotal')
