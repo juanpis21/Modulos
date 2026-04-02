@@ -5,6 +5,7 @@ import { Pet } from '../../pets/entities/pet.entity';
 import { Cita } from '../../citas/entities/cita.entity';
 import { PerfilVeterinario } from '../../perfiles-veterinarios/entities/perfil-veterinario.entity';
 import { Adopcion } from '../../adopciones/entities/adopcion.entity';
+import { HistorialCita } from '../../historial-citas/entities/historial-cita.entity';
 
 @Entity('users')
 export class User {
@@ -59,6 +60,9 @@ export class User {
 
   @OneToMany(() => Adopcion, adopcion => adopcion.adoptante)
   adopcionesRealizadas: Adopcion[];
+
+  @OneToMany(() => HistorialCita, historialCita => historialCita.usuario)
+  historialCitas: HistorialCita[];
 
   @OneToOne(() => PerfilVeterinario, perfilVeterinario => perfilVeterinario.usuario)
   perfilVeterinario: PerfilVeterinario;

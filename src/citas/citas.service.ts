@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException, Inject, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Cita } from './entities/cita.entity';
@@ -7,6 +7,7 @@ import { UpdateCitaDto } from './dto/update-cita.dto';
 import { UsersService } from '../users/users.service';
 import { PetsService } from '../pets/pets.service';
 import { RolesService } from '../roles/roles.service';
+import { HistorialCitasService } from '../historial-citas/historial-citas.service';
 
 @Injectable()
 export class CitasService {
@@ -16,6 +17,8 @@ export class CitasService {
     private usersService: UsersService,
     private petsService: PetsService,
     private rolesService: RolesService,
+    @Inject(forwardRef(() => HistorialCitasService))
+    private historialCitasService: HistorialCitasService,
   ) {}
 
   async create(createCitaDto: CreateCitaDto): Promise<Cita> {
@@ -64,7 +67,16 @@ export class CitasService {
       mascota,
     });
 
-    return this.citasRepository.save(cita);
+    const savedCita = await this.citasRepository.save(cita);
+
+    // Registrar en el historial
+    await this.historialCitasService.registrarCreacionCita(
+      savedCita.id,
+      createCitaDto.usuarioId,
+      `Se creó la cita para ${mascota.name} el ${fechaHora.toISOString()}`
+    );
+
+    return savedCita;
   }
 
   async findAll(): Promise<Cita[]> {
@@ -200,6 +212,33 @@ export class CitasService {
     // Guardar cambios
     await this.citasRepository.save(cita);
     
+    // Registrar cambios en el historial
+    const cambios = [];
+    
+    if (updateCitaDto.motivo !== undefined && updateCitaDto.motivo !== cita.motivo) {
+      cambios.push({ campo: 'motivo', anterior: cita.motivo, nuevo: updateCitaDto.motivo });
+    }
+    if (updateCitaDto.fechaHora !== undefined && updateCitaDto.fechaHora !== cita.fechaHora.toISOString()) {
+      cambios.push({ campo: 'fechaHora', anterior: cita.fechaHora.toISOString(), nuevo: updateCitaDto.fechaHora });
+    }
+    if (updateCitaDto.estado !== undefined && updateCitaDto.estado !== cita.estado) {
+      cambios.push({ campo: 'estado', anterior: cita.estado, nuevo: updateCitaDto.estado });
+    }
+    if (updateCitaDto.notas !== undefined && updateCitaDto.notas !== cita.notas) {
+      cambios.push({ campo: 'notas', anterior: cita.notas || '', nuevo: updateCitaDto.notas || '' });
+    }
+    
+    // Registrar cada cambio en el historial
+    for (const cambio of cambios) {
+      await this.historialCitasService.registrarActualizacionCita(
+        cita.id,
+        cita.usuario.id,
+        `Se actualizó el campo ${cambio.campo}: de "${cambio.anterior}" a "${cambio.nuevo}"`,
+        cambio.anterior,
+        cambio.nuevo
+      );
+    }
+    
     // Devolver la cita actualizada con relaciones desde la base de datos
     const updatedCita = await this.citasRepository.findOne({
       where: { id: cita.id },
@@ -212,6 +251,14 @@ export class CitasService {
 
   async remove(id: number): Promise<void> {
     const cita = await this.findOne(id);
+    
+    // Registrar eliminación en el historial
+    await this.historialCitasService.registrarCancelacionCita(
+      cita.id,
+      cita.usuario.id,
+      `Se eliminó la cita para ${cita.mascota.name} programada para ${cita.fechaHora.toISOString()}`
+    );
+    
     await this.citasRepository.remove(cita);
   }
 }

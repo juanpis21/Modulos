@@ -44,6 +44,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     PetsModule,
     VeterinariasModule,
     CitasModule,
+    HistorialCitasModule,
     PerfilesVeterinariosModule,
     EmergenciasModule,
     AdopcionesModule,

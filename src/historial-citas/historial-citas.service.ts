@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException, Inject, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { HistorialCita } from './entities/historial-cita.entity';
@@ -12,6 +12,7 @@ export class HistorialCitasService {
   constructor(
     @InjectRepository(HistorialCita)
     private historialCitasRepository: Repository<HistorialCita>,
+    @Inject(forwardRef(() => CitasService))
     private citasService: CitasService,
     private usersService: UsersService,
   ) {}
