@@ -6,6 +6,7 @@ import { Cita } from '../../citas/entities/cita.entity';
 import { PerfilVeterinario } from '../../perfiles-veterinarios/entities/perfil-veterinario.entity';
 import { Adopcion } from '../../adopciones/entities/adopcion.entity';
 import { HistorialCita } from '../../historial-citas/entities/historial-cita.entity';
+import { MovimientoInventario } from '../../movimientos/entities/movimiento-inventario.entity';
 
 @Entity('users')
 export class User {
@@ -63,6 +64,9 @@ export class User {
 
   @OneToMany(() => HistorialCita, historialCita => historialCita.usuario)
   historialCitas: HistorialCita[];
+
+  @OneToMany(() => MovimientoInventario, movimiento => movimiento.usuario)
+  movimientosInventario: MovimientoInventario[];
 
   @OneToOne(() => PerfilVeterinario, perfilVeterinario => perfilVeterinario.usuario)
   perfilVeterinario: PerfilVeterinario;

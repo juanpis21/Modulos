@@ -8,10 +8,15 @@ import { RolesModule } from './roles/roles.module';
 import { PetsModule } from './pets/pets.module';
 import { VeterinariasModule } from './veterinarias/veterinarias.module';
 import { CitasModule } from './citas/citas.module';
+import { HistorialCitasModule } from './historial-citas/historial-citas.module';
 import { PerfilesVeterinariosModule } from './perfiles-veterinarios/perfiles-veterinarios.module';
 import { EmergenciasModule } from './emergencias/emergencias.module';
-import { HistorialCitasModule } from './historial-citas/historial-citas.module';
 import { AdopcionesModule } from './adopciones/adopciones.module';
+import { ProductosModule } from './productos/productos.module';
+import { CategoriasModule } from './categorias/categorias.module';
+import { MovimientosModule } from './movimientos/movimientos.module';
+import { ProveedoresModule } from './proveedores/proveedores.module';
+import { StockModule } from './stock/stock.module';
 import { User } from './users/entities/user.entity';
 import { Role } from './roles/entities/role.entity';
 import { Pet } from './pets/entities/pet.entity';
@@ -21,6 +26,10 @@ import { PerfilVeterinario } from './perfiles-veterinarios/entities/perfil-veter
 import { Emergencia } from './emergencias/entities/emergencia.entity';
 import { HistorialCita } from './historial-citas/entities/historial-cita.entity';
 import { Adopcion } from './adopciones/entities/adopcion.entity';
+import { Producto } from './productos/entities/producto.entity';
+import { Categoria } from './categorias/entities/categoria.entity';
+import { MovimientoInventario } from './movimientos/entities/movimiento-inventario.entity';
+import { Proveedor } from './proveedores/entities/proveedor.entity';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 @Module({
@@ -35,7 +44,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [User, Role, Pet, Veterinaria, Cita, PerfilVeterinario, Emergencia, HistorialCita, Adopcion],
+      entities: [User, Role, Pet, Veterinaria, Cita, PerfilVeterinario, Emergencia, HistorialCita, Adopcion, Producto, Categoria, MovimientoInventario, Proveedor],
       synchronize: true,
     }),
     AuthModule,
@@ -48,6 +57,11 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     PerfilesVeterinariosModule,
     EmergenciasModule,
     AdopcionesModule,
+    ProductosModule,
+    CategoriasModule,
+    MovimientosModule,
+    ProveedoresModule,
+    StockModule,
   ],
   providers: [
     {

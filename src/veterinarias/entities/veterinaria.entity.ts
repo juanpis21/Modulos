@@ -1,9 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany, OneToOne } from 'typeorm';
 import { Pet } from '../../pets/entities/pet.entity';
 import { PerfilVeterinario } from '../../perfiles-veterinarios/entities/perfil-veterinario.entity';
 import { Emergencia } from '../../emergencias/entities/emergencia.entity';
 import { Adopcion } from '../../adopciones/entities/adopcion.entity';
+import { Producto } from '../../productos/entities/producto.entity';
 
 @Entity('veterinarias')
 export class Veterinaria {
@@ -61,6 +62,13 @@ export class Veterinaria {
 
   @OneToMany(() => Adopcion, adopcion => adopcion.veterinaria)
   adopciones: Adopcion[];
+
+  @ApiProperty({ 
+    description: 'Productos del inventario de esta veterinaria', 
+    type: () => [Producto] 
+  })
+  @OneToMany(() => Producto, producto => producto.veterinaria)
+  productos: Producto[];
 
   @ApiProperty({ 
     description: 'RUT de la veterinaria', 
