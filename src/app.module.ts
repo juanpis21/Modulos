@@ -37,6 +37,9 @@ import { Servicio } from './servicios/entities/servicio.entity';
 import { Calificacion } from './calificaciones/entities/calificacion.entity';
 import { Carrito } from './carrito/entities/carrito.entity';
 import { CarritoProducto } from './carrito/entities/carrito-producto.entity';
+import { VentasModule } from './ventas/ventas.module';
+import { Venta } from './ventas/entities/venta.entity';
+import { DetalleVenta } from './ventas/entities/detalle-venta.entity';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 @Module({
@@ -51,7 +54,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [User, Role, Pet, Veterinaria, Cita, PerfilVeterinario, Emergencia, HistorialCita, Adopcion, Producto, Categoria, MovimientoInventario, Proveedor, Servicio, Calificacion, Carrito, CarritoProducto],
+      entities: [User, Role, Pet, Veterinaria, Cita, PerfilVeterinario, Emergencia, HistorialCita, Adopcion, Producto, Categoria, MovimientoInventario, Proveedor, Servicio, Calificacion, Carrito, CarritoProducto, Venta, DetalleVenta],
       synchronize: true,
     }),
     AuthModule,
@@ -72,6 +75,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     ServiciosModule,
     CalificacionesModule,
     CarritoModule,
+    VentasModule,
   ],
   providers: [
     {
