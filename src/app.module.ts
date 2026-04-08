@@ -46,6 +46,8 @@ import { EventosModule } from './eventos/eventos.module';
 import { Evento } from './eventos/entities/evento.entity';
 import { HistoriasClinicasModule } from './historias-clinicas/historias-clinicas.module';
 import { HistoriaClinica } from './historias-clinicas/entities/historia-clinica.entity';
+import { ReportesMaltratoModule } from './reportes-maltrato/reportes-maltrato.module';
+import { ReporteMaltrato } from './reportes-maltrato/entities/reporte-maltrato.entity';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 @Module({
@@ -60,7 +62,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [User, Role, Pet, Veterinaria, Cita, PerfilVeterinario, Emergencia, HistorialCita, Adopcion, Producto, Categoria, MovimientoInventario, Proveedor, Servicio, Calificacion, Carrito, CarritoProducto, Venta, DetalleVenta, Notificacion, Evento, HistoriaClinica],
+      entities: [User, Role, Pet, Veterinaria, Cita, PerfilVeterinario, Emergencia, HistorialCita, Adopcion, Producto, Categoria, MovimientoInventario, Proveedor, Servicio, Calificacion, Carrito, CarritoProducto, Venta, DetalleVenta, Notificacion, Evento, HistoriaClinica, ReporteMaltrato],
       synchronize: true,
     }),
     AuthModule,
@@ -85,6 +87,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     NotificacionesModule,
     EventosModule,
     HistoriasClinicasModule,
+    ReportesMaltratoModule,
   ],
   providers: [
     {
