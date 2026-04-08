@@ -16,7 +16,7 @@ export class AdopcionesService {
     private petsService: PetsService,
     private usersService: UsersService,
     private veterinariasService: VeterinariasService,
-  ) {}
+  ) { }
 
   async create(createAdopcionDto: CreateAdopcionDto): Promise<Adopcion> {
     // Verificar si la mascota existe y está disponible para adopción
@@ -25,7 +25,6 @@ export class AdopcionesService {
       throw new NotFoundException(`Mascota with ID ${createAdopcionDto.mascotaId} not found`);
     }
 
-    // Verificar si el usuario existe
     const adoptante = await this.usersService.findOne(createAdopcionDto.adoptanteId);
     if (!adoptante) {
       throw new NotFoundException(`Usuario with ID ${createAdopcionDto.adoptanteId} not found`);
@@ -39,10 +38,10 @@ export class AdopcionesService {
 
     // Verificar si ya existe una adopción activa para esta mascota
     const adopcionActiva = await this.adopcionesRepository.findOne({
-      where: { 
+      where: {
         mascota: { id: createAdopcionDto.mascotaId },
         estado: EstadoAdopcion.APROBADA,
-        isActive: true 
+        isActive: true
       }
     });
 
@@ -61,7 +60,7 @@ export class AdopcionesService {
   }
 
   async findAll(): Promise<Adopcion[]> {
-    return this.adopcionesRepository.find({ 
+    return this.adopcionesRepository.find({
       relations: ['mascota', 'adoptante', 'veterinaria'],
       order: { fechaSolicitud: 'DESC' }
     });

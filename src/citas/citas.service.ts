@@ -19,35 +19,30 @@ export class CitasService {
     private rolesService: RolesService,
     @Inject(forwardRef(() => HistorialCitasService))
     private historialCitasService: HistorialCitasService,
-  ) {}
+  ) { }
 
   async create(createCitaDto: CreateCitaDto): Promise<Cita> {
-    // Verificar si el usuario existe
+
     const usuario = await this.usersService.findOne(createCitaDto.usuarioId);
     if (!usuario) {
       throw new NotFoundException(`Usuario with ID ${createCitaDto.usuarioId} not found`);
     }
 
-    // Verificar si la mascota existe
     const mascota = await this.petsService.findOne(createCitaDto.mascotaId);
     if (!mascota) {
       throw new NotFoundException(`Mascota with ID ${createCitaDto.mascotaId} not found`);
     }
 
-    // Verificar si la mascota pertenece al usuario
     if (mascota.ownerId !== createCitaDto.usuarioId) {
       throw new ConflictException('La mascota no pertenece al usuario especificado');
     }
 
-    // Convertir string de fecha a Date
     const fechaHora = new Date(createCitaDto.fechaHora);
-    
-    // Verificar que la fecha sea futura
+
     if (fechaHora <= new Date()) {
       throw new ConflictException('La fecha de la cita debe ser futura');
     }
 
-    // Verificar si ya existe una cita para la misma mascota en el mismo horario
     const existingCita = await this.citasRepository.findOne({
       where: {
         mascota: { id: createCitaDto.mascotaId },
@@ -69,7 +64,6 @@ export class CitasService {
 
     const savedCita = await this.citasRepository.save(cita);
 
-    // Registrar en el historial
     await this.historialCitasService.registrarCreacionCita(
       savedCita.id,
       createCitaDto.usuarioId,
@@ -80,7 +74,7 @@ export class CitasService {
   }
 
   async findAll(): Promise<Cita[]> {
-    return this.citasRepository.find({ 
+    return this.citasRepository.find({
       relations: ['usuario', 'mascota', 'veterinario'],
       select: ['id', 'motivo', 'fechaHora', 'estado', 'notas', 'createdAt', 'updatedAt', 'usuario', 'mascota', 'veterinario']
     });
@@ -170,7 +164,7 @@ export class CitasService {
       if (!mascota) {
         throw new NotFoundException(`Mascota with ID ${updateCitaDto.mascotaId} not found`);
       }
-      
+
       // Verificar que la mascota pertenezca al usuario
       const usuarioId = updateCitaDto.usuarioId || cita.usuario.id;
       if (mascota.ownerId !== usuarioId) {
@@ -185,7 +179,7 @@ export class CitasService {
     }
     if (updateCitaDto.fechaHora !== undefined) {
       const nuevaFecha = new Date(updateCitaDto.fechaHora);
-      
+
       // Verificar que la fecha sea futura (excepto si se está cancelando)
       if (updateCitaDto.estado !== 'Cancelada' && nuevaFecha <= new Date()) {
         throw new ConflictException('La fecha de la cita debe ser futura');
@@ -211,10 +205,10 @@ export class CitasService {
 
     // Guardar cambios
     await this.citasRepository.save(cita);
-    
+
     // Registrar cambios en el historial
     const cambios = [];
-    
+
     if (updateCitaDto.motivo !== undefined && updateCitaDto.motivo !== cita.motivo) {
       cambios.push({ campo: 'motivo', anterior: cita.motivo, nuevo: updateCitaDto.motivo });
     }
@@ -227,7 +221,7 @@ export class CitasService {
     if (updateCitaDto.notas !== undefined && updateCitaDto.notas !== cita.notas) {
       cambios.push({ campo: 'notas', anterior: cita.notas || '', nuevo: updateCitaDto.notas || '' });
     }
-    
+
     // Registrar cada cambio en el historial
     for (const cambio of cambios) {
       await this.historialCitasService.registrarActualizacionCita(
@@ -238,7 +232,7 @@ export class CitasService {
         cambio.nuevo
       );
     }
-    
+
     // Devolver la cita actualizada con relaciones desde la base de datos
     const updatedCita = await this.citasRepository.findOne({
       where: { id: cita.id },
@@ -251,14 +245,14 @@ export class CitasService {
 
   async remove(id: number): Promise<void> {
     const cita = await this.findOne(id);
-    
+
     // Registrar eliminación en el historial
     await this.historialCitasService.registrarCancelacionCita(
       cita.id,
       cita.usuario.id,
       `Se eliminó la cita para ${cita.mascota.name} programada para ${cita.fechaHora.toISOString()}`
     );
-    
+
     await this.citasRepository.remove(cita);
   }
 }
