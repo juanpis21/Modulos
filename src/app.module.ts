@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
@@ -48,6 +48,9 @@ import { HistoriasClinicasModule } from './historias-clinicas/historias-clinicas
 import { HistoriaClinica } from './historias-clinicas/entities/historia-clinica.entity';
 import { ReportesMaltratoModule } from './reportes-maltrato/reportes-maltrato.module';
 import { ReporteMaltrato } from './reportes-maltrato/entities/reporte-maltrato.entity';
+import { TokenRecuperacionModule } from './token-recuperacion/token-recuperacion.module';
+import { TokenRecuperacion } from './token-recuperacion/entities/token-recuperacion.entity';
+import { MailerModule } from '@nestjs-modules/mailer';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 @Module({
@@ -62,8 +65,26 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [User, Role, Pet, Veterinaria, Cita, PerfilVeterinario, Emergencia, HistorialCita, Adopcion, Producto, Categoria, MovimientoInventario, Proveedor, Servicio, Calificacion, Carrito, CarritoProducto, Venta, DetalleVenta, Notificacion, Evento, HistoriaClinica, ReporteMaltrato],
+      entities: [User, Role, Pet, Veterinaria, Cita, PerfilVeterinario, Emergencia, HistorialCita, Adopcion, Producto, Categoria, MovimientoInventario, Proveedor, Servicio, Calificacion, Carrito, CarritoProducto, Venta, DetalleVenta, Notificacion, Evento, HistoriaClinica, ReporteMaltrato, TokenRecuperacion],
       synchronize: true,
+    }),
+    MailerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        transport: {
+          host: 'smtp.gmail.com',
+          port: 587,
+          secure: false, // true para port 465
+          auth: {
+            user: configService.get('SMTP_USER'),
+            pass: configService.get('SMTP_PASS'),
+          },
+        },
+        defaults: {
+          from: '"Soporte ClinicPet" <' + configService.get('SMTP_USER') + '>',
+        },
+      }),
     }),
     AuthModule,
     UsersModule,
@@ -88,6 +109,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     EventosModule,
     HistoriasClinicasModule,
     ReportesMaltratoModule,
+    TokenRecuperacionModule,
   ],
   providers: [
     {
