@@ -18,46 +18,6 @@ export class VentasController {
     return await this.ventasService.checkout(usuarioId, checkoutDto);
   }
 
-  @Post('checkout-test')
-  @ApiOperation({ summary: 'Endpoint de prueba: Simula un checkout exitoso con datos falsos' })
-  async checkoutTest() {
-    return {
-      "id": 999,
-      "subtotal": "250.50",
-      "total": "250.50",
-      "usuarioId": 1,
-      "fecha": new Date().toISOString(),
-      "updatedAt": new Date().toISOString(),
-      "detalles": [
-        {
-          "id": 1001,
-          "cantidad": 2,
-          "precioUnitario": "100.00",
-          "ventaId": 999,
-          "productoId": 5,
-          "producto": {
-            "id": 5,
-            "nombre": "Alimento Premium Perro (Mock)",
-            "precioVenta": "100.00",
-            "stockActual": 48
-          }
-        },
-        {
-          "id": 1002,
-          "cantidad": 1,
-          "precioUnitario": "50.50",
-          "ventaId": 999,
-          "productoId": 12,
-          "producto": {
-            "id": 12,
-            "nombre": "Collar Antipulgas (Mock)",
-            "precioVenta": "50.50",
-            "stockActual": 14
-          }
-        }
-      ]
-    };
-  }
 
   @Get('mis-compras')
   @ApiOperation({ summary: 'Obtener historial de compras del usuario' })
