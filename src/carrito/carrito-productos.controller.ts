@@ -12,6 +12,8 @@ import {
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { CarritoService } from './carrito.service';
 import { AddProductoDto } from './dto/add-producto.dto';
+import { UpdateCantidadDto } from './dto/update-cantidad.dto';
+import { CarritoProducto } from './entities/carrito-producto.entity';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('carrito-productos')
@@ -53,9 +55,15 @@ export class CarritoProductosController {
 
   @Patch('actualizar-cantidad/:productoId')
   @ApiOperation({ summary: 'Actualizar cantidad de producto' })
-  async updateCantidad(@Request() req, @Param('productoId') productoId: string, @Body() body: { cantidad: number }) {
+  @ApiResponse({ status: 200, description: 'Cantidad actualizada', type: CarritoProducto })
+  async updateCantidad(
+    @Request() req, 
+    @Param('productoId') productoId: string, 
+    @Body() updateCantidadDto: UpdateCantidadDto
+  ) {
     const usuarioId = req.user?.userId || req.user?.sub || req.user?.id;
-    return await this.carritoService.updateCantidad(usuarioId, +productoId, body.cantidad);
+    console.log(`[CARRITO] Actualizando producto ${productoId} a cantidad ${updateCantidadDto.cantidad} para usuario ${usuarioId}`);
+    return await this.carritoService.updateCantidad(usuarioId, +productoId, updateCantidadDto.cantidad);
   }
 
   @Delete('remover/:productoId')

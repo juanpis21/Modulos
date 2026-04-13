@@ -68,12 +68,4 @@ export class RolesController {
     return this.rolesService.remove(+id);
   }
 
-  @Post('initialize-defaults')
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Inicializar roles predeterminados' })
-  @ApiResponse({ status: 200, description: 'Roles predeterminados inicializados', type: [Role] })
-  @ApiResponse({ status: 409, description: 'Los roles ya existen' })
-  async initializeDefaults() {
-    return this.rolesService.initializeDefaultRoles();
-  }
 }

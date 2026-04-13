@@ -8,7 +8,8 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
-  UseGuards
+  UseGuards,
+  Request
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
 import { PetsService } from './pets.service';
@@ -26,12 +27,25 @@ export class PetsController {
   constructor(private readonly petsService: PetsService) {}
 
   @Post()
-  @Public()
   @ApiOperation({ summary: 'Crear una nueva mascota' })
   @ApiResponse({ status: 201, description: 'Mascota creada exitosamente', type: Pet })
   @ApiResponse({ status: 409, description: 'La mascota ya existe' })
-  create(@Body() createPetDto: CreatePetDto) {
-    return this.petsService.create(createPetDto);
+  async create(@Request() req, @Body() createPetDto: CreatePetDto) {
+    const { userId, roles } = req.user;
+    
+    // Si NO es admin, superadmin ni veterinario, forzamos que el dueño sea él mismo
+    const rolesAutorizados = ['admin', 'superadmin', 'veterinario'];
+    const tienePermisoEspecial = roles.some(role => rolesAutorizados.includes(role));
+    
+    if (!tienePermisoEspecial) {
+      console.log(`[SECURITY-PETS] Forzando ownerId ${userId} para el usuario ${req.user.username}`);
+      createPetDto.ownerId = userId;
+    } else if (!createPetDto.ownerId) {
+      // Si es admin pero no puso ownerId, le asignamos la mascota a él mismo por defecto
+      createPetDto.ownerId = userId;
+    }
+
+    return await this.petsService.create(createPetDto);
   }
 
   @Get()

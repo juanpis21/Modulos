@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import configuration from './config/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
@@ -52,21 +53,28 @@ import { TokenRecuperacionModule } from './token-recuperacion/token-recuperacion
 import { TokenRecuperacion } from './token-recuperacion/entities/token-recuperacion.entity';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { MonitoringModule } from './monitoring/monitoring.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
+      load: [configuration],
       isGlobal: true,
     }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_DATABASE,
-      entities: [User, Role, Pet, Veterinaria, Cita, PerfilVeterinario, Emergencia, HistorialCita, Adopcion, Producto, Categoria, MovimientoInventario, Proveedor, Servicio, Calificacion, Carrito, CarritoProducto, Venta, DetalleVenta, Notificacion, Evento, HistoriaClinica, ReporteMaltrato, TokenRecuperacion],
-      synchronize: true,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get<string>('database.host'),
+        port: configService.get<number>('database.port'),
+        username: configService.get<string>('database.username'),
+        password: configService.get<string>('database.password'),
+        database: configService.get<string>('database.database'),
+        entities: [User, Role, Pet, Veterinaria, Cita, PerfilVeterinario, Emergencia, HistorialCita, Adopcion, Producto, Categoria, MovimientoInventario, Proveedor, Servicio, Calificacion, Carrito, CarritoProducto, Venta, DetalleVenta, Notificacion, Evento, HistoriaClinica, ReporteMaltrato, TokenRecuperacion],
+        synchronize: configService.get<boolean>('database.synchronize'),
+        logging: configService.get<boolean>('database.logging'),
+      }),
     }),
     MailerModule.forRootAsync({
       imports: [ConfigModule],
@@ -77,12 +85,12 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
           port: 587,
           secure: false, // true para port 465
           auth: {
-            user: configService.get('SMTP_USER'),
-            pass: configService.get('SMTP_PASS'),
+            user: configService.get<string>('smtp.user'),
+            pass: configService.get<string>('smtp.pass'),
           },
         },
         defaults: {
-          from: '"Soporte ClinicPet" <' + configService.get('SMTP_USER') + '>',
+          from: `"Soporte ClinicPet" <${configService.get('smtp.user')}>`,
         },
       }),
     }),
@@ -110,6 +118,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     HistoriasClinicasModule,
     ReportesMaltratoModule,
     TokenRecuperacionModule,
+    MonitoringModule,
   ],
   providers: [
     {

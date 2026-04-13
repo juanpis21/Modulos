@@ -19,40 +19,52 @@ export class CalificacionesService {
   ) {}
 
   async create(usuarioId: number, createCalificacionDto: CreateCalificacionDto): Promise<Calificacion> {
-    // Verificar que el servicio existe
-    await this.serviciosService.findOne(createCalificacionDto.servicioId);
+    const { servicioId, veterinarioId } = createCalificacionDto;
 
-    // Verificar que el usuario existe
+    // 1. Verificar que el servicio existe
+    const servicio = await this.serviciosService.findOne(servicioId);
+
+    // 2. Verificar que el usuario existe
     await this.usersService.findOne(usuarioId);
 
-    // Verificar que el veterinario existe si se especifica
-    if (createCalificacionDto.veterinarioId) {
-      await this.usersService.findOne(createCalificacionDto.veterinarioId);
+    // 3. Verificar que el veterinario existe si se especifica
+    if (veterinarioId) {
+      await this.usersService.findOne(veterinarioId);
     }
 
-    // Verificar que el usuario no haya calificado ya este servicio
+    // 4. Verificar duplicados de forma robusta
+    // Usamos una búsqueda explícita por ambos IDs para evitar conflictos
     const existingCalificacion = await this.calificacionesRepository.findOne({
       where: { 
-        usuarioId, 
-        servicioId: createCalificacionDto.servicioId 
+        usuarioId: usuarioId, 
+        servicioId: servicioId 
       }
     });
 
     if (existingCalificacion) {
-      throw new ConflictException('Usuario ya ha calificado este servicio');
+      throw new ConflictException(`El usuario ${usuarioId} ya ha calificado el servicio ${servicioId}`);
     }
 
-    const calificacion = this.calificacionesRepository.create({
-      ...createCalificacionDto,
-      usuarioId
-    });
+    // 5. Crear la calificación vinculando las relaciones de forma explícita
+    console.log('[DEBUG] Datos recibidos en DTO:', JSON.stringify(createCalificacionDto));
+    console.log('[DEBUG] Puntuación recibida:', createCalificacionDto.puntuacion);
+
+    const calificacion = this.calificacionesRepository.create();
+    calificacion.puntuacion = createCalificacionDto.puntuacion;
+    calificacion.comentario = createCalificacionDto.comentario;
+    calificacion.usuarioId = usuarioId;
+    calificacion.servicioId = servicioId;
+    calificacion.veterinarioId = veterinarioId;
+    calificacion.estado = createCalificacionDto.estado || 'APROBADA';
+
+    console.log('[DEBUG] Objeto Calificacion antes de guardar:', JSON.stringify(calificacion));
 
     return this.calificacionesRepository.save(calificacion);
   }
 
   async findAll(): Promise<Calificacion[]> {
     return this.calificacionesRepository.find({
-      relations: ['usuario', 'veterinario'],
+      relations: ['usuario', 'servicio', 'veterinario'],
       where: { estado: 'APROBADA' },
       order: { fecha: 'DESC' }
     });
@@ -61,7 +73,7 @@ export class CalificacionesService {
   async findOne(id: number): Promise<Calificacion> {
     const calificacion = await this.calificacionesRepository.findOne({
       where: { id },
-      relations: ['usuario', 'veterinario']
+      relations: ['usuario', 'servicio', 'veterinario']
     });
 
     if (!calificacion) {
@@ -74,7 +86,7 @@ export class CalificacionesService {
   async findByServicio(servicioId: number): Promise<Calificacion[]> {
     return this.calificacionesRepository.find({
       where: { servicioId, estado: 'APROBADA' },
-      relations: ['usuario', 'veterinario'],
+      relations: ['usuario', 'servicio', 'veterinario'],
       order: { fecha: 'DESC' }
     });
   }
@@ -82,7 +94,7 @@ export class CalificacionesService {
   async findByUsuario(usuarioId: number): Promise<Calificacion[]> {
     return this.calificacionesRepository.find({
       where: { usuarioId },
-      relations: ['veterinario'],
+      relations: ['servicio', 'veterinario'],
       order: { fecha: 'DESC' }
     });
   }
@@ -90,14 +102,13 @@ export class CalificacionesService {
   async findByVeterinario(veterinarioId: number): Promise<Calificacion[]> {
     return this.calificacionesRepository.find({
       where: { veterinarioId, estado: 'APROBADA' },
-      relations: ['usuario'],
+      relations: ['usuario', 'servicio'],
       order: { fecha: 'DESC' }
     });
   }
 
   async update(id: number, updateCalificacionDto: UpdateCalificacionDto): Promise<Calificacion> {
     const calificacion = await this.findOne(id);
-
     Object.assign(calificacion, updateCalificacionDto);
     return this.calificacionesRepository.save(calificacion);
   }
@@ -119,11 +130,11 @@ export class CalificacionesService {
       .andWhere('calificacion.estado = :estado', { estado: 'APROBADA' })
       .getRawOne();
 
-    return result || {
-      totalCalificaciones: 0,
-      promedioCalificacion: 0,
-      calificacionesPositivas: 0,
-      calificacionesNegativas: 0
+    return {
+      totalCalificaciones: parseInt(result?.totalCalificaciones || '0'),
+      promedioCalificacion: parseFloat(result?.promedioCalificacion || '0').toFixed(2),
+      calificacionesPositivas: parseInt(result?.calificacionesPositivas || '0'),
+      calificacionesNegativas: parseInt(result?.calificacionesNegativas || '0')
     };
   }
 
@@ -136,16 +147,16 @@ export class CalificacionesService {
       .andWhere('calificacion.estado = :estado', { estado: 'APROBADA' })
       .getRawOne();
 
-    return result || {
-      totalCalificaciones: 0,
-      promedioCalificacion: 0
+    return {
+      totalCalificaciones: parseInt(result?.totalCalificaciones || '0'),
+      promedioCalificacion: parseFloat(result?.promedioCalificacion || '0').toFixed(2)
     };
   }
 
   async getCalificacionesPendientes(): Promise<Calificacion[]> {
     return this.calificacionesRepository.find({
       where: { estado: 'PENDIENTE' },
-      relations: ['usuario', 'veterinario'],
+      relations: ['usuario', 'servicio', 'veterinario'],
       order: { fecha: 'ASC' }
     });
   }

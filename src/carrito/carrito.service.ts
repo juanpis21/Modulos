@@ -110,13 +110,25 @@ export class CarritoService {
       carrito = await this.findCarritoActivo(usuarioId);
     }
 
-    // Verificar que el producto existe
+    // 1. Verificar que el producto existe
     const producto = await this.productosService.findOne(addProductoDto.productoId);
 
-    // Buscar si el producto ya está en el carrito usando query directa (más confiable)
+    // 2. Buscar si el producto ya está en el carrito
     const productoExistente = await this.carritoProductoRepository.findOne({
       where: { carritoId: carrito.id, productoId: addProductoDto.productoId }
     });
+
+    // 3. Verificar stock antes de agregar o actualizar
+    const cantidadActualEnCarrito = productoExistente ? productoExistente.cantidad : 0;
+    const nuevaCantidad = cantidadActualEnCarrito + addProductoDto.cantidad;
+    
+    if (producto.stockActual < nuevaCantidad) {
+      throw new BadRequestException(
+        `No hay suficiente stock para el producto "${producto.nombre}". ` +
+        `Stock disponible: ${producto.stockActual}, Cantidad solicitada: ${nuevaCantidad} ` +
+        `(Ya tienes ${cantidadActualEnCarrito} en el carrito)`
+      );
+    }
 
     if (productoExistente) {
       // Actualizar cantidad sumando la nueva
@@ -154,6 +166,7 @@ export class CarritoService {
   }
 
   async updateCantidad(usuarioId: number, productoId: number, cantidad: number): Promise<Carrito> {
+    console.log(`[DEBUG-SERVICE] updateCantidad llamado: usuario=${usuarioId}, producto=${productoId}, cantidad=${cantidad}`);
     if (!cantidad || cantidad < 1) {
       throw new BadRequestException('La cantidad debe ser al menos 1');
     }
@@ -165,8 +178,13 @@ export class CarritoService {
       where: { carritoId: carrito.id, productoId: productoId }
     });
 
-    if (!carritoProducto) {
-      throw new NotFoundException(`Producto con ID ${productoId} no encontrado en el carrito`);
+    // 3. Verificar stock antes de actualizar
+    const producto = await this.productosService.findOne(productoId);
+    if (producto.stockActual < cantidad) {
+      throw new BadRequestException(
+        `No hay suficiente stock para el producto "${producto.nombre}". ` +
+        `Stock disponible: ${producto.stockActual}, Cantidad solicitada: ${cantidad}`
+      );
     }
 
     carritoProducto.cantidad = cantidad;

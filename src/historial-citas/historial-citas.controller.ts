@@ -25,14 +25,6 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 export class HistorialCitasController {
   constructor(private readonly historialCitasService: HistorialCitasService) {}
 
-  @Post()
-  @ApiOperation({ summary: 'Crear un nuevo registro en el historial de citas' })
-  @ApiResponse({ status: 201, description: 'Registro de historial creado exitosamente', type: HistorialCita })
-  @ApiResponse({ status: 404, description: 'Cita o usuario no encontrado' })
-  create(@Body() createHistorialCitaDto: CreateHistorialCitaDto) {
-    return this.historialCitasService.create(createHistorialCitaDto);
-  }
-
   @Get()
   @ApiOperation({ summary: 'Obtener todos los registros del historial de citas' })
   @ApiResponse({ status: 200, description: 'Lista de registros del historial', type: [HistorialCita] })
@@ -40,14 +32,6 @@ export class HistorialCitasController {
     return this.historialCitasService.findAll();
   }
 
-  @Get(':id')
-  @ApiOperation({ summary: 'Obtener un registro del historial por ID' })
-  @ApiParam({ name: 'id', description: 'ID del registro del historial' })
-  @ApiResponse({ status: 200, description: 'Registro del historial encontrado', type: HistorialCita })
-  @ApiResponse({ status: 404, description: 'Registro del historial no encontrado' })
-  findOne(@Param('id') id: string) {
-    return this.historialCitasService.findOne(+id);
-  }
 
   @Get('cita/:citaId')
   @ApiOperation({ summary: 'Obtener historial por cita' })
@@ -87,47 +71,12 @@ export class HistorialCitasController {
     return this.historialCitasService.findByFechaRange(fechaInicio, fechaFin);
   }
 
-  @Patch(':id')
-  @ApiOperation({ summary: 'Actualizar un registro del historial' })
+  @Get(':id')
+  @ApiOperation({ summary: 'Obtener un registro del historial por ID' })
   @ApiParam({ name: 'id', description: 'ID del registro del historial' })
-  @ApiResponse({ status: 200, description: 'Registro del historial actualizado', type: HistorialCita })
+  @ApiResponse({ status: 200, description: 'Registro del historial encontrado', type: HistorialCita })
   @ApiResponse({ status: 404, description: 'Registro del historial no encontrado' })
-  update(@Param('id') id: string, @Body() updateHistorialCitaDto: UpdateHistorialCitaDto) {
-    return this.historialCitasService.update(+id, updateHistorialCitaDto);
-  }
-
-  @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({ summary: 'Eliminar un registro del historial' })
-  @ApiParam({ name: 'id', description: 'ID del registro del historial' })
-  @ApiResponse({ status: 204, description: 'Registro del historial eliminado' })
-  @ApiResponse({ status: 404, description: 'Registro del historial no encontrado' })
-  remove(@Param('id') id: string) {
-    return this.historialCitasService.remove(+id);
-  }
-
-  // Endpoints para registrar cambios automáticamente
-  @Post('registrar-creacion/:citaId')
-  @ApiOperation({ summary: 'Registrar creación de cita' })
-  @ApiParam({ name: 'citaId', description: 'ID de la cita' })
-  @ApiResponse({ status: 201, description: 'Creación registrada', type: HistorialCita })
-  registrarCreacion(@Param('citaId') citaId: string, @Body() body: { usuarioId: number; descripcion: string }) {
-    return this.historialCitasService.registrarCreacionCita(+citaId, body.usuarioId, body.descripcion);
-  }
-
-  @Post('registrar-actualizacion/:citaId')
-  @ApiOperation({ summary: 'Registrar actualización de cita' })
-  @ApiParam({ name: 'citaId', description: 'ID de la cita' })
-  @ApiResponse({ status: 201, description: 'Actualización registrada', type: HistorialCita })
-  registrarActualizacion(@Param('citaId') citaId: string, @Body() body: { usuarioId: number; descripcion: string; valoresAnteriores: any; valoresNuevos: any }) {
-    return this.historialCitasService.registrarActualizacionCita(+citaId, body.usuarioId, body.descripcion, body.valoresAnteriores, body.valoresNuevos);
-  }
-
-  @Post('registrar-eliminacion/:citaId')
-  @ApiOperation({ summary: 'Registrar eliminación de cita' })
-  @ApiParam({ name: 'citaId', description: 'ID de la cita' })
-  @ApiResponse({ status: 201, description: 'Eliminación registrada', type: HistorialCita })
-  registrarEliminacion(@Param('citaId') citaId: string, @Body() body: { usuarioId: number; descripcion: string }) {
-    return this.historialCitasService.registrarCancelacionCita(+citaId, body.usuarioId, body.descripcion);
+  findOne(@Param('id') id: string) {
+    return this.historialCitasService.findOne(+id);
   }
 }

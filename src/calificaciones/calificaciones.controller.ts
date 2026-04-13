@@ -26,9 +26,10 @@ export class CalificacionesController {
   @Post()
   @ApiOperation({ summary: 'Crear una nueva calificación' })
   @ApiResponse({ status: 201, description: 'Calificación creada exitosamente', type: Calificacion })
-  create(@Body() createCalificacionDto: CreateCalificacionDto & { usuarioId: number }, @Request() req) {
-    // Usar el usuarioId del request o del body (fallback para compatibilidad)
-    const usuarioId = req.user?.id || createCalificacionDto.usuarioId;
+  create(@Body() createCalificacionDto: CreateCalificacionDto, @Request() req) {
+    // 1. Prioridad al usuarioId enviado en el body (para pruebas manuales)
+    // 2. Fallback al userId del token JWT (estándar de seguridad)
+    const usuarioId = createCalificacionDto.usuarioId || req.user?.userId || req.user?.id;
     return this.calificacionesService.create(usuarioId, createCalificacionDto);
   }
 

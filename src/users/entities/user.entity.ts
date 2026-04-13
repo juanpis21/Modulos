@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, JoinTable, OneToMany, OneToOne } from 'typeorm';
+import { ApiProperty, ApiHideProperty } from '@nestjs/swagger';
 import { Role } from '../../roles/entities/role.entity';
 import { Pet } from '../../pets/entities/pet.entity';
 import { Cita } from '../../citas/entities/cita.entity';
@@ -22,7 +22,6 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @ApiProperty({ description: 'Contraseña del usuario (encriptada)' })
   @Column()
   password: string;
 
@@ -56,12 +55,15 @@ export class User {
   @OneToMany(() => Pet, pet => pet.owner)
   pets: Pet[];
 
+  @ApiHideProperty()
   @OneToMany(() => Cita, cita => cita.usuario)
   citas: Cita[];
 
+  @ApiHideProperty()
   @OneToMany(() => Adopcion, adopcion => adopcion.adoptante)
   adopcionesRealizadas: Adopcion[];
 
+  @ApiHideProperty()
   @OneToMany(() => HistorialCita, historialCita => historialCita.usuario)
   historialCitas: HistorialCita[];
 

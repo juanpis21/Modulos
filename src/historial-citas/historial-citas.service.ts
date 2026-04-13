@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, ConflictException, Inject, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Between } from 'typeorm';
 import { HistorialCita } from './entities/historial-cita.entity';
 import { CreateHistorialCitaDto, TipoCambio } from './dto/create-historial-cita.dto';
 import { UpdateHistorialCitaDto } from './dto/update-historial-cita.dto';
@@ -60,17 +60,25 @@ export class HistorialCitasService {
   }
 
   async findByCita(citaId: number): Promise<HistorialCita[]> {
-    // Verificar si la cita existe
-    const cita = await this.citasService.findOne(citaId);
-    if (!cita) {
-      throw new NotFoundException(`Cita with ID ${citaId} not found`);
-    }
+    console.log(`[DEBUG] Buscando historial para citaId: ${citaId}`);
+    
+    try {
+      const query = this.historialCitasRepository
+        .createQueryBuilder('historial')
+        .leftJoinAndSelect('historial.usuario', 'usuario')
+        .leftJoinAndSelect('historial.cita', 'cita')
+        .where('historial.citaId = :citaId', { citaId }) // Uso directo de la columna
+        .orWhere('cita.id = :citaId', { citaId })       // Por si acaso
+        .orderBy('historial.fechaRegistro', 'DESC');
 
-    return this.historialCitasRepository.find({
-      where: { cita: { id: citaId } },
-      relations: ['usuario'],
-      order: { fechaRegistro: 'DESC' }
-    });
+      const registros = await query.getMany();
+      console.log(`[DEBUG] Registros encontrados: ${registros.length}`);
+      
+      return registros;
+    } catch (error) {
+      console.error('[DEBUG] Error en findByCita:', error);
+      throw error;
+    }
   }
 
   async findByUsuario(usuarioId: number): Promise<HistorialCita[]> {
@@ -96,18 +104,37 @@ export class HistorialCitasService {
   }
 
   async findByFechaRange(fechaInicio: string, fechaFin: string): Promise<HistorialCita[]> {
-    const inicio = new Date(fechaInicio);
-    const fin = new Date(fechaFin);
-    fin.setDate(fin.getDate() + 1); // Incluir el día final completo
+    const inicioQuery = new Date(fechaInicio);
+    const finQuery = new Date(fechaFin);
 
-    return this.historialCitasRepository
-      .createQueryBuilder('historial')
-      .leftJoinAndSelect('historial.cita', 'cita')
-      .leftJoinAndSelect('historial.usuario', 'usuario')
-      .where('historial.fechaRegistro >= :fechaInicio', { fechaInicio: inicio })
-      .andWhere('historial.fechaRegistro < :fechaFin', { fechaFin: fin })
-      .orderBy('historial.fechaRegistro', 'DESC')
-      .getMany();
+    // Validar si las fechas son válidas
+    if (isNaN(inicioQuery.getTime()) || isNaN(finQuery.getTime())) {
+      throw new Error('Formato de fecha inválido. Use YYYY-MM-DD');
+    }
+
+    // Ajustar para cubrir los días completos
+    const inicio = new Date(inicioQuery);
+    inicio.setUTCHours(0, 0, 0, 0);
+
+    const fin = new Date(finQuery);
+    fin.setUTCHours(23, 59, 59, 999);
+
+    console.log(`[DEBUG] Buscando historial entre ${inicio.toISOString()} y ${fin.toISOString()}`);
+
+    try {
+      console.log(`[DEBUG] Buscando con Between entre ${inicio.toISOString()} y ${fin.toISOString()}`);
+      
+      return this.historialCitasRepository.find({
+        where: {
+          fechaRegistro: Between(inicio, fin)
+        },
+        relations: ['cita', 'usuario'],
+        order: { fechaRegistro: 'DESC' }
+      });
+    } catch (error) {
+      console.error('[DEBUG] Error en findByFechaRange:', error);
+      throw error;
+    }
   }
 
   async update(id: number, updateHistorialCitaDto: UpdateHistorialCitaDto): Promise<HistorialCita> {

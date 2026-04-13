@@ -41,14 +41,6 @@ export class AdopcionesController {
     return this.adopcionesService.findAll();
   }
 
-  @Get(':id')
-  @ApiOperation({ summary: 'Obtener una solicitud de adopción por ID' })
-  @ApiParam({ name: 'id', description: 'ID de la solicitud de adopción' })
-  @ApiResponse({ status: 200, description: 'Solicitud de adopción encontrada', type: Adopcion })
-  @ApiResponse({ status: 404, description: 'Solicitud de adopción no encontrada' })
-  findOne(@Param('id') id: string) {
-    return this.adopcionesService.findOne(+id);
-  }
 
   @Get('mascota/:mascotaId')
   @ApiOperation({ summary: 'Obtener solicitudes por mascota' })
@@ -97,24 +89,6 @@ export class AdopcionesController {
     return this.adopcionesService.findByFechaRange(fechaInicio, fechaFin);
   }
 
-  @Patch(':id')
-  @ApiOperation({ summary: 'Actualizar una solicitud de adopción' })
-  @ApiParam({ name: 'id', description: 'ID de la solicitud de adopción' })
-  @ApiResponse({ status: 200, description: 'Solicitud de adopción actualizada', type: Adopcion })
-  @ApiResponse({ status: 404, description: 'Solicitud de adopción no encontrada' })
-  update(@Param('id') id: string, @Body() updateAdopcionDto: UpdateAdopcionDto) {
-    return this.adopcionesService.update(+id, updateAdopcionDto);
-  }
-
-  @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({ summary: 'Eliminar una solicitud de adopción' })
-  @ApiParam({ name: 'id', description: 'ID de la solicitud de adopción' })
-  @ApiResponse({ status: 204, description: 'Solicitud de adopción eliminada' })
-  @ApiResponse({ status: 404, description: 'Solicitud de adopción no encontrada' })
-  remove(@Param('id') id: string) {
-    return this.adopcionesService.remove(+id);
-  }
 
   // Endpoints auxiliares para gestión de estados
   @Post(':id/aprobar')
@@ -163,5 +137,33 @@ export class AdopcionesController {
     @Body() body: { usuarioId: number; motivo: string }
   ) {
     return this.adopcionesService.cancelarAdopcion(+id, body.usuarioId, body.motivo);
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Obtener una solicitud de adopción por ID' })
+  @ApiParam({ name: 'id', description: 'ID de la solicitud de adopción' })
+  @ApiResponse({ status: 200, description: 'Solicitud de adopción encontrada', type: Adopcion })
+  @ApiResponse({ status: 404, description: 'Solicitud de adopción no encontrada' })
+  findOne(@Param('id') id: string) {
+    return this.adopcionesService.findOne(+id);
+  }
+
+  @Patch(':id')
+  @ApiOperation({ summary: 'Actualizar una solicitud de adopción' })
+  @ApiParam({ name: 'id', description: 'ID de la solicitud de adopción' })
+  @ApiResponse({ status: 200, description: 'Solicitud de adopción actualizada', type: Adopcion })
+  @ApiResponse({ status: 404, description: 'Solicitud de adopción no encontrada' })
+  update(@Param('id') id: string, @Body() updateAdopcionDto: UpdateAdopcionDto) {
+    return this.adopcionesService.update(+id, updateAdopcionDto);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Eliminar una solicitud de adopción' })
+  @ApiParam({ name: 'id', description: 'ID de la solicitud de adopción' })
+  @ApiResponse({ status: 204, description: 'Solicitud de adopción eliminada' })
+  @ApiResponse({ status: 404, description: 'Solicitud de adopción no encontrada' })
+  remove(@Param('id') id: string) {
+    return this.adopcionesService.remove(+id);
   }
 }

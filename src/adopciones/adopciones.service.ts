@@ -130,17 +130,28 @@ export class AdopcionesService {
   }
 
   async findByFechaRange(fechaInicio: string, fechaFin: string): Promise<Adopcion[]> {
-    const inicio = new Date(fechaInicio);
-    const fin = new Date(fechaFin);
-    fin.setDate(fin.getDate() + 1); // Incluir el día final completo
+    const inicioQuery = new Date(fechaInicio);
+    const finQuery = new Date(fechaFin);
+
+    // Validar si las fechas son válidas
+    if (isNaN(inicioQuery.getTime()) || isNaN(finQuery.getTime())) {
+      throw new Error('Formato de fecha inválido. Use YYYY-MM-DD');
+    }
+
+    // Ajustar para cubrir los días completos
+    const inicio = new Date(inicioQuery);
+    inicio.setUTCHours(0, 0, 0, 0);
+
+    const fin = new Date(finQuery);
+    fin.setUTCHours(23, 59, 59, 999);
 
     return this.adopcionesRepository
       .createQueryBuilder('adopcion')
       .leftJoinAndSelect('adopcion.mascota', 'mascota')
       .leftJoinAndSelect('adopcion.adoptante', 'adoptante')
       .leftJoinAndSelect('adopcion.veterinaria', 'veterinaria')
-      .where('adopcion.fechaSolicitud >= :fechaInicio', { fechaInicio: inicio })
-      .andWhere('adopcion.fechaSolicitud < :fechaFin', { fechaFin: fin })
+      .where('adopcion.fechaSolicitud >= :inicio', { inicio })
+      .andWhere('adopcion.fechaSolicitud <= :fin', { fin })
       .orderBy('adopcion.fechaSolicitud', 'DESC')
       .getMany();
   }

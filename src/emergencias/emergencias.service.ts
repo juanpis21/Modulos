@@ -107,22 +107,32 @@ export class EmergenciasService {
   }
 
   async findByFecha(fecha: string): Promise<Emergencia[]> {
-    const fechaInicio = new Date(fecha);
-    const fechaFin = new Date(fecha);
-    fechaFin.setDate(fechaFin.getDate() + 1);
+    const inicioQuery = new Date(fecha);
+    
+    // Validar si la fecha es válida
+    if (isNaN(inicioQuery.getTime())) {
+      throw new Error('Formato de fecha inválido. Use YYYY-MM-DD');
+    }
+
+    // Ajustar para cubrir el día completo (00:00:00 a 23:59:59)
+    const fechaInicio = new Date(inicioQuery);
+    fechaInicio.setUTCHours(0, 0, 0, 0);
+
+    const fechaFin = new Date(inicioQuery);
+    fechaFin.setUTCHours(23, 59, 59, 999);
 
     return this.emergenciasRepository
       .createQueryBuilder('emergencia')
       .leftJoinAndSelect('emergencia.mascota', 'mascota')
       .leftJoinAndSelect('emergencia.veterinario', 'veterinario')
       .leftJoinAndSelect('emergencia.veterinaria', 'veterinaria')
-      .where('emergencia.fechayhora >= :fechaInicio AND emergencia.fechayhora < :fechaFin AND emergencia.isActive = :isActive', {
+      .where('emergencia.fechayhora BETWEEN :fechaInicio AND :fechaFin AND emergencia.isActive = :isActive', {
         fechaInicio,
         fechaFin,
         isActive: true,
       })
       .select(['emergencia.id', 'emergencia.tipo', 'emergencia.fechayhora', 'emergencia.descripcion', 'emergencia.isActive', 'emergencia.createdAt', 'emergencia.updatedAt'])
-      .addSelect(['mascota.id', 'mascota.nombre', 'mascota.especie'])
+      .addSelect(['mascota.id', 'mascota.name', 'mascota.species'])
       .addSelect(['veterinario.id', 'veterinario.name'])
       .addSelect(['veterinaria.id', 'veterinaria.nombre'])
       .orderBy('emergencia.fechayhora', 'DESC')

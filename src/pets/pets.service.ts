@@ -4,15 +4,24 @@ import { Repository } from 'typeorm';
 import { Pet } from './entities/pet.entity';
 import { CreatePetDto } from './dto/create-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class PetsService {
   constructor(
     @InjectRepository(Pet)
     private petsRepository: Repository<Pet>,
+    private usersService: UsersService,
   ) {}
 
   async create(createPetDto: CreatePetDto): Promise<Pet> {
+    if (!createPetDto.ownerId) {
+      throw new ConflictException('Se requiere un ID de dueño para registrar la mascota');
+    }
+    
+    // Validar que el dueño existe
+    await this.usersService.findOne(createPetDto.ownerId);
+
     const pet = this.petsRepository.create(createPetDto);
     return this.petsRepository.save(pet);
   }
@@ -83,7 +92,9 @@ export class PetsService {
       pet.description = updatePetDto.description;
     }
     if (updatePetDto.ownerId !== undefined) {
-      pet.ownerId = updatePetDto.ownerId;
+      // Validar que el nuevo dueño existe y asignarlo a la relación
+      const owner = await this.usersService.findOne(updatePetDto.ownerId);
+      pet.owner = owner;
     }
     if (updatePetDto.isActive !== undefined) {
       pet.isActive = updatePetDto.isActive;

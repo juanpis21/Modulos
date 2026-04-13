@@ -38,32 +38,6 @@ export class ServiciosController {
     return this.serviciosService.findAll();
   }
 
-  @Get(':id')
-  @ApiOperation({ summary: 'Obtener un servicio por ID' })
-  @ApiParam({ name: 'id', description: 'ID del servicio' })
-  @ApiResponse({ status: 200, description: 'Servicio encontrado', type: Servicio })
-  @ApiResponse({ status: 404, description: 'Servicio no encontrado' })
-  findOne(@Param('id') id: string) {
-    return this.serviciosService.findOne(+id);
-  }
-
-  @Patch(':id')
-  @ApiOperation({ summary: 'Actualizar un servicio' })
-  @ApiParam({ name: 'id', description: 'ID del servicio' })
-  @ApiResponse({ status: 200, description: 'Servicio actualizado', type: Servicio })
-  @ApiResponse({ status: 404, description: 'Servicio no encontrado' })
-  update(@Param('id') id: string, @Body() updateServicioDto: UpdateServicioDto) {
-    return this.serviciosService.update(+id, updateServicioDto);
-  }
-
-  @Delete(':id')
-  @ApiOperation({ summary: 'Desactivar un servicio' })
-  @ApiParam({ name: 'id', description: 'ID del servicio' })
-  @ApiResponse({ status: 200, description: 'Servicio desactivado' })
-  @ApiResponse({ status: 404, description: 'Servicio no encontrado' })
-  remove(@Param('id') id: string) {
-    return this.serviciosService.remove(+id);
-  }
 
   @Get('veterinaria/:veterinariaId')
   @ApiOperation({ summary: 'Obtener servicios por veterinaria' })
@@ -102,5 +76,32 @@ export class ServiciosController {
   @ApiResponse({ status: 200, description: 'Reporte por tipo' })
   getServiciosPorTipo() {
     return this.serviciosService.getServiciosPorTipo();
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Obtener un servicio por ID' })
+  @ApiParam({ name: 'id', description: 'ID del servicio' })
+  @ApiResponse({ status: 200, description: 'Servicio encontrado', type: Servicio })
+  @ApiResponse({ status: 404, description: 'Servicio no encontrado' })
+  findOne(@Param('id') id: string) {
+    return this.serviciosService.findOne(+id);
+  }
+
+  @Patch(':id')
+  @ApiOperation({ summary: 'Actualizar un servicio' })
+  @ApiParam({ name: 'id', description: 'ID del servicio' })
+  @ApiResponse({ status: 200, description: 'Servicio actualizado', type: Servicio })
+  @ApiResponse({ status: 404, description: 'Servicio no encontrado' })
+  update(@Param('id') id: string, @Body() updateServicioDto: UpdateServicioDto) {
+    return this.serviciosService.update(+id, updateServicioDto);
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: 'Desactivar un servicio' })
+  @ApiParam({ name: 'id', description: 'ID del servicio' })
+  @ApiResponse({ status: 200, description: 'Servicio desactivado' })
+  @ApiResponse({ status: 404, description: 'Servicio no encontrado' })
+  remove(@Param('id') id: string) {
+    return this.serviciosService.remove(+id);
   }
 }

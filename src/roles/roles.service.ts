@@ -88,33 +88,6 @@ export class RolesService {
     return this.rolesRepository.findByIds(ids);
   }
 
-  async initializeDefaultRoles(): Promise<Role[]> {
-    const defaultRoles = [
-      { id: 1, name: 'superadmin', description: 'Super administrador con acceso total al sistema' },
-      { id: 2, name: 'admin', description: 'Administrador con acceso a la mayoría de funciones' },
-      { id: 3, name: 'veterinario', description: 'Veterinario con acceso a funciones médicas' },
-      { id: 4, name: 'usuario', description: 'Usuario básico con acceso limitado' }
-    ];
-
-    const createdRoles: Role[] = [];
-
-    for (const roleData of defaultRoles) {
-      const existingRole = await this.rolesRepository.findOne({
-        where: { name: roleData.name }
-      });
-
-      if (!existingRole) {
-        const role = this.rolesRepository.create(roleData);
-        const savedRole = await this.rolesRepository.save(role);
-        createdRoles.push(savedRole);
-      } else {
-        createdRoles.push(existingRole);
-      }
-    }
-
-    return createdRoles;
-  }
-
   async remove(id: number): Promise<void> {
     const role = await this.findOne(id);
     await this.rolesRepository.remove(role);

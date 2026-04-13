@@ -75,16 +75,17 @@ export class CitasService {
 
   async findAll(): Promise<Cita[]> {
     return this.citasRepository.find({
+      where: { isActive: true },
       relations: ['usuario', 'mascota', 'veterinario'],
-      select: ['id', 'motivo', 'fechaHora', 'estado', 'notas', 'createdAt', 'updatedAt', 'usuario', 'mascota', 'veterinario']
+      select: ['id', 'motivo', 'fechaHora', 'estado', 'notas', 'isActive', 'createdAt', 'updatedAt', 'usuario', 'mascota', 'veterinario']
     });
   }
 
   async findOne(id: number): Promise<Cita> {
     const cita = await this.citasRepository.findOne({
-      where: { id },
+      where: { id, isActive: true },
       relations: ['usuario', 'mascota', 'veterinario'],
-      select: ['id', 'motivo', 'fechaHora', 'estado', 'notas', 'createdAt', 'updatedAt', 'usuario', 'mascota', 'veterinario']
+      select: ['id', 'motivo', 'fechaHora', 'estado', 'notas', 'isActive', 'createdAt', 'updatedAt', 'usuario', 'mascota', 'veterinario']
     });
 
     if (!cita) {
@@ -122,18 +123,38 @@ export class CitasService {
   }
 
   async findByFecha(fecha: string): Promise<Cita[]> {
-    const fechaInicio = new Date(fecha);
-    const fechaFin = new Date(fecha);
-    fechaFin.setDate(fechaFin.getDate() + 1);
+    const fechaQuery = new Date(fecha);
+    
+    // Validar si la fecha es válida
+    if (isNaN(fechaQuery.getTime())) {
+      throw new Error('Formato de fecha inválido. Use YYYY-MM-DD');
+    }
+
+    // Ajustar para que busque desde el inicio del día (00:00:00) 
+    // hasta el final del día (23:59:59)
+    const fechaInicio = new Date(fechaQuery);
+    fechaInicio.setUTCHours(0, 0, 0, 0);
+
+    const fechaFin = new Date(fechaQuery);
+    fechaFin.setUTCHours(23, 59, 59, 999);
 
     return this.citasRepository
       .createQueryBuilder('cita')
       .leftJoinAndSelect('cita.usuario', 'usuario')
       .leftJoinAndSelect('cita.mascota', 'mascota')
-      .where('cita.fechaHora >= :fechaInicio', { fechaInicio })
-      .andWhere('cita.fechaHora < :fechaFin', { fechaFin })
+      .leftJoinAndSelect('cita.veterinario', 'veterinario')
+      .where('cita.fechaHora BETWEEN :fechaInicio AND :fechaFin', { 
+        fechaInicio, 
+        fechaFin 
+      })
       .andWhere('cita.isActive = :isActive', { isActive: true })
-      .select(['cita.id', 'cita.motivo', 'cita.fechaHora', 'cita.estado', 'cita.notas', 'cita.idVeterinario', 'cita.isActive', 'cita.createdAt', 'cita.updatedAt', 'usuario', 'mascota'])
+      .select([
+        'cita.id', 'cita.motivo', 'cita.fechaHora', 'cita.estado', 'cita.notas', 
+        'cita.isActive', 'cita.createdAt', 'cita.updatedAt', 
+        'usuario.id', 'usuario.username', 'usuario.email', 'usuario.fullName',
+        'mascota.id', 'mascota.name', 'mascota.species',
+        'veterinario.id', 'veterinario.name'
+      ])
       .orderBy('cita.fechaHora', 'ASC')
       .getMany();
   }
@@ -253,6 +274,8 @@ export class CitasService {
       `Se eliminó la cita para ${cita.mascota.name} programada para ${cita.fechaHora.toISOString()}`
     );
 
-    await this.citasRepository.remove(cita);
+    // Borrado Lógico: En lugar de remove, marcamos como inactiva
+    cita.isActive = false;
+    await this.citasRepository.save(cita);
   }
 }

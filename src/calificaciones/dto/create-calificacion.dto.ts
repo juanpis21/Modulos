@@ -27,6 +27,15 @@ export class CreateCalificacionDto {
   comentario?: string;
 
   @ApiProperty({ 
+    description: 'ID del usuario que califica (opcional, se usa JWT por defecto)', 
+    example: 1,
+    required: false
+  })
+  @IsOptional()
+  @IsNumber()
+  usuarioId?: number;
+
+  @ApiProperty({ 
     description: 'ID del servicio calificado', 
     example: 1 
   })

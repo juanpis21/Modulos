@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn, JoinColumn } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
+import { Servicio } from '../../servicios/entities/servicio.entity';
 
 @Entity('calificaciones')
 export class Calificacion {
@@ -15,7 +16,7 @@ export class Calificacion {
     description: 'Puntuación del servicio (1-5)', 
     example: 5 
   })
-  @Column({ type: 'int' })
+  @Column({ name: 'puntuacion', type: 'int' })
   puntuacion: number;
 
   @ApiProperty({ 
@@ -41,29 +42,38 @@ export class Calificacion {
     description: 'ID del usuario que califica', 
     example: 1 
   })
-  @Column({ name: 'usuarioId' })
+  @Column({ name: 'usuario_id' })
   usuarioId: number;
 
   @ApiProperty({ 
     description: 'Usuario que realiza la calificación', 
     type: () => User 
   })
-  @ManyToOne(() => User, user => user.id)
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'usuario_id' })
   usuario: User;
 
   @ApiProperty({ 
     description: 'ID del servicio calificado', 
     example: 1 
   })
-  @Column({ name: 'servicioId' })
+  @Column({ name: 'servicio_id' })
   servicioId: number;
+
+  @ApiProperty({ 
+    description: 'Servicio calificado', 
+    type: () => Servicio 
+  })
+  @ManyToOne(() => Servicio)
+  @JoinColumn({ name: 'servicio_id' })
+  servicio: Servicio;
 
   @ApiProperty({ 
     description: 'ID del veterinario atendido (opcional)', 
     example: 2,
     required: false
   })
-  @Column({ name: 'veterinarioId', nullable: true })
+  @Column({ name: 'veterinario_id', nullable: true })
   veterinarioId?: number;
 
   @ApiProperty({ 
@@ -71,10 +81,11 @@ export class Calificacion {
     type: () => User,
     required: false
   })
-  @ManyToOne(() => User, user => user.id)
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'veterinario_id' })
   veterinario?: User;
 
   @ApiProperty({ description: 'Fecha de creación de la calificación', example: '2026-03-20T10:30:00.000Z' })
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'fecha' })
   fecha: Date;
 }

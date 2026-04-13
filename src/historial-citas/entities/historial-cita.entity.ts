@@ -16,7 +16,7 @@ export class HistorialCita {
     description: 'Cita asociada a este registro de historial', 
     type: () => Cita 
   })
-  @ManyToOne(() => Cita, cita => cita.id)
+  @ManyToOne(() => Cita, cita => cita.historial)
   cita: Cita;
 
   @ApiProperty({ 
@@ -57,7 +57,7 @@ export class HistorialCita {
     description: 'Usuario que realizó el cambio', 
     type: () => User 
   })
-  @ManyToOne(() => User, user => user.id)
+  @ManyToOne(() => User, user => user.historialCitas)
   usuario: User;
 
   @ApiProperty({ 

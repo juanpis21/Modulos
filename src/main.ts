@@ -3,6 +3,9 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { Reflector } from '@nestjs/core';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { PrometheusService } from './monitoring/prometheus.service';
+import { MetricsInterceptor } from './monitoring/metrics.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,10 +20,17 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
-      forbidNonWhitelisted: true,
+      forbidNonWhitelisted: false, // Desactivado temporalmente para debugging
       transform: true,
     }),
   );
+
+  // Global exception filter
+  app.useGlobalFilters(new HttpExceptionFilter());
+
+  // Global metrics interceptor
+  const prometheusService = app.get(PrometheusService);
+  app.useGlobalInterceptors(new MetricsInterceptor(prometheusService));
 
   // Swagger configuration
   const config = new DocumentBuilder()
