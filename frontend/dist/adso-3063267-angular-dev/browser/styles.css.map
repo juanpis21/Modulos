@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/styles.scss"],
+  "sourcesContent": [":root {\n\t--rosa-pastel: #f8d7da;\n\t--azul-nav: #99c6ed;\n\t--azul-pastel: #c6eee6;\n\t--beige: #f8f9fa;\n\t--azul-oscuro: #0451c4;\n\t--verde-oscuro: #2926a7;\n\t--rosa-fuerte: #ba9dff;\n\t--gris-claro: #f8f9fa;\n\t--gris-medio: #e9ecef;\n\t--color-fondo: #ffffff;\n\t--color-texto: #000000;\n\t--color-navbar: #f4f4f4;\n\t--color-card: #ffffff;\n}\n\nbody {\n  font-family: 'Fira sans', sans-serif;\n  background-color: #fff;\n  color: #333;\n}\n"],
+  "mappings": ";AAAA;AACC,iBAAA;AACA,cAAA;AACA,iBAAA;AACA,WAAA;AACA,iBAAA;AACA,kBAAA;AACA,iBAAA;AACA,gBAAA;AACA,gBAAA;AACA,iBAAA;AACA,iBAAA;AACA,kBAAA;AACA,gBAAA;;AAGD;AACE,eAAA,WAAA,EAAA;AACA,oBAAA;AACA,SAAA;;",
+  "names": []
+}
