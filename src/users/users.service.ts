@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { RolesService } from '../roles/roles.service';
+import { Role } from '../roles/entities/role.entity';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -12,8 +12,9 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-    private rolesService: RolesService,
-  ) {}
+    @InjectRepository(Role)
+    private rolesRepository: Repository<Role>,
+  ) { }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const existingUser = await this.usersRepository.findOne({
@@ -28,33 +29,38 @@ export class UsersService {
     }
 
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
-    
+
+    // Obtener el rol por defecto 'usuario' o usar el roleId proporcionado
+    let roleId = createUserDto.roleId;
+    if (!roleId) {
+      const defaultRole = await this.rolesRepository.findOne({ where: { name: 'usuario' } });
+      if (!defaultRole) {
+        throw new NotFoundException('Default role "usuario" not found');
+      }
+      roleId = defaultRole.id;
+    }
+
     const user = this.usersRepository.create({
       ...createUserDto,
       password: hashedPassword,
+      roleId,
     });
-
-    // Asignar roles si se proporcionan roleIds
-    if (createUserDto.roleIds && createUserDto.roleIds.length > 0) {
-      const roles = await this.rolesService.findByIds(createUserDto.roleIds);
-      user.roles = roles;
-    }
 
     return this.usersRepository.save(user);
   }
 
   async findAll(): Promise<User[]> {
-    return this.usersRepository.find({ 
-      relations: ['roles', 'pets'],
-      select: ['id', 'username', 'email', 'fullName', 'phone', 'isActive', 'createdAt', 'updatedAt', 'roles', 'pets']
+    return this.usersRepository.find({
+      relations: ['pets', 'role'],
+      select: ['id', 'username', 'email', 'fullName', 'firstName', 'lastName', 'phone', 'documentType', 'documentNumber', 'age', 'address', 'avatar', 'roleId', 'isActive', 'createdAt', 'updatedAt'],
     });
   }
 
   async findOne(id: number): Promise<User> {
     const user = await this.usersRepository.findOne({
       where: { id },
-      relations: ['roles', 'pets'],
-      select: ['id', 'username', 'email', 'fullName', 'phone', 'isActive', 'createdAt', 'updatedAt', 'roles', 'pets']
+      relations: ['pets', 'role'],
+      select: ['id', 'username', 'email', 'fullName', 'firstName', 'lastName', 'phone', 'documentType', 'documentNumber', 'age', 'address', 'avatar', 'roleId', 'isActive', 'createdAt', 'updatedAt'],
     });
 
     if (!user) {
@@ -64,31 +70,32 @@ export class UsersService {
     return user;
   }
 
-  async findByUsername(username: string): Promise<User> {
+  async findByUsername(identifier: string): Promise<User> {
     const user = await this.usersRepository.findOne({
-      where: { username },
-      relations: ['roles', 'pets'],
+      where: [
+        { username: identifier },
+        { email: identifier },
+      ],
+      relations: ['pets', 'role'],
+      select: ['id', 'username', 'email', 'password', 'fullName', 'firstName', 'lastName', 'phone', 'documentType', 'documentNumber', 'age', 'address', 'avatar', 'roleId', 'isActive', 'createdAt', 'updatedAt'],
     });
-    
-    if (!user) {
-      return null;
-    }
-    
-    return user;
+
+    return user || null;
   }
 
   async findByEmail(email: string): Promise<User> {
     return this.usersRepository.findOne({
       where: { email },
-      relations: ['roles', 'pets'],
+      relations: ['pets', 'role'],
+      select: ['id', 'username', 'email', 'password', 'fullName', 'firstName', 'lastName', 'phone', 'documentType', 'documentNumber', 'age', 'address', 'avatar', 'roleId', 'isActive', 'createdAt', 'updatedAt'],
     });
   }
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
-    // Primero obtener el usuario actual con relaciones
     const user = await this.usersRepository.findOne({
       where: { id },
-      relations: ['roles', 'pets'],
+      relations: ['pets', 'role'],
+      select: ['id', 'username', 'email', 'fullName', 'firstName', 'lastName', 'phone', 'documentType', 'documentNumber', 'age', 'address', 'avatar', 'roleId', 'isActive', 'createdAt', 'updatedAt'],
     });
 
     if (!user) {
@@ -112,30 +119,21 @@ export class UsersService {
       updateUserDto.password = await bcrypt.hash(updateUserDto.password, 10);
     }
 
-    // Asignar roles si se proporcionan roleIds
-    if (updateUserDto.roleIds && updateUserDto.roleIds.length > 0) {
-      const roles = await this.rolesService.findByIds(updateUserDto.roleIds);
-      user.roles = roles;
-    }
-
-    // Actualizar solo los campos proporcionados
     Object.assign(user, updateUserDto);
-    
-    // Guardar cambios
     await this.usersRepository.save(user);
-    
-    // Devolver el usuario actualizado con relaciones desde la base de datos
+
     const updatedUser = await this.usersRepository.findOne({
       where: { id: user.id },
-      relations: ['roles', 'pets'],
-      select: ['id', 'username', 'email', 'fullName', 'phone', 'isActive', 'createdAt', 'updatedAt', 'roles', 'pets']
+      relations: ['pets', 'role'],
+      select: ['id', 'username', 'email', 'fullName', 'firstName', 'lastName', 'phone', 'documentType', 'documentNumber', 'age', 'address', 'avatar', 'roleId', 'isActive', 'createdAt', 'updatedAt'],
     });
 
     return updatedUser;
   }
 
-  async remove(id: number): Promise<void> {
+  async deactivate(id: number): Promise<void> {
     const user = await this.findOne(id);
-    await this.usersRepository.remove(user);
+    user.isActive = false;
+    await this.usersRepository.save(user);
   }
 }

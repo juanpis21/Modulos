@@ -34,10 +34,14 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
+    if (!user.isActive) {
+      throw new UnauthorizedException('Su cuenta está desactivada. Por favor, contacte al soporte.');
+    }
+
     const payload = { 
       username: user.username, 
       sub: user.id, 
-      roles: user.roles ? user.roles.map((role: any) => role.name) : [] 
+      role: user.role ?? 'usuario'
     };
 
     return {

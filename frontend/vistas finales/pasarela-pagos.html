@@ -1,0 +1,265 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pasarela de Pagos - HelpYourPet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/CSS/Estilos-Pasarela.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="icon" href="assets/IMG/logo.png" type="image/png">
+</head>
+<body>
+    <!-- Header -->
+    <header class="payment-header">
+        <div class="header-content">
+            <div class="brand">
+                <img src="assets/IMG/logo.png" alt="HelpYourPet Logo" class="logo">
+                <h1>HelpYourPet</h1>
+            </div>
+            <div class="header-right">
+                <div class="secure-badge">
+                    <i class="fas fa-lock"></i>
+                    <span>Pago Seguro</span>
+                </div>
+                <!-- Toggle Modo Oscuro/Claro -->
+                <div class="theme-toggle-container">
+                    <input type="checkbox" id="themeToggle" class="theme-toggle-checkbox">
+                    <label for="themeToggle" class="theme-toggle-label">
+                        <div class="toggle-circle">
+                            <i class="bi bi-moon-stars-fill toggle-icon moon-icon"></i>
+                            <i class="bi bi-sun-fill toggle-icon sun-icon"></i>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="payment-container">
+        <!-- Resumen del Pedido -->
+        <div class="order-summary">
+            <h2><i class="fas fa-shopping-bag"></i> Resumen del Pedido</h2>
+            
+            <div class="order-items" id="orderItems">
+                <!-- Los items se cargarán dinámicamente -->
+            </div>
+
+            <div class="order-totals">
+                <div class="total-row">
+                    <span>Subtotal:</span>
+                    <span id="summarySubtotal">$0.00</span>
+                </div>
+                <div class="total-row">
+                    <span>Envío:</span>
+                    <span id="shippingCostDisplay">$ 5.000</span>
+                </div>
+                <div class="total-row discount-row" id="discountRow" style="display: none;">
+                    <span>Descuento:</span>
+                    <span id="discountAmount">-$0.00</span>
+                </div>
+                <div class="total-row total-final">
+                    <span>Total a Pagar:</span>
+                    <span id="finalTotal">$0.00</span>
+                </div>
+            </div>
+
+            <div class="promo-code">
+                <input type="text" id="promoInput" placeholder="Código de descuento">
+                <button onclick="applyPromoCode()">
+                    <i class="fas fa-tag"></i> Aplicar
+                </button>
+            </div>
+        </div>
+
+        <!-- Formulario de Pago -->
+        <div class="payment-form">
+            <h2><i class="fas fa-credit-card"></i> Información de Pago</h2>
+
+            <!-- Métodos de Pago -->
+            <div class="payment-methods">
+                <button class="method-btn active" data-method="card" onclick="selectPaymentMethod('card')">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Tarjeta</span>
+                </button>
+                <button class="method-btn" data-method="pse" onclick="selectPaymentMethod('pse')">
+                    <i class="fas fa-university"></i>
+                    <span>PSE</span>
+                </button>
+                <button class="method-btn" data-method="nequi" onclick="selectPaymentMethod('nequi')">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>Nequi</span>
+                </button>
+            </div>
+
+            <!-- Formulario de Tarjeta -->
+            <form id="cardForm" class="payment-method-form active">
+                <div class="form-group">
+                    <label for="cardNumber">
+                        <i class="fas fa-credit-card"></i> Número de Tarjeta
+                    </label>
+                    <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                    <div class="card-brands">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cardName">
+                            <i class="fas fa-user"></i> Nombre en la Tarjeta
+                        </label>
+                        <input type="text" id="cardName" placeholder="Juan Pérez" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="expiryDate">
+                            <i class="fas fa-calendar"></i> Fecha de Vencimiento
+                        </label>
+                        <input type="text" id="expiryDate" placeholder="MM/AA" maxlength="5" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cvv">
+                            <i class="fas fa-lock"></i> CVV
+                        </label>
+                        <input type="text" id="cvv" placeholder="123" maxlength="4" required>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Formulario PSE -->
+            <form id="pseForm" class="payment-method-form">
+                <div class="form-group">
+                    <label for="bankSelect">
+                        <i class="fas fa-university"></i> Selecciona tu Banco
+                    </label>
+                    <select id="bankSelect" required>
+                        <option value="">Seleccionar banco...</option>
+                        <option value="bancolombia">Bancolombia</option>
+                        <option value="davivienda">Davivienda</option>
+                        <option value="bbva">BBVA</option>
+                        <option value="bogota">Banco de Bogotá</option>
+                        <option value="popular">Banco Popular</option>
+                        <option value="occidente">Banco de Occidente</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="personType">
+                        <i class="fas fa-user-tag"></i> Tipo de Persona
+                    </label>
+                    <select id="personType" required>
+                        <option value="">Seleccionar...</option>
+                        <option value="natural">Persona Natural</option>
+                        <option value="juridica">Persona Jurídica</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="documentNumber">
+                        <i class="fas fa-id-card"></i> Número de Documento
+                    </label>
+                    <input type="text" id="documentNumber" placeholder="1234567890" required>
+                </div>
+            </form>
+
+            <!-- Formulario Nequi -->
+            <form id="nequiForm" class="payment-method-form">
+                <div class="form-group">
+                    <label for="phoneNumber">
+                        <i class="fas fa-mobile-alt"></i> Número de Celular
+                    </label>
+                    <input type="tel" id="phoneNumber" placeholder="300 123 4567" required>
+                </div>
+
+                <div class="nequi-info">
+                    <i class="fas fa-info-circle"></i>
+                    <p>Recibirás una notificación en tu app Nequi para autorizar el pago</p>
+                </div>
+            </form>
+
+            <!-- Información de Envío -->
+            <div class="shipping-info">
+                <h3><i class="fas fa-truck"></i> Información de Envío</h3>
+                
+                <div class="form-group">
+                    <label for="fullName">
+                        <i class="fas fa-user"></i> Nombre Completo
+                    </label>
+                    <input type="text" id="fullName" placeholder="Juan Pérez García" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">
+                        <i class="fas fa-map-marker-alt"></i> Dirección de Envío
+                    </label>
+                    <input type="text" id="address" placeholder="Calle 123 #45-67" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="city">
+                            <i class="fas fa-city"></i> Ciudad
+                        </label>
+                        <input type="text" id="city" placeholder="Duitama" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">
+                            <i class="fas fa-phone"></i> Teléfono
+                        </label>
+                        <input type="tel" id="phone" placeholder="300 123 4567" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="action-buttons">
+                <button class="btn-cancel" onclick="cancelPayment()">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button class="btn-pay" onclick="processPayment()">
+                    <i class="fas fa-check-circle"></i> Proceder al Pago
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content success">
+            <div class="success-animation">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>¡Pago Exitoso!</h2>
+            <p>Tu pedido ha sido procesado correctamente</p>
+            <div class="order-number">
+                <span>Número de Orden:</span>
+                <strong id="orderNumber">#000000</strong>
+            </div>
+            <p class="confirmation-message">
+                Recibirás un correo de confirmación con los detalles de tu pedido.
+            </p>
+            <button class="btn-continue" onclick="returnToStore()">
+                <i class="fas fa-home"></i> Volver a la Tienda
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal de Procesamiento -->
+    <div id="processingModal" class="modal">
+        <div class="modal-content processing">
+            <div class="spinner"></div>
+            <h3>Procesando tu pago...</h3>
+            <p>Por favor espera, no cierres esta ventana</p>
+        </div>
+    </div>
+
+    <script src="assets/JS/JS-Pasarela.js"></script>
+</body>
+</html>

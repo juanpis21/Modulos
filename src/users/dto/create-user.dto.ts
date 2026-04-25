@@ -36,10 +36,27 @@ export class CreateUserDto {
     required: false,
     maxLength: 100
   })
-  @IsOptional()
   @IsString()
   @MaxLength(100)
   fullName?: string;
+
+  @ApiProperty({ 
+    description: 'Nombres', 
+    example: 'Juan Carlos',
+    required: false
+  })
+  @IsOptional()
+  @IsString()
+  firstName?: string;
+
+  @ApiProperty({ 
+    description: 'Apellidos', 
+    example: 'Pérez García',
+    required: false
+  })
+  @IsOptional()
+  @IsString()
+  lastName?: string;
 
   @ApiProperty({ 
     description: 'Teléfono', 
@@ -53,6 +70,42 @@ export class CreateUserDto {
   phone?: string;
 
   @ApiProperty({ 
+    description: 'Tipo de documento', 
+    example: 'Cédula',
+    required: false
+  })
+  @IsOptional()
+  @IsString()
+  documentType?: string;
+
+  @ApiProperty({ 
+    description: 'Número de documento', 
+    example: '12345678',
+    required: false
+  })
+  @IsOptional()
+  @IsString()
+  documentNumber?: string;
+
+  @ApiProperty({ 
+    description: 'Edad', 
+    example: 25,
+    required: false
+  })
+  @IsOptional()
+  @IsNumber()
+  age?: number;
+
+  @ApiProperty({ 
+    description: 'Dirección', 
+    example: 'Calle 123 #45-67',
+    required: false
+  })
+  @IsOptional()
+  @IsString()
+  address?: string;
+
+  @ApiProperty({ 
     description: 'Estado del usuario', 
     example: true,
     required: false
@@ -62,12 +115,19 @@ export class CreateUserDto {
   isActive?: boolean;
 
   @ApiProperty({ 
-    description: 'IDs de los roles del usuario', 
-    example: [1, 2],
-    required: false
+    description: 'ID del rol del usuario', 
+    example: 4,
+    required: false 
   })
   @IsOptional()
-  @IsArray()
-  @IsNumber({}, { each: true })
-  roleIds?: number[];
+  @IsNumber()
+  roleId?: number;
+
+  @ApiProperty({ 
+    description: 'Imagen de perfil', 
+    required: false 
+  })
+  @IsOptional()
+  @IsString()
+  avatar?: string;
 }

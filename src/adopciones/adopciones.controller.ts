@@ -20,8 +20,10 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('adopciones')
 @Controller('adopciones')
+
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
+
 export class AdopcionesController {
   constructor(private readonly adopcionesService: AdopcionesService) {}
 

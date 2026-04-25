@@ -1,0 +1,1034 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>HelpYourPet- Mi Perfil</title>
+	<!-- Bootstrap CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<!-- Bootstrap Icons -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<!-- Google Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap"
+		rel="stylesheet">
+	<link
+		href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Fredoka:wght@300;400;500;600;700&display=swap"
+		rel="stylesheet">
+	<link
+		href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+		rel="stylesheet">
+	<!-- CSS Personalizado -->
+	<link rel="stylesheet" href="assets/CSS/Estilos-Usuario.css">
+	<link rel="icon" href="assets/IMG/logo.png" type="image/png">
+	<!-- Animate.css para animaciones -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+	<!-- SweetAlert2 -->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+	<!-- Overlay para cerrar sidebar en móviles -->
+	<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+	<div class="container-fluid">
+		<div class="row">
+			<nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar">
+				<div class="sidebar-header">
+					<h3 class="text-center">HelpYourPet</h3>
+					<div class="user-profile text-center">
+						<!-- Uso del operador Elvis para evitar expresiones anidadas -->
+						<img src="assets/IMG/Desparasitacion1.png" alt="Foto de perfil"
+							class="rounded-circle mb-2" id="sidebar-profile-picture">
+						<h5 id="username">Usuario
+						</h5>
+						<p class="text-muted">Dueño de mascotas</p>
+					</div>
+				</div>
+
+				<ul class="nav flex-column">
+					<li class="nav-item">
+						<a class="nav-link active" href="#dashboard">
+							<i class="fas fa-home me-2"></i>Inicio
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#mascotas">
+							<i class="fas fa-paw me-2"></i>Mis Mascotas
+						</a>
+					</li>
+
+					<li class="nav-item">
+						<a class="nav-link" href="#compras">
+							<i class="fas fa-shopping-cart me-2"></i>Mis Compras
+						</a>
+					</li>
+
+					<li class="nav-item">
+						<a class="nav-link" href="#adopciones-usuario">
+							<i class="fas fa-heart me-2"></i>Mis Adopciones
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#configuracion">
+							<i class="fas fa-cog me-2"></i>Configuración
+						</a>
+					</li>
+
+					<!-- Separador y Cerrar Sesión -->
+					<li class="nav-item mt-4 pt-3 border-top">
+						<a class="nav-link text-danger logout-sidebar" href="#" onclick="cerrarSesionUsuario(event)">
+							<i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+						</a>
+					</li>
+				</ul>
+			</nav>
+
+			<!-- Contenido Principal -->
+			<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+				<input type="hidden" id="current-user-id">
+
+				<!-- Flash Messages (Success/Error post-agregar) -->
+				<div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+					<i class="fas fa-check-circle me-2"></i><span>Mascota agregada!</span>
+					<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+				</div>
+
+				<div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+					<i class="fas fa-exclamation-triangle me-2"></i><span>Error!</span>
+					<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+				</div>
+
+				<!-- Sección Dashboard -->
+				<section id="dashboard" class="content-section">
+					<div class="section-header">
+						<h1 class="h2">Hola, <span id="username-header">Juan</span>
+						</h1>
+						<div class="d-flex gap-2 align-items-center">
+							<!-- Botón Hamburguesa (solo móviles) -->
+							<button class="menu-toggle" id="menuToggle1">
+								<i class="fas fa-bars"></i>
+							</button>
+							<!-- Botón de cambio de tema -->
+							<div class="theme-toggle-container">
+								<input type="checkbox" id="themeToggle" class="theme-toggle-checkbox">
+								<label for="themeToggle" class="theme-toggle-label">
+									<i class="fas fa-moon toggle-icon moon-icon"></i>
+									<i class="fas fa-sun toggle-icon sun-icon"></i>
+								</label>
+							</div>
+							<a href="inicio.html" class="btn-volver-inicio">
+								<i class="fas fa-home"></i>
+							</a>
+						</div>
+					</div>
+
+					<!-- Mis Mascotas (Preview) -->
+					<div class="card mb-4">
+						<div class="card-header">
+							<h5><i class="fas fa-paw me-2"></i>Mis Mascotas</h5>
+						</div>
+						<div class="card-body">
+							<div class="row" id="pets-preview">
+								<div class="col-12">
+									<div class="alert alert-info text-center">
+										<i class="fas fa-paw me-2"></i>No tienes mascotas registradas aún.
+									</div>
+								</div>
+								<div class="col-12">
+									<div class="pets-grid">
+										<div class="pet-card">
+											<div class="pet-image-container">
+												<img src="assets/IMG/Desparasitacion1.png"
+													class="pet-image"
+													onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+													loading="lazy" />
+												<div
+													class="pet-image-placeholder d-none">
+													<i class="fas fa-paw"></i>
+												</div>
+											</div>
+											<div class="pet-info">
+												<h5 class="pet-name">Nombre Mascota</h5>
+												<div class="pet-details">
+													<div class="pet-detail">
+														<i class="fas fa-paw"></i>
+														<span>Especie</span>
+													</div>
+													<div class="pet-detail">
+														<i class="fas fa-calendar"></i>
+														<span>Edad</span>
+														<span>Edad</span>
+													</div>
+													<div class="pet-detail">
+														<i class="fas fa-dna"></i>
+														<span>Raza</span>
+													</div>
+												</div>
+											</div>
+										</div> <!-- .pet-card -->
+									</div> <!-- .pets-grid -->
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<!-- Sección Mis Mascotas -->
+				<section id="mascotas" class="content-section" style="display: none;">
+					<div class="section-header">
+						<h1 class="h2"><i class="fas fa-paw me-2"></i>Mis Mascotas</h1>
+						<div class="d-flex gap-2 align-items-center">
+							<!-- Botón Hamburguesa (solo móviles) -->
+							<button class="menu-toggle" id="menuToggle2">
+								<i class="fas fa-bars"></i>
+							</button>
+							<!-- Botón de cambio de tema -->
+							<div class="theme-toggle-container">
+								<input type="checkbox" id="themeToggle2" class="theme-toggle-checkbox">
+								<label for="themeToggle2" class="theme-toggle-label">
+									<i class="fas fa-moon toggle-icon moon-icon"></i>
+									<i class="fas fa-sun toggle-icon sun-icon"></i>
+								</label>
+							</div>
+							<a href="inicio.html" class="btn-volver-inicio">
+								<i class="fas fa-home"></i>
+							</a>
+							<button class="btn btn-primary" id="add-pet-btn" data-bs-toggle="modal"
+								data-bs-target="#addPetModal">
+								<i class="fas fa-plus me-2"></i>Agregar Mascota
+							</button>
+						</div>
+					</div>
+
+					<div class="row" id="pets-list">
+						<div class="col-12">
+							<div class="alert alert-info text-center py-5">
+								<i class="fas fa-paw fa-3x mb-3"></i>
+								<h4>No tienes mascotas registradas.</h4>
+								<p>¡Agrega tu primera mascota haciendo clic en el botón arriba!</p>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="table-responsive">
+								<table class="table table-striped table-hover">
+									<thead class="table-dark">
+										<tr>
+											<th>Foto</th>
+											<th>Nombre</th>
+											<th>Especie</th>
+											<th>Edad</th>
+											<th>Género</th>
+											<th>Raza</th>
+											<th>Acciones</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>
+												<img src="assets/IMG/Desparasitacion1.png"
+													class="rounded" width="50" height="50"
+													onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';"
+													loading="lazy" />
+												<span
+													class="text-muted d-none">Sin foto</span>
+											</td>
+											<td><strong>Nombre</strong></td>
+											<td>Especie</td>
+											<td>Edad</td>
+											<td>Género</td>
+											<td>Raza</td>
+											<td>
+												<div class="d-flex gap-2 flex-wrap">
+													<button type="button"
+														class="btn btn-sm btn-outline-primary edit-pet-btn"
+														data-bs-toggle="modal" data-bs-target="#editPetModal">
+														<i class="fas fa-edit"></i> Editar
+													</button>
+													<button class="btn btn-sm btn-outline-danger">
+														<i class="fas fa-trash"></i> Eliminar
+													</button>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<!-- Sección Historia Clínica -->
+				<section id="historia-clinica" class="content-section" style="display: none;">
+					<div class="section-header">
+						<h1 class="h2"><i class="fas fa-file-medical me-2"></i>Historia Clínica</h1>
+						<div class="d-flex gap-2 align-items-center">
+							<!-- Botón Hamburguesa (solo móviles) -->
+							<button class="menu-toggle" id="menuToggle3">
+								<i class="fas fa-bars"></i>
+							</button>
+							<!-- Botón de cambio de tema -->
+							<div class="theme-toggle-container">
+								<input type="checkbox" id="themeToggle3" class="theme-toggle-checkbox">
+								<label for="themeToggle3" class="theme-toggle-label">
+									<i class="fas fa-moon toggle-icon moon-icon"></i>
+									<i class="fas fa-sun toggle-icon sun-icon"></i>
+								</label>
+							</div>
+							<a href="inicio.html" class="btn-volver-inicio">
+								<i class="fas fa-home"></i>
+							</a>
+							<div class="dropdown">
+								<button class="btn btn-outline-secondary dropdown-toggle" type="button"
+									id="pet-selector" data-bs-toggle="dropdown">
+									Seleccionar Mascota
+								</button>
+								<ul class="dropdown-menu" id="pet-dropdown">
+									<!-- Opciones de mascotas se cargarán aquí -->
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div id="medical-history-content">
+						<div class="text-center py-5" id="no-pet-selected">
+							<i class="fas fa-paw fa-3x mb-3"></i>
+							<h4>Selecciona una mascota para ver su historia clínica</h4>
+						</div>
+
+						<div id="pet-history" style="display: none;">
+							<div class="row mb-4">
+								<div class="col-md-3 text-center">
+									<img id="pet-history-image" src="https://via.placeholder.com/150" alt="Mascota"
+										class="img-thumbnail mb-3">
+									<h4 id="pet-history-name">Max</h4>
+									<p id="pet-history-info">Golden Retriever · 3 años · Macho</p>
+									<p id="pet-history-status" class="badge bg-success">Saludable</p>
+								</div>
+								<div class="col-md-9">
+									<div class="timeline">
+										<!-- Los eventos de la historia clínica se cargarán aquí -->
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<!-- Sección Mis Compras -->
+				<section id="compras" class="content-section" style="display: none;">
+					<div class="section-header">
+						<h1 class="h2"><i class="fas fa-shopping-cart me-2"></i>Mis Compras</h1>
+						<div class="d-flex gap-2 align-items-center">
+							<!-- Botón Hamburguesa (solo móviles) -->
+							<button class="menu-toggle" id="menuToggle4">
+								<i class="fas fa-bars"></i>
+							</button>
+							<!-- Botón de cambio de tema -->
+							<div class="theme-toggle-container">
+								<input type="checkbox" id="themeToggle4" class="theme-toggle-checkbox">
+								<label for="themeToggle4" class="theme-toggle-label">
+									<i class="fas fa-moon toggle-icon moon-icon"></i>
+									<i class="fas fa-sun toggle-icon sun-icon"></i>
+								</label>
+							</div>
+							<a href="inicio.html" class="btn-volver-inicio">
+								<i class="fas fa-home"></i>
+							</a>
+							<button class="btn btn-primary" id="go-to-shop-btn" onclick="goToShop()">
+								<i class="fas fa-store me-2"></i>Ir a la Tienda
+							</button>
+						</div>
+					</div>
+
+					<div class="card mb-4">
+						<div class="card-header">
+							<h5><i class="fas fa-history me-2"></i>Historial de Compras</h5>
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="table table-hover">
+									<thead>
+										<tr>
+											<th>Fecha</th>
+											<th>Productos</th>
+											<th>Total</th>
+											<th>Acciones</th>
+										</tr>
+									</thead>
+									<tbody id="purchase-history">
+										<!-- Historial de compras se cargará aquí -->
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<!-- Sección Citas Veterinarias -->
+				<section id="citas" class="content-section" style="display: none;">
+					<div class="section-header">
+						<h1 class="h2"><i class="fas fa-calendar-alt me-2"></i>Citas Veterinarias</h1>
+						<div class="d-flex gap-2 align-items-center">
+							<!-- Botón Hamburguesa (solo móviles) -->
+							<button class="menu-toggle" id="menuToggle5">
+								<i class="fas fa-bars"></i>
+							</button>
+							<!-- Botón de cambio de tema -->
+							<div class="theme-toggle-container">
+								<input type="checkbox" id="themeToggle5" class="theme-toggle-checkbox">
+								<label for="themeToggle5" class="theme-toggle-label">
+									<i class="fas fa-moon toggle-icon moon-icon"></i>
+									<i class="fas fa-sun toggle-icon sun-icon"></i>
+								</label>
+							</div>
+							<a href="inicio.html" class="btn-volver-inicio">
+								<i class="fas fa-home"></i>
+							</a>
+							<button class="btn btn-primary" id="new-appointment-btn">
+								<i class="fas fa-plus me-2"></i>Nueva Cita
+							</button>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-header">
+									<h5><i class="fas fa-history me-2"></i>Historial de citas</h5>
+								</div>
+								<div class="card-body" id="past-appointments">
+									<!-- Citas pasadas se cargarán aquí -->
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<!-- Sección Mis Mascotas en Adopción -->
+				<section id="adopciones-usuario" class="content-section" style="display: none;">
+					<div class="section-header">
+						<h1 class="h2"><i class="fas fa-heart me-2"></i>Mis Mascotas en Adopción</h1>
+						<div class="d-flex gap-2 align-items-center">
+							<!-- Botón Hamburguesa (solo móviles) -->
+							<button class="menu-toggle" id="menuToggle7">
+								<i class="fas fa-bars"></i>
+							</button>
+							<!-- Botón de cambio de tema -->
+							<div class="theme-toggle-container">
+								<input type="checkbox" id="themeToggle7" class="theme-toggle-checkbox">
+								<label for="themeToggle7" class="theme-toggle-label">
+									<i class="fas fa-moon toggle-icon moon-icon"></i>
+									<i class="fas fa-sun toggle-icon sun-icon"></i>
+								</label>
+							</div>
+							<a href="inicio.html" class="btn-volver-inicio">
+								<i class="fas fa-home"></i>
+							</a>
+							<a href="adopcion.html" class="btn btn-primary">
+								<i class="fas fa-plus me-2"></i>Publicar Mascota en Adopción
+							</a>
+						</div>
+					</div>
+
+					<div
+						class="text-center py-5"
+						style="background: var(--card-bg); border-radius: 20px; padding: 60px 20px; margin: 20px 0; box-shadow: 0 5px 20px rgba(0,0,0,0.08);">
+						<i class="fas fa-heart fa-4x mb-4" style="color: var(--rosa-fuerte); opacity: 0.5;"></i>
+						<h3 style="color: var(--text-color); font-weight: 700; margin-bottom: 15px;">
+							No has publicado mascotas en adopción
+						</h3>
+						<p style="color: var(--text-color); opacity: 0.7; font-size: 1.1rem; margin-bottom: 30px;">
+							¡Ayuda a encontrar un hogar a una mascota que necesite amor!
+						</p>
+						<a href="adopcion.html" class="btn btn-primary"
+							style="padding: 15px 40px; font-size: 1.1rem; border-radius: 50px;">
+							<i class="fas fa-plus me-2"></i>Publicar Primera Mascota
+						</a>
+					</div>
+
+					<!-- Grid de tarjetas de adopción (mismo estilo que adopcion.html) -->
+					<div class="lista-mascotas" style="margin-top: 30px;">
+						<div class="card-mascota">
+							<!-- Imagen con badge de estado -->
+							<div class="mascota-imagen-container">
+								<span class="badge-estado">
+									Estado
+								</span>
+								<img src="assets/IMG/Desparasitacion1.png"
+									onerror="this.src='assets/IMG/default.jpg'">
+							</div>
+
+							<!-- Información de la mascota -->
+							<div class="mascota-info">
+								<h3 class="mascota-nombre">Nombre</h3>
+
+								<!-- Detalles con etiquetas pasteles -->
+								<div class="mascota-detalles">
+									<span>Tipo</span>
+									<span>
+										Tamaño
+									</span>
+									<span>
+										Edad
+									</span>
+								</div>
+
+								<!-- Raza -->
+								<h6 class="mascota-raza">Raza</h6>
+
+								<!-- Descripción -->
+								<p class="mascota-descripcion">
+									Descripción breve de la mascota...
+								</p>
+
+								<!-- Acciones -->
+								<div class="mascota-acciones">
+									<!-- Botón Ver Detalles -->
+									<a href="adopcion.html" class="btn-ver-detalles"
+										title="Ver en la página de adopciones">
+										<i class="fas fa-eye"></i> Ver en Adopciones
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<!-- Sección Configuración -->
+				<section id="configuracion" class="content-section" style="display: none;">
+					<div class="section-header">
+						<h1 class="h2"><i class="fas fa-cog me-2"></i>Configuración de Perfil</h1>
+						<div class="d-flex gap-2 align-items-center">
+							<!-- Botón Hamburguesa (solo móviles) -->
+							<button class="menu-toggle" id="menuToggle6">
+								<i class="fas fa-bars"></i>
+							</button>
+							<!-- Botón de cambio de tema -->
+							<div class="theme-toggle-container">
+								<input type="checkbox" id="themeToggle6" class="theme-toggle-checkbox">
+								<label for="themeToggle6" class="theme-toggle-label">
+									<i class="fas fa-moon toggle-icon moon-icon"></i>
+									<i class="fas fa-sun toggle-icon sun-icon"></i>
+								</label>
+							</div>
+							<a href="inicio.html" class="btn-volver-inicio">
+								<i class="fas fa-home"></i>
+							</a>
+						</div>
+					</div>
+
+					<div class="row g-2 config-main-layout">
+						<!-- Información Personal - Ancho completo -->
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header">
+									<h6 class="mb-0"><i class="fas fa-user-edit me-2"></i>Información Personal</h6>
+								</div>
+								<div class="card-body">
+									<form id="profile-form"
+										action="#" method="post"
+										enctype="multipart/form-data">
+										<input type="hidden" />
+										<input type="hidden" id="profile-picture-data" name="fotoPerfil">
+
+										<div class="row g-2">
+											<!-- Foto de Perfil - Columna Izquierda -->
+											<div class="col-md-1 text-center d-flex flex-column">
+												<!-- Foto Principal -->
+												<div class="profile-picture-container">
+													<img src="assets/IMG/Desparasitacion1.png"
+														alt="Foto de perfil" class="rounded-circle img-fluid mb-1"
+														style="width: 90px; height: 90px; object-fit: cover; border: 2px solid var(--pastel-blue);"
+														id="current-profile-picture">
+													<p class="text-muted" style="font-size: 0.65rem; margin: 0.2rem 0;">
+														JPG, PNG</p>
+													<input type="file" class="d-none" id="profile-picture-input"
+														accept="image/*" onchange="previewProfilePicture(this)">
+													<button type="button"
+														class="btn btn-outline-primary btn-sm w-100 mb-1"
+														style="font-size: 0.65rem; padding: 0.2rem;"
+														onclick="document.getElementById('profile-picture-input').click()">
+														<i class="fas fa-upload"></i> Cambiar
+													</button>
+													<button type="button"
+														class="btn btn-outline-secondary btn-sm w-100 mb-2"
+														style="font-size: 0.65rem; padding: 0.2rem;"
+														onclick="removeProfilePicture()">
+														<i class="fas fa-trash"></i> Eliminar
+													</button>
+												</div>
+
+												<!-- Preview (aparece debajo cuando se selecciona una imagen) -->
+												<div id="new-picture-preview" class="preview-container"
+													style="display: none;">
+													<hr style="margin: 0.5rem 0; border-color: var(--border-color);">
+													<p class="text-muted mb-2" style="font-size: 0.75rem;">Preview:</p>
+													<img id="picture-preview" class="rounded-circle mb-2"
+														style="width: 90px; height: 90px; object-fit: cover; border: 2px solid var(--secondary-color);">
+													<div class="d-flex flex-column gap-1">
+														<button type="button" class="btn btn-success btn-sm w-100"
+															style="font-size: 0.7rem; padding: 0.3rem;"
+															onclick="saveProfilePicture()">
+															<i class="fas fa-check me-1"></i>Guardar
+														</button>
+														<button type="button" class="btn btn-secondary btn-sm w-100"
+															style="font-size: 0.7rem; padding: 0.3rem;"
+															onclick="cancelProfilePicture()">
+															<i class="fas fa-times me-1"></i>Cancelar
+														</button>
+													</div>
+												</div>
+											</div>
+
+											<!-- Información del formulario - 2 Columnas -->
+											<div class="col-md-11">
+												<div class="row g-2">
+													<!-- COLUMNA 1 -->
+													<div class="col-md-6">
+														<div class="row g-2">
+															<div class="col-12">
+																<label for="profile-name"
+																	class="form-label fw-bold">Nombres</label>
+																<input type="text" class="form-control"
+																	id="profile-name" required
+																	placeholder="Ingresa tus nombres">
+															</div>
+															<div class="col-12">
+																<label for="profile-apellidos"
+																	class="form-label fw-bold">Apellidos</label>
+																<input type="text" class="form-control"
+																	id="profile-apellidos"
+																	required placeholder="Ingresa tus apellidos">
+															</div>
+															<div class="col-12">
+																<label for="profile-email"
+																	class="form-label fw-bold">Correo
+																	Electrónico</label>
+																<input type="email" class="form-control"
+																	id="profile-email" required
+																	placeholder="correo@ejemplo.com">
+															</div>
+															<div class="col-12">
+																<label for="profile-phone"
+																	class="form-label fw-bold">Teléfono</label>
+																<input type="tel" class="form-control"
+																	id="profile-phone"
+																	placeholder="+57 123 456 7890">
+															</div>
+														</div>
+													</div>
+
+													<!-- COLUMNA 2 -->
+													<div class="col-md-6">
+														<div class="row g-2">
+															<div class="col-12">
+																<label for="profile-edad"
+																	class="form-label fw-bold">Edad</label>
+																<input type="number" class="form-control"
+																	id="profile-edad"
+																	placeholder="Tu edad">
+															</div>
+															<div class="col-12">
+																<label for="profile-address"
+																	class="form-label fw-bold">Dirección</label>
+																<input type="text" class="form-control"
+																	id="profile-address"
+																	placeholder="Ingresa tu dirección completa">
+															</div>
+															<div class="col-12">
+																<label for="profile-tipoDocumento"
+																	class="form-label fw-bold">Tipo
+																	Documento</label>
+																<input type="text" class="form-control"
+																	id="profile-tipoDocumento" readonly
+																	style="background-color: #f8f9fa; cursor: not-allowed;"
+																	placeholder="Tipo de documento">
+															</div>
+															<div class="col-12">
+																<label for="profile-numDocumento"
+																	class="form-label fw-bold">Número
+																	Documento</label>
+																<input type="text" class="form-control"
+																	id="profile-numDocumento"
+																	placeholder="Número de documento">
+															</div>
+														</div>
+													</div>
+
+													<!-- Botón Guardar -->
+													<div class="col-12 text-center mt-2">
+														<button type="submit" class="btn btn-primary btn-sm px-4">
+															<i class="fas fa-save me-1"></i>Guardar Cambios
+														</button>
+													</div>
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+
+						<!-- Botones de Seguridad y Eliminar Cuenta -->
+						<div class="col-12">
+							<div class="row g-2">
+								<!-- Seguridad -->
+								<div class="col-md-6">
+									<div class="card border-warning">
+										<div class="card-header bg-warning text-dark" style="padding: 0.4rem 0.6rem;">
+											<h6 class="mb-0" style="font-size: 0.9rem;"><i
+													class="fas fa-key me-2"></i>Seguridad
+											</h6>
+										</div>
+										<div class="card-body text-center" style="padding: 0.6rem;">
+											<p class="text-muted mb-2" style="font-size: 0.8rem;">Cambia tu contraseña
+												regularmente
+											</p>
+											<a href="recovery.html" class="btn btn-warning btn-sm">
+												<i class="fas fa-lock me-1"></i>Cambiar Contraseña
+											</a>
+										</div>
+									</div>
+								</div>
+								<!-- Eliminar Cuenta -->
+								<div class="col-md-6">
+									<div class="card border-danger">
+										<div class="card-header bg-danger text-white" style="padding: 0.4rem 0.6rem;">
+											<h6 class="mb-0" style="font-size: 0.9rem;"><i
+													class="fas fa-exclamation-triangle me-2"></i>Zona de Peligro</h6>
+										</div>
+										<div class="card-body text-center" style="padding: 0.6rem;">
+											<p class="text-muted mb-2" style="font-size: 0.8rem;">Eliminación permanente
+												de cuenta
+											</p>
+											<button class="btn btn-outline-danger btn-sm" id="delete-account-btn">
+												<i class="fas fa-trash me-1"></i>Eliminar Cuenta
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div> <!-- .row g-2 config-main-layout -->
+				</section>
+
+			</main>
+		</div> <!-- .row -->
+	</div> <!-- .container-fluid -->
+
+	<!-- ========== MODALES ========== -->
+
+	<!-- Modal para agregar mascota -->
+	<div class="modal fade" id="addPetModal" tabindex="-1" aria-labelledby="addPetModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="addPetModalLabel">
+						<i class="fas fa-plus-circle me-2"></i>Agregar Nueva Mascota
+					</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<form action="#" method="post"
+						enctype="multipart/form-data">
+						<input type="hidden" id="idUsuario" name="idUsuario">
+
+						<div class="row g-3">
+							<!-- Columna Izquierda -->
+							<div class="col-md-6">
+								<div class="mb-3">
+									<label for="nombre" class="form-label fw-bold">Nombre de la Mascota</label>
+									<input type="text" class="form-control" id="nombre" name="nombre" required
+										placeholder="Ej: Max, Luna">
+								</div>
+
+								<div class="mb-3">
+									<label for="especie" class="form-label fw-bold">Especie</label>
+									<select class="form-select" id="especie" name="especie" required>
+										<option value="" selected disabled>Selecciona una especie</option>
+										<option value="perro">Perro</option>
+										<option value="gato">Gato</option>
+										<option value="ave">Ave</option>
+										<option value="roedor">Roedor</option>
+										<option value="reptil">Reptil</option>
+										<option value="otro">Otro</option>
+									</select>
+								</div>
+
+								<div class="mb-3">
+									<label for="raza" class="form-label fw-bold">Raza</label>
+									<input type="text" class="form-control" id="raza" name="raza"
+										placeholder="Ej: Labrador, Siames">
+								</div>
+
+								<div class="mb-3">
+									<label for="fotoFile" class="form-label fw-bold">Foto de la Mascota</label>
+									<input class="form-control" type="file" id="fotoFile" name="fotoFile"
+										accept="image/*">
+									<div class="form-text">Formatos: JPG, PNG, GIF. Máx: 5MB</div>
+								</div>
+							</div>
+
+							<!-- Columna Derecha -->
+							<div class="col-md-6">
+								<div class="row mb-3">
+									<div class="col-6">
+										<label for="edad" class="form-label fw-bold">Edad</label>
+										<div class="input-group">
+											<input type="number" class="form-control" id="edad" name="edad" min="0"
+												max="50" required placeholder="0">
+											<select class="form-select" id="unidadEdad" name="unidadEdad"
+												style="max-width: 120px;" required>
+												<option value="meses">Meses</option>
+												<option value="años" selected>Años</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-6">
+										<label for="genero" class="form-label fw-bold">Género</label>
+										<select class="form-select" id="genero" name="genero">
+											<option value="M">Macho</option>
+											<option value="F">Hembra</option>
+											<option value="desconocido">Desconocido</option>
+										</select>
+									</div>
+								</div>
+
+								<div class="mb-3">
+									<label for="tamano" class="form-label fw-bold">Tamaño</label>
+									<select class="form-select" id="tamano" name="tamano">
+										<option value="" selected disabled>Selecciona un tamaño</option>
+										<option value="pequeño">Pequeño</option>
+										<option value="mediano">Mediano</option>
+										<option value="grande">Grande</option>
+									</select>
+								</div>
+
+								<div class="mb-3">
+									<label for="descripcion" class="form-label fw-bold">Descripción</label>
+									<textarea class="form-control" id="descripcion" name="descripcion" rows="4"
+										placeholder="Características, comportamiento, etc."></textarea>
+								</div>
+							</div>
+						</div>
+
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+								<i class="fas fa-times me-2"></i>Cancelar
+							</button>
+							<button type="submit" class="btn btn-primary">
+								<i class="fas fa-save me-2"></i>Guardar Mascota
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal para Editar Mascota -->
+	<div class="modal fade" id="editPetModal" tabindex="-1" aria-labelledby="editPetModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="editPetModalLabel">
+						<i class="fas fa-edit me-2"></i>Editar Mascota
+					</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<form id="editPetForm" action="#" method="post"
+						enctype="multipart/form-data">
+						<input type="hidden" name="id" id="editMascotaId">
+						<input type="hidden" name="fotoActual" id="editMascotaFotoActual">
+
+						<div class="row g-3">
+							<!-- Columna Izquierda -->
+							<div class="col-md-6">
+								<div class="mb-3">
+									<label for="editNombre" class="form-label fw-bold">Nombre de la Mascota</label>
+									<input type="text" class="form-control" id="editNombre" name="nombre" required>
+								</div>
+
+								<div class="mb-3">
+									<label for="editEspecie" class="form-label fw-bold">Especie</label>
+									<select class="form-select" id="editEspecie" name="especie" required>
+										<option value="perro">Perro</option>
+										<option value="gato">Gato</option>
+										<option value="ave">Ave</option>
+										<option value="roedor">Roedor</option>
+										<option value="reptil">Reptil</option>
+										<option value="otro">Otro</option>
+									</select>
+								</div>
+
+								<div class="mb-3">
+									<label for="editRaza" class="form-label fw-bold">Raza</label>
+									<input type="text" class="form-control" id="editRaza" name="raza">
+								</div>
+
+								<div class="mb-3">
+									<label for="editFotoFile" class="form-label fw-bold">Cambiar Foto</label>
+									<input class="form-control" type="file" id="editFotoFile" name="fotoFile"
+										accept="image/*">
+									<div class="form-text">La foto actual se mantendrá si no subes una nueva</div>
+								</div>
+							</div>
+
+							<!-- Columna Derecha -->
+							<div class="col-md-6">
+								<div class="row mb-3">
+									<div class="col-6">
+										<label for="editEdad" class="form-label fw-bold">Edad</label>
+										<div class="input-group">
+											<input type="number" class="form-control" id="editEdad" name="edad" min="0"
+												max="50" required>
+											<select class="form-select" id="editUnidadEdad" name="unidadEdad"
+												style="max-width: 120px;" required>
+												<option value="meses">Meses</option>
+												<option value="años">Años</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-6">
+										<label for="editGenero" class="form-label fw-bold">Género</label>
+										<select class="form-select" id="editGenero" name="genero">
+											<option value="M">Macho</option>
+											<option value="F">Hembra</option>
+											<option value="desconocido">Desconocido</option>
+										</select>
+									</div>
+								</div>
+
+								<div class="mb-3">
+									<label for="editTamano" class="form-label fw-bold">Tamaño</label>
+									<select class="form-select" id="editTamano" name="tamano">
+										<option value="pequeño">Pequeño</option>
+										<option value="mediano">Mediano</option>
+										<option value="grande">Grande</option>
+									</select>
+								</div>
+
+								<div class="mb-3">
+									<label for="editDescripcion" class="form-label fw-bold">Descripción</label>
+									<textarea class="form-control" id="editDescripcion" name="descripcion"
+										rows="4"></textarea>
+								</div>
+							</div>
+						</div>
+
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+								<i class="fas fa-times me-2"></i>Cancelar
+							</button>
+							<button type="submit" class="btn btn-primary">
+								<i class="fas fa-save me-2"></i>Guardar Cambios
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal para detalles de compra -->
+	<div class="modal fade" id="purchaseDetailsModal" tabindex="-1" aria-labelledby="purchaseDetailsModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="purchaseDetailsModalLabel">Detalles de Compra</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body" id="purchase-details-content">
+					<!-- Los detalles de la compra se cargarán aquí -->
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal para detalles de cita -->
+	<div class="modal fade" id="appointmentDetailsModal" tabindex="-1" aria-labelledby="appointmentDetailsModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="appointmentDetailsModalLabel">Detalles de Cita</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body" id="appointment-details-content">
+					<!-- Los detalles de la cita se cargarán aquí -->
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Bootstrap JS Bundle with Popper -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+	<script>
+		// Función para cerrar sesión del usuario con confirmación
+		function cerrarSesionUsuario(event) {
+			// Prevenir comportamiento por defecto
+			if (event) {
+				event.preventDefault();
+				event.stopPropagation();
+			}
+
+			Swal.fire({
+				title: '¿Cerrar sesión?',
+				text: '¿Estás seguro de que deseas cerrar la sesión?',
+				icon: 'question',
+				showCancelButton: true,
+				confirmButtonColor: '#dc3545',
+				cancelButtonColor: '#6c757d',
+				confirmButtonText: 'Sí, cerrar sesión',
+				cancelButtonText: 'Cancelar',
+				background: '#fff',
+				customClass: {
+					popup: 'swal-popup-usuario',
+					title: 'swal-title-usuario',
+					content: 'swal-content-usuario'
+				}
+			}).then((result) => {
+				if (result.isConfirmed) {
+					// Mostrar mensaje de despedida
+					Swal.fire({
+						title: 'Sesión cerrada',
+						text: 'Hasta pronto, esperamos verte pronto con tus mascotas',
+						icon: 'success',
+						timer: 2000,
+						showConfirmButton: false,
+						background: '#fff',
+						customClass: {
+							popup: 'swal-popup-usuario',
+							title: 'swal-title-usuario'
+						}
+					}).then(() => {
+						// Redirigir al index
+						window.location.href = '/usuarios/index';
+					});
+				}
+			});
+		}
+	</script>
+
+	<!-- JS Personalizado (archivo único fusionado) -->
+	<script src="assets/JS/JS-Usuario.js"></script>
+</body>
+
+</html>

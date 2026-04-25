@@ -1,12 +1,12 @@
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, JoinTable, OneToMany, OneToOne } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany, OneToOne, ManyToOne, JoinColumn } from 'typeorm';
 import { ApiProperty, ApiHideProperty } from '@nestjs/swagger';
-import { Role } from '../../roles/entities/role.entity';
 import { Pet } from '../../pets/entities/pet.entity';
 import { Cita } from '../../citas/entities/cita.entity';
 import { PerfilVeterinario } from '../../perfiles-veterinarios/entities/perfil-veterinario.entity';
 import { Adopcion } from '../../adopciones/entities/adopcion.entity';
 import { HistorialCita } from '../../historial-citas/entities/historial-cita.entity';
 import { MovimientoInventario } from '../../movimientos/entities/movimiento-inventario.entity';
+import { Role } from '../../roles/entities/role.entity';
 
 @Entity('users')
 export class User {
@@ -29,28 +29,50 @@ export class User {
   @Column({ nullable: true })
   fullName: string;
 
+  @ApiProperty({ description: 'Nombres', example: 'Juan Carlos', required: false })
+  @Column({ nullable: true })
+  firstName: string;
+
+  @ApiProperty({ description: 'Apellidos', example: 'Pérez García', required: false })
+  @Column({ nullable: true })
+  lastName: string;
+
   @ApiProperty({ description: 'Teléfono', example: '+1234567890', required: false })
   @Column({ nullable: true })
   phone: string;
+
+  @ApiProperty({ description: 'Tipo de documento', example: 'Cédula', required: false })
+  @Column({ nullable: true })
+  documentType: string;
+
+  @ApiProperty({ description: 'Número de documento', example: '12345678', required: false })
+  @Column({ nullable: true })
+  documentNumber: string;
+
+  @ApiProperty({ description: 'Edad', example: 25, required: false })
+  @Column({ nullable: true })
+  age: number;
+
+  @ApiProperty({ description: 'Dirección', example: 'Calle 123 #45-67', required: false })
+  @Column({ nullable: true })
+  address: string;
 
   @ApiProperty({ description: 'Estado del usuario', example: true })
   @Column({ default: true })
   isActive: boolean;
 
-  @ApiProperty({ description: 'Roles del usuario', type: () => [Role] })
-  @ManyToMany(() => Role, role => role.users, { cascade: true })
-  @JoinTable({
-    name: 'user_roles',
-    joinColumn: {
-      name: 'user_id',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'role_id',
-      referencedColumnName: 'id',
-    },
-  })
-  roles: Role[];
+  @ApiProperty({ description: 'Imagen de perfil (URL o Base64)', required: false })
+  @Column({ type: 'text', nullable: true })
+  avatar: string;
+
+  @ApiProperty({ description: 'ID del rol del usuario', example: 4 })
+  @Column({ default: 4 }) // 4 = rol 'usuario' por defecto
+  roleId: number;
+
+  @ApiProperty({ description: 'Rol del usuario', type: () => Role })
+  @ManyToOne(() => Role, { eager: true })
+  @JoinColumn({ name: 'roleId' })
+  role: Role;
 
   @OneToMany(() => Pet, pet => pet.owner)
   pets: Pet[];

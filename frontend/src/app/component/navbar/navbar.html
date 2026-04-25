@@ -1,0 +1,71 @@
+<nav class="navbar">
+		<div class="navbar-container">
+			<div class="brand-section">
+				<div class="logo">
+					<img src="assets/IMG/logo.png" alt="logo" class="logo">
+				</div>
+				<a routerLink="/inicio" style="text-decoration: none;">
+					<span class="brand-name">HelpYourPet</span>
+				</a>
+			</div>
+
+			<div class="d-flex align-items-center">
+				<div class="botones-finales">
+					<div class="nav-buttons">
+						<div class="theme-toggle-container">
+							<input type="checkbox" id="themeToggle" class="theme-toggle-checkbox" [checked]="isDarkMode" (change)="toggleTheme($event)">
+							<label for="themeToggle" class="theme-toggle-label">
+								<div class="toggle-circle">
+									<i class="bi bi-moon-stars-fill toggle-icon moon-icon"></i>
+									<i class="bi bi-sun-fill toggle-icon sun-icon"></i>
+								</div>
+							</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="hamburger-menu">
+					<button class="hamburger-btn" (click)="toggleMenu($event)">
+						<i class="fas fa-bars"></i>
+					</button>
+					<div class="menu-content" [class.active]="isMenuOpen" (click)="$event.stopPropagation()">
+						<div class="menu-item">
+							<a routerLink="/perfil-usuario" style="text-decoration: none;">
+								<i class="fas fa-user-plus"></i>
+								<span>Perfil</span>
+							</a>
+						</div>
+						<div class="menu-item">
+							<a routerLink="/tienda" style="text-decoration: none;"> <i class="fas fa-shop"></i>
+								<span>PetShop</span></a>
+						</div>
+						<!--<div class="menu-item">
+							<a href="Reporte.html" style="text-decoration: none;">
+								<i class="fas fa-clinic-medical"></i>
+								<span>Reporte Maltrato</span>
+							</a>
+						</div>
+						<div class="menu-item">
+							<a href="Calificaciones.html" style="text-decoration: none;">
+								<i class="fas fa-star"></i>
+								<span>Calificaciones</span>
+							</a>
+						</div>-->
+
+
+						<div class="menu-item">
+							<a routerLink="/sobre-nosotros" style="text-decoration: none;"> <i
+									class="fas fa-users"></i>
+								<span>Acerca de Nosotros</span></a>
+						</div>
+						<div class="menu-item">
+							<a routerLink="/" style="text-decoration: none;">
+								<i class="fas fa-arrow-right"></i>
+								<span>Cerrar Sesión</span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</nav>

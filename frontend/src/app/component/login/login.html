@@ -1,0 +1,69 @@
+<div class="login-container">
+
+    <!-- LADO IZQUIERDO -->
+    <div class="left">
+
+        <!-- IMAGEN -->
+        <img src="assets/images/fondoinicio.png" class="Mascotas">
+
+        <!-- TEXTO ENCIMA -->
+        <div class="overlay">
+            <h1>Helpyourpet</h1>
+            <p>Cuidamos a quienes más amas</p>
+        </div>
+
+    </div>
+
+    <!-- LINEA DIVISORA -->
+    <div class="vertical-divider"></div>
+
+    <!-- LADO DERECHO -->
+    <div class="right">
+
+        <div class="form-box">
+
+            <div class="titulo">Iniciar sesión</div>
+
+            <input 
+                type="text" 
+                placeholder="Correo electrónico o celular" 
+                [(ngModel)]="credentials.username"
+                [disabled]="isLoading"
+            >
+            <input 
+                type="password" 
+                placeholder="Contraseña" 
+                [(ngModel)]="credentials.password"
+                [disabled]="isLoading"
+            >
+
+            <button 
+                class="login-btn" 
+                (click)="onSubmit()"
+                [disabled]="isLoading"
+            >
+                {{ isLoading ? 'Iniciando sesión...' : 'Iniciar sesión' }}
+            </button>
+
+            <div *ngIf="errorMessage" class="error-message">
+                {{ errorMessage }}
+            </div>
+
+            <a class="forgot" routerLink="/recovery">¿Olvidaste tu contraseña?</a>
+
+            <div class="divider"></div>
+
+            <button class="register-btn" routerLink="/register">
+                Crear cuenta nueva
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <p>&copy; 2024 Helpyourpet - Todos los derechos reservados</p>
+    </div>
+
+</div>

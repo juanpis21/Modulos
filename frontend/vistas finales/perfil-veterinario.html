@@ -1,0 +1,1579 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Clinic Pet - Dashboard Veterinario</title>
+
+	<!-- Bootstrap 5 (SIN Thymeleaf - como en el que SÍ funciona) -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Bootstrap Icons -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+	<!-- FontAwesome (SIN Thymeleaf - como en el que SÍ funciona) -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+	<!-- Google Fonts (SIN Thymeleaf) -->
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+		rel="stylesheet">
+
+	<!-- En el <head> -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+	<!-- CSS Personalizado (CON Thymeleaf - como en el que SÍ funciona) -->
+	<link rel="stylesheet" href="assets/CSS/Css-Veterinario.css">
+	<style>
+		/* Estilos personalizados para SweetAlert2 del veterinario */
+		.swal-popup-veterinario {
+			font-family: 'Poppins', sans-serif !important;
+			border-radius: 15px !important;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+		}
+
+		.swal-title-veterinario {
+			color: #2c3e50 !important;
+			font-weight: 600 !important;
+		}
+
+		.swal-content-veterinario {
+			color: #5a6c7d !important;
+		}
+
+		/* Efecto hover para el botón de cerrar sesión */
+		.logout-veterinario:hover {
+			background-color: rgba(220, 53, 69, 0.2) !important;
+			transform: translateX(5px);
+			transition: all 0.3s ease;
+		}
+
+		/* Estilos del menú hamburguesa - solo visible en móviles */
+		.hamburger-menu-btn {
+			display: none;
+			background: transparent;
+			border: none;
+			font-size: 24px;
+			color: var(--text-color, #333);
+			cursor: pointer;
+			padding: 8px;
+			margin-right: 15px;
+			transition: all 0.3s ease;
+			border-radius: 8px;
+		}
+
+		.hamburger-menu-btn:hover {
+			background: rgba(0, 0, 0, 0.05);
+		}
+
+		.hamburger-menu-btn:active {
+			transform: scale(0.95);
+		}
+
+		/* Overlay para cerrar el menú al hacer clic fuera */
+		.sidebar-overlay {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: 998;
+			opacity: 0;
+			transition: opacity 0.3s ease;
+		}
+
+		.sidebar-overlay.active {
+			display: block;
+			opacity: 1;
+		}
+
+		/* Media query para pantallas pequeñas (móviles) */
+		@media (max-width: 768px) {
+			.hamburger-menu-btn {
+				display: block;
+			}
+
+			.sidebar {
+				position: fixed;
+				left: -280px;
+				transition: left 0.3s ease;
+				z-index: 999;
+			}
+
+			.sidebar.active {
+				left: 0;
+			}
+
+			.main-content {
+				margin-left: 0;
+			}
+		}
+	</style>
+</head>
+
+<body>
+
+	<!-- Overlay para cerrar el menú en móviles -->
+	<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+	<!-- Menú Lateral -->
+	<nav class="sidebar" id="sidebar">
+		<div class="user-profile">
+			<!-- ✅ Foto dinámica -->
+			<img src="assets/IMG/Desparasitacion1.png">
+			<div>
+				<small>Veterinario</small>
+				<!-- ✅ Nombre dinámico -->
+				<h6>Dr.
+					Pérez</h6>
+			</div>
+		</div>
+
+		<ul class="menu-items">
+			<li><a href="#inicio" class="menu-link active" data-section="inicio"><i class="fas fa-home"></i>
+					<span>Inicio</span></a></li>
+			<!-- <li><a href="#agenda" class="menu-link" data-section="agenda"><i class="fas fa-calendar-alt"></i>
+					<span>Agenda</span></a></li>
+			<li><a href="#historias" class="menu-link" data-section="historias"><i class="fas fa-paw"></i>
+					<span>Historias Clínicas</span></a></li>
+			<li><a href="#adopciones" class="menu-link" data-section="adopciones"><i class="fas fa-heart"></i>
+					<span>Adopciones</span></a></li> -->
+			<li><a href="#eventos" class="menu-link" data-section="eventos"><i class="fa-solid fa-calendar-week"></i>
+					<span>Eventos y Campañas</span></a></li>
+			<li><a href="#petshop" class="menu-link" data-section="petshop"><i class="fas fa-shopping-bag"></i>
+					<span>Pet Shop</span></a></li>
+			<li><a href="#configuracion" class="menu-link" data-section="configuracion"><i class="fas fa-cog"></i>
+					<span>Configuración</span></a></li>
+			<!-- Separador y Cerrar Sesión -->
+			<li style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border-color, #e0e0e0);">
+				<a href="#" class="menu-link logout-veterinario" onclick="cerrarSesionVeterinario(event)"
+					style="color: #dc3545; background: rgba(220, 53, 69, 0.1); border-radius: 8px; transition: all 0.3s ease;">
+					<i class="fas fa-sign-out-alt"></i>
+					<span>Cerrar Sesión</span>
+				</a>
+			</li>
+		</ul>
+	</nav>
+
+	<!-- Contenido Principal -->
+	<main class="main-content">
+		<!-- Barra Superior -->
+		<header class="top-bar">
+			<div class="top-bar-left">
+				<!-- Botón Hamburguesa (solo visible en móviles) -->
+				<button class="hamburger-menu-btn" id="hamburgerBtn" aria-label="Abrir menú">
+					<i class="fas fa-bars"></i>
+				</button>
+			</div>
+			<div class="search-bar">
+				<input type="text" id="searchInput" placeholder="Buscar..." autocomplete="off">
+				<i class="fas fa-search"></i>
+				<div class="search-results" id="searchResults"></div>
+			</div>
+			<div class="user-actions">
+				<!-- Toggle Modo Oscuro/Claro -->
+				<div class="theme-toggle-container">
+					<input type="checkbox" id="themeToggle" class="theme-toggle-checkbox">
+					<label for="themeToggle" class="theme-toggle-label">
+						<i class="bi bi-moon-stars-fill toggle-icon moon-icon"></i>
+						<i class="bi bi-sun-fill toggle-icon sun-icon"></i>
+					</label>
+				</div>
+			</div>
+		</header>
+
+		<!-- Secciones de contenido -->
+		<div class="content-sections">
+			<!-- Sección Inicio -->
+			<section id="inicio" class="content-section active">
+				<div class="welcome-section">
+					<h1>
+						Hola, Dr. Pérez 👋
+					</h1>
+					<p>Bienvenido a tu panel de control. Aquí puedes gestionar todas las actividades de la clínica.</p>
+
+					<div class="summary-cards">
+						<!-- <div class="card card-summary bg-success">
+							<i class="fas fa-paw"></i>
+							<h3>0</h3>
+							<p>Mascotas atendidas hasta la fecha</p>
+						</div> -->
+						<div class="card card-summary bg-warning">
+							<i class="fa-solid fa-calendar-week"></i>
+							<h3>0</h3>
+							<p>Eventos</p>
+						</div>
+						<div class="card card-summary bg-info">
+							<i class="fas fa-shopping-bag"></i>
+							<h3>0</h3>
+							<p>Productos</p>
+						</div>
+					</div>
+
+					<div class="quick-actions">
+						<h3>Acciones rápidas</h3>
+						<div class="actions-grid">
+							<button class="btn-action" onclick="openModal('new-event')">
+								<i class="fa-solid fa-calendar-week"></i>
+								<span>Crear evento</span>
+							</button>
+							<button class="btn-action" onclick="openModal('new-product')">
+								<i class="fas fa-box-open"></i>
+								<span>Agregar producto</span>
+							</button>
+							<!-- <button class="btn-action" onclick="openModal('new-appointment')">
+								<i class="fa-solid fa-file-medical"></i>
+								<span>Nueva cita</span>
+							</button>
+							<button class="btn-action" onclick="openModal('new-pet')">
+								<i class="fa-solid fa-file-circle-exclamation"></i>
+								<span>Registrar emergencia</span>
+							</button> -->
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Sección Agenda 
+			<section id="agenda" class="content-section">
+				<div class="section-header">
+					<h2><i class="fas fa-calendar-alt"></i> Agenda de Citas</h2>
+					<button class="btn btn-primary" onclick="openModal('new-appointment')">
+						<i class="fas fa-plus"></i> Nueva cita
+					</button>
+				</div>
+
+				<div class="filters">
+					<button class="btn btn-filter active" data-filter="all">Todas</button>
+					<button class="btn btn-filter" data-filter="completed">Finalizadas</button>
+					<button class="btn btn-filter" data-filter="canceled">Canceladas</button>
+				</div>
+
+				<div class="table-responsive">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th>Hora</th>
+								<th>Mascota</th>
+								<th>Dueño</th>
+								<th>Motivo</th>
+								<th>Acciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr data-status="pending">
+								<td>09:00 AM</td>
+								<td class="pet-cell">
+									<img src="assets/IMG/golden.jpg" alt="Max">
+									<div>
+										<strong>Max</strong>
+										<small>Golden Retriever, 3 años</small>
+									</div>
+								</td>
+								<td>Ana López</td>
+								<td>Control anual</td>
+								<td>
+									<button class="btn btn-sm btn-success"
+										onclick="completeAppointment(2)">Finalizar</button>
+									<button class="btn btn-sm btn-danger">Cancelar</button>
+								</td>
+							</tr>
+							<tr data-status="in-progress">
+								<td>10:30 AM</td>
+								<td class="pet-cell">
+									<img src="assets/IMG/gata.jpg" alt="Luna">
+									<div>
+										<strong>Luna</strong>
+										<small>Siamesa, 2 años</small>
+									</div>
+								</td>
+								<td>Carlos Ruiz</td>
+								<td>Vacunación</td>
+								<td>
+									<button class="btn btn-sm btn-success"
+										onclick="completeAppointment(2)">Finalizar</button>
+									<button class="btn btn-sm btn-danger">Cancelar</button>
+
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</section> -->
+
+
+
+
+			<!-- Sección Historias Clínicas 
+			<section id="historias" class="content-section">
+				<div class="section-header">
+					<h2><i class="fas fa-paw"></i> Historias Clínicas</h2>
+				</div>
+
+				<div class="treatment-filters">
+					<div class="row">
+						<div class="col-md-3">
+							<label>Filtrar por mascota</label>
+							<select class="form-select">
+								<option>Todas las mascotas</option>
+								<option>Max (Golden Retriever)</option>
+								<option>Luna (Siamesa)</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<!-- Historia Clínica Card 
+					<div class="col-12">
+						<div class="hc-main-card">
+							<!-- Header 
+							<div class="hc-section">
+								<div class="hc-header">
+									<div class="hc-header-left">
+										<div class="hc-logo-title">
+											<i class="fa-solid fa-paw"></i>
+											<h3>Historia Clínica Veterinaria</h3>
+											<span class="hc-page-badge">HC-<span id="hcNumber">001</span></span>
+										</div>
+										<div class="hc-info-grid">
+											<div class="hc-info-box">
+												<h4><i class="fa-solid fa-user"></i> Dueño</h4>
+												<input type="text" class="hc-editable" placeholder="Nombre completo"
+													disabled>
+												<input type="text" class="hc-editable" placeholder="Teléfono" disabled>
+											</div>
+											<div class="hc-info-box">
+												<h4><i class="fa-solid fa-dog"></i> Mascota</h4>
+												<input type="text" class="hc-editable" placeholder="Nombre - Especie"
+													disabled>
+												<input type="text" class="hc-editable" placeholder="Raza, Edad"
+													disabled>
+											</div>
+											<div class="hc-info-box">
+												<h4><i class="fa-solid fa-user-doctor"></i> Veterinario</h4>
+												<input type="text" class="hc-editable" placeholder="Nombre" disabled>
+												<input type="text" class="hc-editable" placeholder="Cédula profesional"
+													disabled>
+											</div>
+											<div class="hc-info-box">
+												<h4><i class="fa-solid fa-hospital"></i> Veterinaria</h4>
+												<input type="text" class="hc-editable" placeholder="Nombre clínica"
+													disabled>
+												<input type="text" class="hc-editable" placeholder="Dirección" disabled>
+											</div>
+										</div>
+									</div>
+									<div class="hc-pet-photo" id="hcPetPhotoContainer">
+										<i class="fa-solid fa-camera"></i>
+										<input type="file" id="hcPhotoInput" accept="image/*" style="display:none">
+									</div>
+								</div>
+							</div>
+
+							<!-- Motivo y Anamnesis 
+							<div class="hc-section">
+								<div class="hc-two-cols">
+									<div>
+										<div class="hc-section-title"><i class="fa-solid fa-comment-medical"></i> Motivo
+											de Consulta</div>
+										<textarea class="hc-editable" disabled
+											placeholder="Ingrese el motivo de la consulta..."></textarea>
+									</div>
+									<div>
+										<div class="hc-section-title"><i class="fa-solid fa-clipboard-list"></i>
+											Anamnesis</div>
+										<textarea class="hc-editable" disabled
+											placeholder="Historial y síntomas reportados..."></textarea>
+									</div>
+								</div>
+							</div>
+
+							<!-- Examen Físico
+							<div class="hc-section">
+								<div class="hc-section-title"><i class="fa-solid fa-stethoscope"></i> Examen Físico
+								</div>
+								<div class="hc-vital-signs">
+									<div class="hc-vital-box">
+										<div class="hc-icon-circle hc-temp-icon"><i
+												class="fa-solid fa-temperature-three-quarters"></i></div>
+										<label>Temperatura (°C)</label>
+										<input type="number" step="0.1" class="hc-editable" placeholder="--" disabled>
+									</div>
+									<div class="hc-vital-box">
+										<div class="hc-icon-circle hc-heart-icon"><i
+												class="fa-solid fa-heart-pulse"></i></div>
+										<label>Frec. Cardíaca (lpm)</label>
+										<input type="number" class="hc-editable" placeholder="--" disabled>
+									</div>
+									<div class="hc-vital-box">
+										<div class="hc-icon-circle hc-resp-icon"><i class="fa-solid fa-lungs"></i></div>
+										<label>Frec. Respiratoria</label>
+										<input type="number" class="hc-editable" placeholder="--" disabled>
+									</div>
+									<div class="hc-vital-box">
+										<div class="hc-icon-circle hc-weight-icon"><i
+												class="fa-solid fa-weight-scale"></i></div>
+										<label>Peso Actual (kg)</label>
+										<input type="number" step="0.1" class="hc-editable" placeholder="--" disabled>
+									</div>
+									<div class="hc-vital-box">
+										<div class="hc-icon-circle hc-mucosa-icon"><i class="fa-solid fa-droplet"></i>
+										</div>
+										<label>Estado Mucosas</label>
+										<input type="text" class="hc-editable" placeholder="--" disabled>
+									</div>
+									<div class="hc-vital-box">
+										<div class="hc-icon-circle hc-body-icon"><i
+												class="fa-solid fa-chart-simple"></i></div>
+										<label>Condición Corporal</label>
+										<input type="text" class="hc-editable" placeholder="--" disabled>
+									</div>
+								</div>
+							</div>
+
+							<!-- Diagnóstico y Tratamiento 
+							<div class="hc-section">
+								<div class="hc-two-cols">
+									<div>
+										<div class="hc-section-title"><i class="fa-solid fa-magnifying-glass-chart"></i>
+											Diagnóstico</div>
+										<textarea class="hc-editable" disabled
+											placeholder="Diagnóstico del paciente..."></textarea>
+									</div>
+									<div>
+										<div class="hc-section-title"><i class="fa-solid fa-pills"></i> Tratamiento
+										</div>
+										<textarea class="hc-editable" disabled
+											placeholder="Tratamiento indicado..."></textarea>
+									</div>
+								</div>
+							</div>
+
+							<!-- Recomendaciones 
+							<div class="hc-section">
+								<div class="hc-section-title"><i class="fa-solid fa-lightbulb"></i> Recomendaciones
+								</div>
+								<textarea class="hc-editable" disabled
+									placeholder="Recomendaciones para el propietario..."></textarea>
+							</div>
+
+							<!-- Anexos y Fecha 
+							<div class="hc-section">
+								<div class="hc-two-cols">
+									<div>
+										<div class="hc-section-title"><i class="fa-solid fa-paperclip"></i> Anexos</div>
+										<div class="hc-attachments" id="hcDropZone">
+											<i class="fa-solid fa-cloud-arrow-up"></i>
+											<p>Clic o arrastre archivos<br><small>(Radiografías, imágenes)</small></p>
+											<input type="file" id="hcFileInput" multiple accept="image/*"
+												style="display:none">
+										</div>
+										<div class="hc-attachment-preview" id="hcAttachmentPreview"></div>
+									</div>
+									<div style="display:flex;flex-direction:column;justify-content:flex-start;">
+										<div class="hc-section-title"><i class="fa-solid fa-calendar-check"></i> Fecha
+											de Registro</div>
+										<input type="date" id="hcRegistrationDate" class="hc-editable" disabled>
+									</div>
+								</div>
+							</div> -->
+
+			<!-- Botones y Paginación 
+							<div class="hc-section hc-section-last">
+								<div class="hc-buttons">
+									<button class="hc-btn hc-btn-edit" id="hcEditBtn"><i
+											class="fa-solid fa-pen-to-square"></i> Editar</button>
+									<button class="hc-btn hc-btn-save" id="hcSaveBtn" style="display:none"><i
+											class="fa-solid fa-floppy-disk"></i> Guardar</button>
+									<button class="hc-btn hc-btn-new" id="hcNewBtn"><i class="fa-solid fa-plus"></i>
+										Nueva HC</button>
+									<button class="hc-btn hc-btn-print" id="hcPrintBtn"><i
+											class="fa-solid fa-print"></i> Imprimir</button>
+								</div>
+								<div class="hc-pagination">
+									<button class="hc-page-btn" id="hcPrevBtn"><i
+											class="fa-solid fa-chevron-left"></i></button>
+									<div class="hc-page-dots" id="hcPageDots"></div>
+									<div class="hc-page-info">Página <span id="hcCurrentPage">1</span> de <span
+											id="hcTotalPages">1</span></div>
+									<button class="hc-page-btn" id="hcNextBtn"><i
+											class="fa-solid fa-chevron-right"></i></button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section> -->
+
+
+
+			<!-- Sección Adopciones 
+			<section id="adopciones" class="content-section">
+				<div class="section-header">
+					<h2><i class="fas fa-heart"></i>Adopciones Realizadas</h2>
+					<button class="btn btn-primary" onclick="openModal('new-adoption')">
+						<i class="fas fa-plus"></i> Registrar adopción
+					</button>
+				</div>
+
+				<div class="adoption-filters">
+					<button class="btn btn-filter active">Todas</button>
+					<button class="btn btn-filter">Adopciones Pendientes</button>
+				</div>
+
+				<div class="adoption-list">
+					<div class="adoption-card">
+						<div class="adoption-header">
+							<div class="pet-info">
+								<img src="assets/IMG/rocky.jpg" alt="Rocky">
+								<div>
+									<h5>Rocky</h5>
+									<small>Mezcla · 1 año</small>
+								</div>
+							</div>
+						</div>
+						<div class="adoption-body">
+							<div class="row">
+								<div class="col-md-6">
+									<h6>Información de adopción</h6>
+									<p><strong>Fecha:</strong> 10/03/2023</p>
+									<p><strong>Adoptante:</strong> María González</p>
+									<p><strong>Teléfono:</strong> 555-5678</p>
+								</div>
+								<div class="col-md-6">
+									<h6>Seguimiento</h6>
+									<p><strong>Próximo control:</strong> 25/03/2023</p>
+									<p><strong>Estado:</strong> Primer control</p>
+									<p><strong>Notas:</strong> Requiere seguimiento especial por ansiedad</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section> -->
+
+			<!-- Eventos y Campañas -->
+			<section id="eventos" class="content-section">
+				<div class="section-header">
+					<h2><i class="fa-solid fa-calendar-week"></i> Eventos y Campañas</h2>
+					<button class="btn btn-primary" onclick="openModal('new-event')">
+						<i class="fas fa-plus"></i> Crear evento
+					</button>
+				</div>
+				
+
+				<div class="cards-container" id="cardsContainer">
+					<div class="event-card">
+						<div class="card-image-placeholder">
+							<!-- Aquí podrías mostrar la imagen real si existe -->
+							<i class="fas fa-image"></i>
+							<img src="assets/IMG/Desparasitacion1.png" alt="Imagen evento"
+								style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+						</div>
+						<div class="card-content">
+							<h4 class="card-title">Título del evento</h4>
+							<div class="card-date">
+								<i class="far fa-calendar-alt"></i>
+								<span>Desde ...</span>
+							</div>
+							<div class="card-date">
+								<i class="far fa-calendar-alt"></i>
+								<span>Hasta ...</span>
+							</div>
+							<p class="card-description">
+								Descripción del evento
+							</p>
+							<div class="card-actions">
+								<button class="btn btn-edit">
+									<i class="fas fa-pen"></i>
+									EDITAR
+								</button>
+								<button class="btn btn-delete">
+									<i class="fas fa-trash-alt"></i>
+									ELIMINAR
+								</button>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="pagination">
+					<button class="pagination-btn" id="prevBtn" onclick="changePage(-1)">
+						<i class="fas fa-chevron-left"></i>
+						Anterior
+					</button>
+					<div class="pagination-info">
+						Página <span id="currentPage">1</span> de <span id="totalPages">1</span>
+					</div>
+					<button class="pagination-btn" id="nextBtn" onclick="changePage(1)">
+						Siguiente
+						<i class="fas fa-chevron-right"></i>
+					</button>
+				</div>
+
+			</section>
+
+
+			<!-- Sección Pet Shop -->
+			<section id="petshop" class="content-section">
+				<div class="section-header">
+					<h2><i class="fas fa-shopping-bag"></i> Pet Shop</h2>
+					<button class="btn btn-primary" onclick="openModal('new-product')">
+						<i class="fas fa-plus"></i> Agregar producto
+					</button>
+				</div>
+
+				<div class="product-filters">
+					<form class="row" action="#" method="get">
+						<div class="col-md-3">
+							<label>Categoría</label>
+							<select class="form-select" name="categoria" id="filtro-categoria">
+								<option value="">
+									Todas las categorías
+								</option>
+								<option value="Alimentos">
+									Alimentos</option>
+								<option value="Medicamentos">
+									Medicamentos</option>
+								<option value="Juguetes">Juguetes
+								</option>
+								<option value="Accesorios">
+									Accesorios</option>
+							</select>
+						</div>
+						<div class="col-md-3">
+							<label>Estado</label>
+							<select class="form-select" name="estado" id="filtro-estado">
+								<option value="">
+									Todos
+								</option>
+								<option value="Disponible">
+									Disponible</option>
+								<option value="Agotado">Agotado
+								</option>
+							</select>
+						</div>
+					</form>
+				</div>
+				<div class="product-grid">
+					<div class="product-card">
+						<div class="product-badge">
+							Disponible
+						</div>
+
+						<div class="product-image">
+							<img src="assets/IMG/Desparasitacion1.png">
+						</div>
+
+						<div class="product-info">
+							<h5>Nombre producto</h5>
+							<p class="product-description">Descripción</p>
+							<div class="product-meta">
+								<span class="price">$0.000</span>
+								<span class="stock">
+									<i class="fas fa-box"></i>
+									<span>
+										0 unidades
+									</span>
+								</span>
+							</div>
+							<div class="product-actions">
+								<button class="btn btn-sm btn-primary"><i
+										class="fas fa-edit"></i></button>
+								<form
+									method="post" style="display:inline;">
+									<button type="submit" class="btn btn-sm btn-danger"
+										onclick="return confirm('¿Seguro que deseas eliminar este producto?');">
+										<i class="fas fa-trash"></i>
+									</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+
+			<!-- Sección Configuración -->
+			<section id="configuracion" class="content-section">
+				<div class="section-header">
+					<h2><i class="fas fa-cog"></i> Configuración</h2>
+				</div>
+
+				<form action="#" method="post" enctype="multipart/form-data">
+					<div class="config-container">
+
+						<div class="config-content">
+							<!-- Columna izquierda: Foto de perfil y vista previa -->
+							<div class="config-left-column">
+								<div class="config-photo-card">
+									<div class="config-photo-wrapper">
+										<img id="previewFoto" src="assets/IMG/Desparasitacion1.png" alt="Foto de perfil"
+											class="config-profile-img">
+
+									</div>
+									<button type="button" class="config-change-photo-btn"
+										onclick="document.getElementById('inputFoto').click()">
+										<i class="fas fa-camera"></i> Cambiar foto
+									</button>
+									<input type="file" name="foto" id="inputFoto" accept="image/*"
+										style="display: none;" onchange="previewImage(event)">
+									<small class="config-photo-hint">
+										<i class="fas fa-info-circle"></i> Cualquier imagen (Máx. 10MB)
+									</small>
+								</div>
+
+								<!-- Vista previa de la nueva foto -->
+								<div id="newPhotoPreview" class="new-photo-preview" style="display: none;">
+									<div class="preview-header">
+										<span><i class="fas fa-image"></i> Nueva foto seleccionada</span>
+										<button type="button" class="preview-remove" onclick="removePreview()">
+											<i class="fas fa-times"></i>
+										</button>
+									</div>
+									<img id="newPhotoImg" src="" alt="Vista previa" class="preview-img">
+								</div>
+							</div>
+
+							<!-- Columna derecha: Información en dos columnas -->
+							<div class="config-info-section">
+								<!-- Información Personal -->
+								<div class="config-info-group">
+									<h3 class="config-section-title">
+										<i class="fas fa-user"></i> Información Personal
+									</h3>
+									<div class="config-field">
+										<label class="config-label">
+											<i class="fas fa-user"></i> Nombre
+										</label>
+										<input type="text" class="config-input">
+									</div>
+									<div class="config-field">
+										<label class="config-label">
+											<i class="fas fa-user"></i> Apellidos
+										</label>
+										<input type="text" class="config-input">
+									</div>
+									<div class="config-field">
+										<label class="config-label">
+											<i class="fas fa-user-md"></i> Especialidad
+										</label>
+										<input type="text" class="config-input config-readonly" readonly>
+										<small class="config-hint"><i class="fas fa-lock"></i> No modificable</small>
+									</div>
+									<div class="config-field">
+										<label class="config-label">
+											<i class="fas fa-id-card"></i> Tarjeta Profesional
+										</label>
+										<input type="text" class="config-input config-readonly" readonly>
+										<small class="config-hint"><i class="fas fa-lock"></i> No modificable</small>
+									</div>
+								</div>
+
+								<!-- Información de Contacto -->
+								<div class="config-info-group">
+									<h3 class="config-section-title">
+										<i class="fas fa-address-book"></i> Información de Contacto
+									</h3>
+									<div class="config-field">
+										<label class="config-label">
+											<i class="fas fa-envelope"></i> Email
+										</label>
+										<input type="email" class="config-input config-readonly" readonly>
+										<small class="config-hint"><i class="fas fa-lock"></i> No modificable</small>
+									</div>
+									<div class="config-field">
+										<label class="config-label">
+											<i class="fas fa-phone"></i> Teléfono
+										</label>
+										<input type="tel" class="config-input">
+									</div>
+									<div class="config-field">
+										<label class="config-label">
+											<i class="fas fa-briefcase"></i> Experiencia
+										</label>
+										<input type="text" class="config-input"
+											placeholder="Años de experiencia">
+									</div>
+									<div class="config-field">
+										<label class="config-label">
+											<i class="fas fa-map-marker-alt"></i> Dirección
+										</label>
+										<input type="text" class="config-input">
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Botones de acción -->
+						<div class="config-actions">
+							<button type="button" class="config-btn config-btn-save"
+								onclick="confirmSaveChanges(event)">
+								<i class="fas fa-save"></i> Guardar Cambios
+							</button>
+							<button type="button" class="config-btn config-btn-password">
+								<a href="recovery.html">
+									<i class="fas fa-key"></i> Cambiar Contraseña</a>
+							</button>
+							<button type="button" class="config-btn config-btn-delete" onclick="confirmDeleteAccount()">
+								<i class="fas fa-trash-alt"></i> Eliminar Cuenta
+							</button>
+						</div>
+					</div>
+				</form>
+			</section>
+
+			<!-- Modales -->
+			<div class="modal-overlay" id="modal-overlay"></div>
+
+			<!-- Modal Crear Evento -->
+			<div class="modal" id="edit-event-modal">
+				<form id="form-edit-event" method="post" enctype="multipart/form-data">
+					<input type="hidden" id="edit-event-id" name="idEvento">
+					<div class="modal-header">
+						<h3><i class="fa-solid fa-calendar-week"></i>Editar Evento</h3>
+						<button class="btn-close-modal" onclick="closeModal()"><i class="fas fa-times"></i></button>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-6 mb-3">
+								<label class="form-label" for="edit-event-nombre">Nombre del evento</label>
+								<input type="text" id="edit-event-nombre" name="nombre" placeholder="Nombre"
+									class="form-control" required>
+							</div>
+							<div class="col-md-6 mb-3">
+								<label class="form-label" for="edit-event-imagen">Imagen del evento</label>
+								<input type="file" id="edit-event-imagen" name="fileImagen" class="form-control"
+									accept="image/*">
+								<small class="text-muted">Deja vacío para mantener la imagen actual</small>
+							</div>
+							<div class="col-md-6 mb-3">
+								<label class="form-label" for="edit-event-fechainicio">Fecha de Inicio</label>
+								<input type="date" id="edit-event-fechainicio" name="fechainicio" class="form-control"
+									required>
+							</div>
+							<div class="col-md-6 mb-3">
+								<label class="form-label" for="edit-event-fechafin">Fecha de finalización</label>
+								<input type="date" id="edit-event-fechafin" name="fechafin" class="form-control"
+									required>
+							</div>
+							<div class="mb-3">
+								<label class="form-label">Descripción del evento</label>
+								<textarea id="edit-event-descripcion" class="form-control" rows="3"
+									name="descripcion"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+						<button type="submit" class="btn btn-primary">Actualizar evento</button>
+					</div>
+				</form>
+			</div>
+
+
+
+
+			<!-- Modal Editar Evento -->
+			<div class="modal" id="new-event-modal">
+				<form action="#" method="post" enctype="multipart/form-data">
+					<div class="modal-header">
+						<h3><i class="fa-solid fa-calendar-week"></i>Crear Evento</h3>
+						<button class="btn-close-modal" onclick="closeModal()"><i class="fas fa-times"></i></button>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-6 mb-3">
+								<label class="form-label" for="nombre">Nombre del evento</label>
+								<input type="text" id="nombre" name="nombre" placeholder="Nombre" class="form-control"
+									required>
+							</div>
+							<div class="col-md-6 mb-3">
+								<label class="form-label" for="imagen">Imagen del evento</label>
+								<input type="file" id="imagen" name="fileImagen" class="form-control" accept="image/*"
+									required>
+							</div>
+							<div class="col-md-6 mb-3">
+								<label class="form-label" for="fechainicio">Fecha de Inicio</label>
+								<input type="date" id="fechainicio" name="fechainicio" class="form-control" required>
+							</div>
+							<div class="col-md-6 mb-3">
+								<label class="form-label" for="fechafin">Fecha de finalización</label>
+								<input type="date" id="fechafin" name="fechafin" class="form-control" required>
+							</div>
+							<div class="mb-3">
+								<label class="form-label">Descripción del evento</label>
+								<textarea class="form-control" rows="3" name="descripcion"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+						<button type="submit" class="btn btn-primary">Publicar evento</button>
+					</div>
+				</form>
+			</div>
+
+
+
+			<!-- En tu página perfil-veterinario.html, asegúrate de tener esto: -->
+			<div id="veterinaria-data"
+				style="display:none;">
+			</div>
+			<!-- Modal Agregar Producto -->
+			<div class="modal" id="new-product-modal">
+				<form action="#" method="post" enctype="multipart/form-data"
+					id="form-producto">
+					<div class="modal-header">
+						<h3><i class="fas fa-box-open"></i> Agregar Producto</h3>
+						<button type="button" class="btn-close-modal" onclick="closeModal()">
+							<i class="fas fa-times"></i>
+						</button>
+					</div>
+
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-6 mb-3">
+								<label class="form-label" for="nombre">Nombre *</label>
+								<input type="text" id="nombre" name="nombre" placeholder="Nombre del producto"
+									class="form-control" required minlength="2">
+							</div>
+							<div class="col-md-6 mb-3">
+								<label class="form-label" for="precio">Precio *</label>
+								<input type="number" id="precio" name="precio" step="1.000" min="0" placeholder="0.000"
+									class="form-control" required>
+							</div>
+							<div class="col-md-6 mb-3">
+								<label for="cantidadDisponible" class="form-label">Cantidad *</label>
+								<input type="number" id="cantidadDisponible" name="cantidadDisponible"
+									class="form-control" min="1" required>
+								<small class="text-muted">Número de unidades que ingresan al stock</small>
+							</div>
+							<div class="col-md-6 mb-3">
+								<label for="categoria" class="form-label">Categoría *</label>
+								<select id="categoria" name="categoria" class="form-select" required>
+									<option value="">Seleccionar categoría</option>
+									<option value="Alimentos">Alimentos</option>
+									<option value="Medicamentos">Medicamentos</option>
+									<option value="Juguetes">Juguetes</option>
+									<option value="Accesorios">Accesorios</option>
+								</select>
+							</div>
+						</div>
+						<div class="mb-3">
+							<label class="form-label" for="descripcion">Descripción *</label>
+							<textarea id="descripcion" name="descripcion" class="form-control" rows="3"
+								placeholder="Descripción del producto" required></textarea>
+						</div>
+						<div class="mb-3">
+							<label class="form-label" for="imagen">Imagen del Producto *</label>
+							<input type="file" id="imagen" name="fileImagen" class="form-control" accept="image/*"
+								required>
+							<!-- CAMPO OCULTO CON VALOR FIJO PARA PRUEBAS -->
+							<input type="hidden" name="idveterinaria" id="idveterinaria-input" value="1">
+
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+						<button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
+
+					</div>
+				</form>
+			</div>
+
+
+
+
+			<!-- Modal Nueva Cita -->
+			<div class="modal" id="new-appointment-modal">
+				<form action="#" method="post">
+					<div class="modal-header">
+						<h3><i class="fas fa-calendar-plus"></i> Nueva Cita</h3>
+						<button class="btn-close-modal" onclick="closeModal()"><i class="fas fa-times"></i></button>
+					</div>
+					<div class="modal-body">
+						<div class="mb-3">
+							<label class="form-label" for="mascota">Mascota</label>
+							<select id="mascotas" name="mascotas.id" class="form-control" required>
+								<option value="" disabled selected>Selecciona una mascota</option>
+								<option></option>
+							</select>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="mb-3">
+									<label class="form-label">Fecha</label>
+									<input type="date" class="form-control" name="fecha">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="mb-3">
+									<label class="form-label">Hora</label>
+									<input type="time" class="form-control" name="hora">
+								</div>
+							</div>
+						</div>
+						<div class="mb-3">
+							<label class="form-label" for="motivo">Motivo</label>
+							<textarea id="motivo" name="motivo" class="form-control" rows="3" required></textarea>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+						<button type="submit" class="btn btn-primary">Agendar cita</button>
+					</div>
+				</form>
+			</div>
+
+
+			<!-- Modal Emergencia -->
+			<div class="modal" id="new-pet-modal">
+				<div class="modal-header">
+					<h3><i class="fas fa-exclamation-triangle"></i>Registrar Emergencia</h3>
+					<button class="btn-close-modal" onclick="closeModal()"><i class="fas fa-times"></i></button>
+				</div>
+				<div class="modal-body">
+					<form action="#" method="post">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="mb-3">
+									<label class="form-label">Mascota</label>
+									<select class="form-select" name="mascotaId">
+										<option value="">Seleccione una mascota</option>
+										<option>
+										</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="mb-3">
+									<label class="form-label">Tipo</label>
+									<select name="tipo" class="form-control" required>
+										<option value="">Seleccione el tipo de emergencia</option>
+										<option value="accidente">Accidente</option>
+										<option value="enfermedad">Enfermedad</option>
+										<option value="intoxicacion">Intoxicación</option>
+										<option value="parto">Parto</option>
+										<option value="cirugia">Cirugia</option>
+										<option value="otro">Otro</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="mb-3">
+									<label class="form-label">Fecha</label>
+									<input type="date" class="form-control" name="fecha">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="mb-3">
+									<label class="form-label">Hora</label>
+									<input type="time" class="form-control" name="hora">
+								</div>
+							</div>
+						</div>
+						<div class="mb-3">
+							<label class="form-label">Descripción</label>
+							<textarea class="form-control" rows="3" name="descripcion"></textarea>
+						</div>
+						<input type="hidden" name="veterinariaId">
+						<input type="hidden" name="veterinarioId">
+
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+							<button type="submit" class="btn btn-primary">Registrar Emergencia</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<!-- Más modales... -->
+
+			<!-- En tu página perfil-veterinario.html, asegúrate de tener esto: -->
+			<div id="veterinaria-data" data-id="${veterinaria.id}" style="display:none;">
+			</div>
+			<!-- Modal Editar Producto -->
+			<div class="modal" id="edit-product-modal">
+				<form method="post"
+					enctype="multipart/form-data" id="form-producto-editar">
+					<div class="modal-header">
+						<h3><i class="fa-solid fa-pen-to-square"></i> Editar Producto</h3>
+						<button type="button" class="btn-close-modal" onclick="closeModal()">
+							<i class="fas fa-times"></i>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-6 mb-3">
+								<label class="form-label" for="edit-nombre">Nombre *</label>
+								<input type="text" id="edit-nombre" name="nombre" class="form-control" required>
+							</div>
+							<div class="col-md-6 mb-3">
+								<label class="form-label" for="edit-precio">Precio *</label>
+								<input type="number" id="edit-precio" name="precio" step="0.001" min="0"
+									class="form-control" required>
+							</div>
+							<div class="col-md-6 mb-3">
+								<label for="edit-cantidadDisponible" class="form-label">Cantidad *</label>
+								<input type="number" id="edit-cantidadDisponible" name="cantidadDisponible"
+									class="form-control" min="0" required>
+							</div>
+							<div class="col-md-6 mb-3">
+								<label for="edit-categoria" class="form-label">Categoría *</label>
+								<select id="edit-categoria" name="categoria" class="form-select" required>
+									<option value="">Seleccionar categoría</option>
+									<option value="Alimentos">Alimentos</option>
+									<option value="Medicamentos">Medicamentos</option>
+									<option value="Juguetes">Juguetes</option>
+									<option value="Accesorios">Accesorios</option>
+								</select>
+							</div>
+						</div>
+						<div class="mb-3">
+							<label class="form-label" for="edit-descripcion">Descripción *</label>
+							<textarea id="edit-descripcion" name="descripcion" class="form-control" rows="3"
+								required></textarea>
+						</div>
+						<div class="mb-3">
+							<label class="form-label" for="edit-imagen">Imagen del Producto</label>
+							<input type="file" id="edit-imagen" name="imagen" class="form-control" accept="image/*">
+							<small class="text-muted">Dejar vacío para mantener la imagen actual</small>
+							<!-- Vista previa de imagen actual -->
+							<div class="mt-2">
+								<img id="preview-imagen-actual" src="" alt="Imagen actual"
+									style="max-width: 200px; display: none;">
+							</div>
+						</div>
+						<!-- Campo oculto para idveterinaria -->
+						<input type="hidden" name="idveterinaria" value="1">
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+						<button type="submit" class="btn btn-primary">Actualizar Producto</button>
+					</div>
+				</form>
+			</div>
+
+
+			<!-- Scripts -->
+			<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+			<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+			<script src="assets/JS/Scrip-Veterinario.js"></script>
+
+			<!-- Script para vista previa de imagen en configuración -->
+			<script>
+				function previewImage(event) {
+					event.stopPropagation();
+
+					const file = event.target.files[0];
+					if (file) {
+						// Validar que sea una imagen
+						if (!file.type.match('image.*')) {
+							Swal.fire({
+								icon: 'error',
+								title: 'Archivo inválido',
+								text: 'Por favor selecciona un archivo de imagen válido',
+								confirmButtonColor: '#6B9BD1'
+							});
+							return;
+						}
+
+						// Validar tamaño (10MB máximo)
+						if (file.size > 10 * 1024 * 1024) {
+							Swal.fire({
+								icon: 'error',
+								title: 'Archivo muy grande',
+								text: 'La imagen no debe superar los 10MB',
+								confirmButtonColor: '#6B9BD1'
+							});
+							return;
+						}
+
+						const reader = new FileReader();
+						reader.onload = function (e) {
+							// Actualizar imagen principal
+							const imgElement = document.getElementById('previewFoto');
+							if (imgElement) {
+								imgElement.src = e.target.result;
+							}
+
+							// Mostrar vista previa nueva
+							const newPreview = document.getElementById('newPhotoPreview');
+							const newImg = document.getElementById('newPhotoImg');
+							if (newPreview && newImg) {
+								newImg.src = e.target.result;
+								newPreview.style.display = 'block';
+							}
+						};
+						reader.onerror = function () {
+							Swal.fire({
+								icon: 'error',
+								title: 'Error',
+								text: 'Error al leer el archivo',
+								confirmButtonColor: '#6B9BD1'
+							});
+						};
+						reader.readAsDataURL(file);
+					}
+				}
+
+				function removePreview() {
+					// Ocultar vista previa
+					const newPreview = document.getElementById('newPhotoPreview');
+					if (newPreview) {
+						newPreview.style.display = 'none';
+					}
+
+					// Limpiar input de archivo
+					const inputFoto = document.getElementById('inputFoto');
+					if (inputFoto) {
+						inputFoto.value = '';
+					}
+
+					// Restaurar imagen original (recargar desde el servidor)
+					const imgElement = document.getElementById('previewFoto');
+					if (imgElement && imgElement.dataset.original) {
+						imgElement.src = imgElement.dataset.original;
+					}
+				}
+
+				function confirmSaveChanges(event) {
+					event.preventDefault();
+
+					Swal.fire({
+						title: '¿Guardar cambios?',
+						text: 'Se actualizará tu información de perfil',
+						icon: 'question',
+						showCancelButton: true,
+						confirmButtonColor: '#6B9BD1',
+						cancelButtonColor: '#95a5a6',
+						confirmButtonText: '<i class="fas fa-save"></i> Sí, guardar',
+						cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
+						customClass: {
+							popup: 'swal-popup-veterinario',
+							title: 'swal-title-veterinario'
+						}
+					}).then((result) => {
+						if (result.isConfirmed) {
+							// Mostrar loading
+							Swal.fire({
+								title: 'Guardando cambios...',
+								text: 'Por favor espera',
+								allowOutsideClick: false,
+								allowEscapeKey: false,
+								didOpen: () => {
+									Swal.showLoading();
+								}
+							});
+
+							// Enviar formulario
+							event.target.closest('form').submit();
+						}
+					});
+				}
+
+				function openPasswordModal() {
+					// Funcionalidad de cambiar contraseña - puede implementarse más adelante
+					console.log('Abrir modal de cambiar contraseña');
+				}
+
+				function confirmDeleteAccount() {
+					Swal.fire({
+						title: '¿Eliminar cuenta?',
+						html: `
+							<div style="text-align: left; padding: 10px;">
+								<p style="margin-bottom: 15px; color: var(--dark); font-weight: 500;">
+									<i class="fas fa-exclamation-triangle" style="color: #f39c12; margin-right: 8px;"></i>
+									Esta acción eliminará permanentemente:
+								</p>
+								<ul style="color: var(--gray); font-size: 0.95rem; margin-left: 20px;">
+									<li>Tu perfil de veterinario</li>
+									<li>Tu cuenta de usuario</li>
+									<li>Todos los datos asociados</li>
+								</ul>
+								<p style="color: #e74c3c; font-weight: 500; margin-top: 15px; font-size: 0.9rem;">
+									<i class="fas fa-warning" style="margin-right: 5px;"></i>
+									Esta acción no se puede deshacer
+								</p>
+							</div>
+						`,
+						icon: 'warning',
+						showCancelButton: true,
+						confirmButtonText: '<i class="fas fa-trash-alt"></i> Sí, eliminar cuenta',
+						cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
+						reverseButtons: true,
+						confirmButtonColor: '#dc3545',
+						cancelButtonColor: '#6c757d',
+						customClass: {
+							popup: 'swal-popup-veterinario',
+							title: 'swal-title-veterinario',
+							content: 'swal-content-veterinario'
+						}
+					}).then((result) => {
+						if (result.isConfirmed) {
+							console.log('🗑️ Eliminando cuenta de veterinario...');
+
+							// Crear formulario para enviar POST al backend
+							const form = document.createElement('form');
+							form.method = 'POST';
+							form.action = '/perfil-veterinario/configuracion/eliminar-cuenta';
+							document.body.appendChild(form);
+							form.submit();
+						}
+					});
+				}
+
+				// Guardar URL original de la imagen al cargar la página
+				document.addEventListener('DOMContentLoaded', function () {
+					const imgElement = document.getElementById('previewFoto');
+					if (imgElement) {
+						imgElement.dataset.original = imgElement.src;
+					}
+				});
+			</script>
+
+
+
+
+
+			<script>
+				// Si quieres hacerlo dinámico, puedes usar este script:
+				function openProductModal() {
+					// Intentar obtener el ID de la veterinaria del elemento oculto
+					const veterinariaData = document.getElementById('veterinaria-data');
+					if (veterinariaData) {
+						const veterinariaId = veterinariaData.getAttribute('data-id');
+						document.getElementById('idveterinaria-input').value = veterinariaId;
+						console.log("🔑 ID Veterinaria establecido: " + veterinariaId);
+					}
+
+					// Usar el sistema unificado de modales
+					openModal('new-product');
+				}
+			</script>
+
+
+
+			<!-- Script para navegación entre secciones (FALTABA ESTO) -->
+			<script>
+				document.addEventListener('DOMContentLoaded', function () {
+					// Navegación entre secciones
+					const menuLinks = document.querySelectorAll('.menu-link');
+					const contentSections = document.querySelectorAll('.content-section');
+
+					menuLinks.forEach(link => {
+						link.addEventListener('click', function (e) {
+							e.preventDefault();
+
+							// Remover active de todos
+							menuLinks.forEach(l => l.classList.remove('active'));
+							contentSections.forEach(s => s.classList.remove('active'));
+
+							// Agregar active al clickeado
+							this.classList.add('active');
+
+							// Mostrar sección correspondiente
+							const targetSection = this.getAttribute('data-section');
+							document.getElementById(targetSection).classList.add('active');
+						});
+					});
+
+					// Menú móvil
+					const btnMenu = document.querySelector('.btn-menu');
+					const sidebar = document.querySelector('.sidebar');
+					const btnCloseMenu = document.querySelector('.btn-close-menu');
+					if (btnCloseMenu) {                       // ← evita el null
+						btnCloseMenu.addEventListener('click', function () {
+							sidebar.classList.remove('active');
+						});
+					}
+				});
+			</script>
+
+			<script>
+				document.getElementById('inputFoto').addEventListener('change', function () {
+					const file = this.files[0];
+					if (!file) return;
+
+					// Validación frontend
+					if (file.size > 10 * 1024 * 1024) {
+						alert('❌ La imagen no debe superar 2MB');
+						this.value = '';
+						return;
+					}
+
+					const formData = new FormData();
+					formData.append('foto', file);
+
+					// Feedback visual
+					const button = document.querySelector('button[onclick*="inputFoto"]');
+					const originalText = button.textContent;
+					button.textContent = 'Subiendo...';
+					button.disabled = true;
+
+					fetch('/perfil-veterinario/configuracion/actualizar', {
+						method: 'POST',
+						body: formData
+					})
+						.then(res => res.json())
+						.then(data => {
+							if (data.success) {
+								// 🔥 **Usar la ruta completa con timestamp para evitar cache**
+								const newSrc = data.fotoPath + '?t=' + new Date().getTime();
+
+								// Actualizar todas las imágenes
+								document.getElementById('previewFoto').src = newSrc;
+								document.querySelectorAll('.user-profile img, .user-dropdown img').forEach(img => {
+									img.src = newSrc;
+								});
+
+								alert('✅ ' + data.message);
+							} else {
+								alert('❌ ' + data.message);
+							}
+						})
+						.catch(err => {
+							console.error('Error:', err);
+						})
+						.finally(() => {
+							// Restaurar botón
+							button.textContent = originalText;
+							button.disabled = false;
+							this.value = '';
+						});
+				});
+			</script>
+
+
+			<script>
+				document.getElementById('changePasswordForm').addEventListener('submit', function (e) {
+					const newPassword = document.getElementById('newPassword').value;
+					const confirmPassword = document.getElementById('confirmPassword').value;
+
+					if (newPassword !== confirmPassword) {
+						e.preventDefault();
+						alert('Las contraseñas no coinciden');
+						return false;
+					}
+
+					if (newPassword.length < 4) {
+						e.preventDefault();
+						alert('La contraseña debe tener al menos 4 caracteres');
+						return false;
+					}
+				});
+			</script>
+
+			<script>
+				// Funcionalidad del menú hamburguesa (solo móviles)
+				document.addEventListener('DOMContentLoaded', function () {
+					const hamburgerBtn = document.getElementById('hamburgerBtn');
+					const sidebar = document.getElementById('sidebar');
+					const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+					// Función para abrir el menú
+					function openSidebar() {
+						sidebar.classList.add('active');
+						sidebarOverlay.classList.add('active');
+						document.body.style.overflow = 'hidden'; // Prevenir scroll del body
+					}
+
+					// Función para cerrar el menú
+					function closeSidebar() {
+						sidebar.classList.remove('active');
+						sidebarOverlay.classList.remove('active');
+						document.body.style.overflow = ''; // Restaurar scroll del body
+					}
+
+					// Evento click en el botón hamburguesa
+					if (hamburgerBtn) {
+						hamburgerBtn.addEventListener('click', function (e) {
+							e.stopPropagation();
+							if (sidebar.classList.contains('active')) {
+								closeSidebar();
+							} else {
+								openSidebar();
+							}
+						});
+					}
+
+					// Evento click en el overlay para cerrar
+					if (sidebarOverlay) {
+						sidebarOverlay.addEventListener('click', closeSidebar);
+					}
+
+					// Cerrar el menú al hacer clic en cualquier enlace del menú (opcional)
+					const menuLinks = document.querySelectorAll('.sidebar .menu-link');
+					menuLinks.forEach(link => {
+						link.addEventListener('click', function () {
+							// Solo cerrar en móviles
+							if (window.innerWidth <= 768) {
+								closeSidebar();
+							}
+						});
+					});
+
+					// Cerrar el menú si se redimensiona la ventana a tamaño desktop
+					window.addEventListener('resize', function () {
+						if (window.innerWidth > 768) {
+							closeSidebar();
+						}
+					});
+				});
+			</script>
+
+			<script>
+				// Función para cerrar sesión del veterinario con confirmación
+				function cerrarSesionVeterinario(event) {
+					// Prevenir comportamiento por defecto
+					if (event) {
+						event.preventDefault();
+						event.stopPropagation();
+					}
+
+					Swal.fire({
+						title: '¿Cerrar sesión?',
+						text: '¿Estás seguro de que deseas cerrar la sesión?',
+						icon: 'question',
+						showCancelButton: true,
+						confirmButtonColor: '#dc3545',
+						cancelButtonColor: '#6c757d',
+						confirmButtonText: 'Sí, cerrar sesión',
+						cancelButtonText: 'Cancelar',
+						background: '#fff',
+						customClass: {
+							popup: 'swal-popup-veterinario',
+							title: 'swal-title-veterinario',
+							content: 'swal-content-veterinario'
+						}
+					}).then((result) => {
+						if (result.isConfirmed) {
+							// Mostrar mensaje de despedida
+							Swal.fire({
+								title: 'Sesión cerrada',
+								text: 'Hasta pronto, Dr. Esperamos verte pronto cuidando a nuestras mascotas',
+								icon: 'success',
+								timer: 2000,
+								showConfirmButton: false,
+								background: '#fff',
+								customClass: {
+									popup: 'swal-popup-veterinario',
+									title: 'swal-title-veterinario'
+								}
+							}).then(() => {
+								// Redirigir al index
+								window.location.href = '/usuarios/index';
+							});
+						}
+					});
+				}
+			</script>
+</body>
+
+</html>

@@ -83,7 +83,7 @@ import { MonitoringModule } from './monitoring/monitoring.module';
         transport: {
           host: 'smtp.gmail.com',
           port: 587,
-          secure: false, // true para port 465
+          secure: false, 
           auth: {
             user: configService.get<string>('smtp.user'),
             pass: configService.get<string>('smtp.pass'),

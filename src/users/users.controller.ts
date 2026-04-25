@@ -62,11 +62,11 @@ export class UsersController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({ summary: 'Eliminar un usuario' })
+  @ApiOperation({ summary: 'Desactivar un usuario (soft delete)' })
   @ApiParam({ name: 'id', description: 'ID del usuario' })
-  @ApiResponse({ status: 204, description: 'Usuario eliminado' })
+  @ApiResponse({ status: 204, description: 'Usuario desactivado' })
   @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
   remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+    return this.usersService.deactivate(+id);
   }
 }

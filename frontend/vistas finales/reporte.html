@@ -1,0 +1,263 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Reporte de Maltrato Animal</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+	<link rel="stylesheet" href="assets/CSS/Estilos-Reporte.css">
+</head>
+
+<body>
+	<header>
+		<div class="container">
+			<div class="logo">
+				<img src="assets/IMG/logofotter.png" alt="logo" class="logo">
+			</div>
+			<div class="titulo">
+				<p>REPORTE DE MALTRATO ANIMAL</p>
+				<p class="subtitulo">Tu Denuncia Puede Salvar Vidas</p>
+			</div>
+		</div>
+	</header>
+
+	<main class="container2">
+		<!-- Mensajes de éxito/error -->
+		<div class="alert alert-success alert-dismissible fade show" role="alert">
+			<i class="fas fa-check-circle me-2"></i>
+			<span>Mensaje</span>
+			<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+		</div>
+
+		<div class="alert alert-danger alert-dismissible fade show" role="alert">
+			<i class="fas fa-exclamation-triangle me-2"></i>
+			<span>Error</span>
+			<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+		</div>
+
+		<section class="report-section">
+			<h2>Formulario de Denuncia</h2>
+			<form id="abuseReportForm" action="#" method="post"
+				enctype="multipart/form-data">
+				<div class="form-group">
+					<label for="animalType">Tipo de animal:</label>
+					<select id="animalType" name="animalType" required>
+						<option value="">Seleccione...</option>
+						<option value="perro">Perro</option>
+						<option value="gato">Gato</option>
+						<option value="otro">Otro</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label for="otherAnimal">Especifique el tipo de animal si seleccionó "Otro":</label>
+					<input type="text" id="otherAnimal" name="otherAnimal">
+				</div>
+
+				<div class="form-group">
+					<label for="affectedAnimals">Número de animales afectados:</label>
+					<input type="number" id="affectedAnimals" name="affectedAnimals" min="1" required>
+				</div>
+
+				<div class="form-group">
+					<label for="abuseDescription">Descripción del maltrato:</label>
+					<textarea id="abuseDescription" name="abuseDescription" rows="4" required></textarea>
+				</div>
+
+				<div class="form-group">
+					<label for="location">¿Dónde ocurrió? (Dirección aproximada):</label>
+					<input type="text" id="location" name="location" required>
+				</div>
+
+				<div class="form-group">
+					<label for="dateTime">¿Cuándo ocurrió?</label>
+					<input type="datetime-local" id="dateTime" name="dateTime" required>
+				</div>
+
+				<div class="form-group">
+					<label for="accusedName">Nombre del denunciado (si se conoce):</label>
+					<input type="text" id="accusedName" name="accusedName">
+				</div>
+
+				<div class="form-group checkbox-group">
+					<input type="checkbox" id="anonymous" name="anonymous" value="true">
+					<label for="anonymous">¿Desea que su reporte sea anónimo?</label>
+				</div>
+
+				<div id="reporterInfo">
+					<div class="form-group">
+						<label for="reporterName">Nombres y apellidos del denunciante:</label>
+						<input type="text" id="reporterName" name="reporterName">
+					</div>
+
+					<div class="form-group">
+						<label for="reporterPhone">Teléfono de contacto:</label>
+						<input type="tel" id="reporterPhone" name="reporterPhone">
+					</div>
+
+					<div class="form-group">
+						<label for="reporterEmail">Email:</label>
+						<input type="email" id="reporterEmail" name="reporterEmail">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label>Categorías de maltrato (marque todas las que apliquen):</label>
+					<div class="abuse-categories">
+						<div class="checkbox-group">
+							<input type="checkbox" id="abandonment" name="abuseCategories" value="abandono">
+							<label for="abandonment">Abandono</label>
+						</div>
+						<div class="checkbox-group">
+							<input type="checkbox" id="physicalViolence" name="abuseCategories" value="golpes">
+							<label for="physicalViolence">Golpes o violencia física</label>
+						</div>
+						<div class="checkbox-group">
+							<input type="checkbox" id="malnutrition" name="abuseCategories" value="desnutricion">
+							<label for="malnutrition">Desnutrición o deshidratación</label>
+						</div>
+						<div class="checkbox-group">
+							<input type="checkbox" id="confinement" name="abuseCategories" value="encierro">
+							<label for="confinement">Encierro o aislamiento</label>
+						</div>
+						<div class="checkbox-group">
+							<input type="checkbox" id="medicalNeglect" name="abuseCategories" value="falta_medica">
+							<label for="medicalNeglect">Falta de atención médica</label>
+						</div>
+						<div class="checkbox-group">
+							<input type="checkbox" id="illegalSale" name="abuseCategories" value="venta_ilegal">
+							<label for="illegalSale">Venta ilegal</label>
+						</div>
+						<div class="checkbox-group">
+							<input type="checkbox" id="forcedBreeding" name="abuseCategories"
+								value="reproduccion_forzada">
+							<label for="forcedBreeding">Reproducción forzada</label>
+						</div>
+						<div class="checkbox-group">
+							<input type="checkbox" id="otherAbuse" name="abuseCategories" value="otros">
+							<label for="otherAbuse">Otros</label>
+							<input type="text" id="otherAbuseDescription" name="otherAbuseDescription"
+								placeholder="Describa" style="display: none;">
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="evidence">Evidencia (imágenes o videos):</label>
+					<input type="file" id="evidence" name="evidence" multiple accept="image/*,video/*">
+					<small class="file-info">Máximo 5 archivos (10MB en total)</small>
+					<div id="filePreview" class="file-preview"></div>
+				</div>
+
+				<div class="form-group">
+					<label for="additionalInfo">Información adicional:</label>
+					<textarea id="additionalInfo" name="additionalInfo" rows="3"></textarea>
+				</div>
+
+				<div class="form-actions">
+					<button type="submit" class="btn-submit">Enviar Reporte</button>
+					<button type="button" id="urgentReport" class="btn-urgent">
+						<i class="fas fa-exclamation-triangle"></i> Reporte Urgente
+					</button>
+				</div>
+
+				<div class="confidentiality-notice">
+					<p><i class="fas fa-lock"></i> <strong>Confidencialidad garantizada:</strong> Todos los datos
+						proporcionados serán tratados con estricta confidencialidad.</p>
+				</div>
+			</form>
+		</section>
+
+		<section class="info-section">
+			<h2>¿Qué hacer si presencias maltrato animal?</h2>
+			<div class="info-cards">
+				<div class="card">
+					<div class="card-icon">
+						<i class="fas fa-camera"></i>
+					</div>
+					<h3>1. Documenta la evidencia</h3>
+					<p>Toma fotos o videos del animal y las condiciones en que se encuentra, siempre que sea seguro
+						hacerlo.</p>
+				</div>
+				<div class="card">
+					<div class="card-icon">
+						<i class="fas fa-map-marker-alt"></i>
+					</div>
+					<h3>2. Anota los detalles</h3>
+					<p>Registra la ubicación exacta, fecha, hora y cualquier información sobre el presunto agresor.</p>
+				</div>
+				<div class="card">
+					<div class="card-icon">
+						<i class="fas fa-phone-alt"></i>
+					</div>
+					<h3>3. Reporta inmediatamente</h3>
+					<p>Contacta a las autoridades locales o a organizaciones de protección animal en tu área.</p>
+				</div>
+				<div class="card">
+					<div class="card-icon">
+						<i class="fas fa-shield-alt"></i>
+					</div>
+					<h3>4. No intervengas directamente</h3>
+					<p>Evita confrontaciones que puedan ponerte en peligro. Deja el rescate a los profesionales.</p>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<div id="confirmationModal" class="modal">
+		<div class="modal-content">
+			<span class="close-modal">&times;</span>
+			<h3><i class="fas fa-check-circle"></i> Reporte enviado</h3>
+			<p>Gracias por tu denuncia. Hemos recibido tu reporte y lo procesaremos lo antes posible.</p>
+			<p><strong>Tu información personal está protegida</strong> y solo se usará para fines de investigación.</p>
+			<p>Si proporcionaste tus datos de contacto, te responderemos en un plazo máximo de 48 horas.</p>
+			<button id="modalCloseBtn" class="btn-modal">Aceptar</button>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	<footer class="footer">
+		<div class="footer-container">
+			<div class="footer-brand-section">
+				<div class="footer-logo-container">
+					<img src="assets/IMG/logofotter.png" alt="logo" class="footer-logo">
+					<span class="footer-brand">CLINIC PET</span>
+				</div>
+				<p class="footer-lema">"Simplifica tu trabajo, mejora su salud"</p>
+				<p class="footer-description">
+					Nuestra plataforma digital está diseñada para optimizar la gestión clínica, conectando a
+					veterinarios y propietarios de mascotas a través de un sistema eficiente, seguro y personalizado.
+				</p>
+				<div class="social-links">
+					<a href="#"><i class="fab fa-facebook-f"></i></a>
+					<a href="#"><i class="fab fa-instagram"></i></a>
+					<a href="#"><i class="fab fa-twitter"></i></a>
+					<a href="#"><i class="fab fa-youtube"></i></a>
+					<a href="#"><i class="fab fa-whatsapp"></i></a>
+				</div>
+			</div>
+
+			<div class="footer-contact">
+				<h5 class="footer-title">Contacto</h5>
+				<div class="footer-links">
+					<a href="#"><i class="fas fa-map-marker-alt"></i> Duitama, Boyacá</a>
+					<a href="tel:018000457890"><i class="fas fa-phone"></i> 018000 45 78 90</a>
+					<a href="mailto:info@clinicpet.com"><i class="fas fa-envelope"></i> info@clinicpet.com</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="copyright">
+			<p>&copy; 2025 CLINIC PET. Todos los derechos reservados. Desarrollado en Duitama, Boyacá</p>
+		</div>
+	</footer>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="assets/JS/JS-Reporte.js"></script>
+</body>
+
+</html>

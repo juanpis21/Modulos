@@ -7,39 +7,38 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { PrometheusService } from './monitoring/prometheus.service';
 import { MetricsInterceptor } from './monitoring/metrics.interceptor';
 
+import { json, urlencoded } from 'express';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Enable CORS
+  app.use(json({ limit: '10mb' }));
+  app.use(urlencoded({ limit: '10mb', extended: true }));
+
   app.enableCors({
     origin: true,
     credentials: true,
   });
 
-  // Global validation pipe
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
-      forbidNonWhitelisted: false, // Desactivado temporalmente para debugging
+      forbidNonWhitelisted: false,
       transform: true,
     }),
   );
-
-  // Global exception filter
   app.useGlobalFilters(new HttpExceptionFilter());
 
-  // Global metrics interceptor
   const prometheusService = app.get(PrometheusService);
   app.useGlobalInterceptors(new MetricsInterceptor(prometheusService));
 
-  // Swagger configuration
   const config = new DocumentBuilder()
-    .setTitle('Clinic Pet API')
+    .setTitle('HelpyourPet API')
     .setDescription('API para gestión de clínica veterinaria')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
-  
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 

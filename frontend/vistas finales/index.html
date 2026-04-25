@@ -1,0 +1,1158 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>HelpYourPet</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+	<link
+		href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Fredoka:wght@300..700&display=swap"
+		rel="stylesheet">
+	<link
+		href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Fredoka:wght@300..700&display=swap"
+		rel="stylesheet">
+	<link rel="stylesheet" href="assets/CSS/Estilos-Home.css">
+	<link rel="icon" href="assets/IMG/logo.png" type="image/png">
+
+	<!-- Estilos del Modal -->
+	<style>
+		.modal-overlay {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(59, 87, 97, 0.85);
+			backdrop-filter: blur(8px);
+			z-index: 1000;
+			animation: fadeIn 0.3s ease;
+		}
+
+		.modal-overlay.active {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+			}
+
+			to {
+				opacity: 1;
+			}
+		}
+
+		@keyframes slideUp {
+			from {
+				transform: translateY(50px);
+				opacity: 0;
+			}
+
+			to {
+				transform: translateY(0);
+				opacity: 1;
+			}
+		}
+
+		.modal-container {
+			background: white;
+			border-radius: 25px;
+			max-width: 750px;
+			width: 100%;
+			max-height: 90vh;
+			overflow-y: auto;
+			box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
+			animation: slideUp 0.4s ease;
+			position: relative;
+		}
+
+		.close-btn {
+			position: absolute;
+			top: 20px;
+			right: 20px;
+			background: rgba(0, 0, 0, 0.05);
+			border: none;
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			color: #2d3748;
+			font-size: 22px;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			z-index: 10;
+		}
+
+		.close-btn:hover {
+			background: rgba(0, 0, 0, 0.1);
+			transform: rotate(90deg);
+		}
+
+		.modal-body {
+			padding: 40px 35px;
+		}
+
+		.icon-header {
+			width: 140px;
+			height: 140px;
+			background: linear-gradient(135deg, #318FAD 0%, #3FB8E0 100%);
+			border-radius: 50%;
+			margin: 0 auto 30px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 70px;
+			color: white;
+			box-shadow: 0 15px 40px rgba(49, 143, 173, 0.35);
+		}
+
+		.vet-name {
+			font-size: 32px;
+			font-weight: 800;
+			color: #1a202c;
+			text-align: center;
+			margin-bottom: 35px;
+			letter-spacing: -0.5px;
+		}
+
+		.info-container {
+			background: #f8fafc;
+			border-radius: 20px;
+			padding: 30px;
+			border: 2px solid #e2e8f0;
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 30px;
+		}
+
+		.info-left {
+			display: flex;
+			flex-direction: column;
+		}
+
+		.info-row {
+			display: flex;
+			align-items: flex-start;
+			gap: 18px;
+			padding: 18px 0;
+			border-bottom: 2px solid #e2e8f0;
+		}
+
+		.info-row:last-child {
+			border-bottom: none;
+			padding-bottom: 0;
+		}
+
+		.info-row:first-child {
+			padding-top: 0;
+		}
+
+		.icon-circle {
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 22px;
+			flex-shrink: 0;
+			color: white;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		}
+
+		.icon-location {
+			background: #E0A332;
+		}
+
+		.icon-phone {
+			background: #318FAD;
+		}
+
+		.icon-email {
+			background: #AD546A;
+		}
+
+		.icon-clock {
+			background: #679F9E;
+		}
+
+		.info-text {
+			flex: 1;
+			padding-top: 5px;
+		}
+
+		.info-text-content {
+			color: #1a202c;
+			font-size: 17px;
+			line-height: 1.6;
+			font-weight: 600;
+		}
+
+		.schedule-details {
+			margin-top: 0;
+		}
+
+		.schedule-line {
+			color: #1a202c;
+			font-size: 17px;
+			margin: 6px 0;
+			font-weight: 600;
+			line-height: 1.5;
+		}
+
+		.description-section {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+		}
+
+		.description-title {
+			font-size: 20px;
+			font-weight: 800;
+			color: #1a202c;
+			margin-bottom: 15px;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.description-title i {
+			color: #612F3C;
+			font-size: 22px;
+		}
+
+		.description-text {
+			color: #2d3748;
+			font-size: 16px;
+			line-height: 1.8;
+			font-weight: 500;
+		}
+
+		.modal-container::-webkit-scrollbar {
+			width: 8px;
+		}
+
+		.modal-container::-webkit-scrollbar-track {
+			background: #f1f1f1;
+			border-radius: 10px;
+		}
+
+		.modal-container::-webkit-scrollbar-thumb {
+			background: #318FAD;
+			border-radius: 10px;
+		}
+
+		.modal-container::-webkit-scrollbar-thumb:hover {
+			background: #007DBF;
+		}
+
+		@media (max-width: 640px) {
+			.modal-container {
+				margin: 15px;
+			}
+
+			.modal-body {
+				padding: 30px 25px;
+			}
+
+			.vet-name {
+				font-size: 26px;
+			}
+
+			.icon-header {
+				width: 120px;
+				height: 120px;
+				font-size: 60px;
+			}
+
+			.info-text-content,
+			.schedule-line {
+				font-size: 16px;
+			}
+
+			.info-container {
+				grid-template-columns: 1fr;
+			}
+		}
+	</style>
+</head>
+
+<body>
+
+	<!-- Navbar -->
+	<nav class="navbar">
+		<div class="navbar-container">
+			<!-- Logo y nombre -->
+			<div class="brand-section">
+				<div class="logo">
+					<img src="assets/IMG/logo.png" alt="logo" class="logo">
+				</div>
+				<span class="brand-name">HelpYourPet</span>
+			</div>
+
+
+
+			<!-- Buscador -->
+			<div class="search-container">
+				<i class="fas fa-search search-icon"></i>
+				<input type="text" class="search-input" id="searchInput" placeholder="Buscar en la página...">
+				<div class="search-results" id="searchResults"></div>
+			</div>
+
+			<div class="d-flex align-items-center">
+
+				<!-- Botones principales -->
+				<div class="botones-finales">
+					<div class="nav-buttons">
+						<button class="nav-button btn-registro">
+							<a href="iniciarsesion.html" style="text-decoration: none;"><i
+									class="fas fa-user-plus"></i>
+								Iniciar Sesión</a>
+						</button>
+
+						<!-- Toggle Modo Oscuro/Claro -->
+						<div class="theme-toggle-container">
+							<input type="checkbox" id="themeToggle" class="theme-toggle-checkbox">
+							<label for="themeToggle" class="theme-toggle-label">
+								<div class="toggle-circle">
+									<i class="bi bi-moon-stars-fill toggle-icon moon-icon"></i>
+									<i class="bi bi-sun-fill toggle-icon sun-icon"></i>
+								</div>
+							</label>
+						</div>
+						<!-- Menú Hamburguesa -->
+						<!--<div class="hamburger-menu">
+							<button class="hamburger-btn">
+								<i class="fas fa-bars"></i>
+							</button>
+							<div class="menu-content">
+								<div class="menu-item">
+									<a href="#"> <i class="fas fa-users"></i>
+										<span>Acerca de Nosotros</span></a>
+								</div>
+							</div>
+						</div>-->
+					</div>
+	</nav>
+	<!-- Hero Section -->
+	<section class="hero" id="inicio">
+		<div class="container">
+			<h1><strong>HelpYourPet</strong></h1>
+			<p>Porque una mascota no es solo un animal, es un miembro más de la familia</p>
+		</div>
+	</section>
+
+	<!-- Introducción -->
+	<section class="section intro" data-searchable>
+		<div class="container">
+			<div class="intro-content">
+				<div class="intro-text">
+					<h2>La Importancia de Tener Mascotas</h2>
+					<p>Tener una mascota es una experiencia profundamente enriquecedora que va mucho más allá de la
+						simple
+						compañía. Las mascotas, ya sean perros, gatos, aves, conejos u otros animales, tienen un impacto
+						positivo
+						en
+						la vida de las personas a nivel emocional, físico y social.</p>
+					<p>Su presencia genera una sensación de bienestar y tranquilidad, y puede reducir significativamente
+						los
+						niveles de estrés, ansiedad e incluso depresión. Diversos estudios han demostrado que acariciar
+						o jugar
+						con
+						una mascota estimula la liberación de oxitocina, la hormona del afecto, y disminuye la
+						producción de
+						cortisol, la hormona del estrés. Esto mejora el estado de ánimo y contribuye a una mayor
+						estabilidad
+						emocional.</p>
+					<p>Cuidar una mascota contribuye al crecimiento personal al enseñar a valorar y atender las
+						necesidades de
+						otro
+						ser vivo. Esto fortalece la responsabilidad, la empatía y la paciencia, especialmente en los
+						niños,
+						quienes
+						aprenden a comprometerse y a desarrollar una mayor sensibilidad y respeto por los demás.
+					</p>
+
+					<p>Nuestro equipo de profesionales está dedicado a proporcionar la mejor atención médica, consejos
+						de
+						cuidado
+						y servicios que garanticen una vida larga y feliz para tu mascota.</p>
+				</div>
+				<div class="intro-img">
+					<img src="assets/IMG/imagenH.png" alt="Niña abrazando a su perro">
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Consejos para mascotas -->
+	<section class="section consejos" data-searchable>
+		<div class="container">
+			<div class="section-title">
+				<h2>Consejos para el Cuidado de tu Mascota</h2>
+			</div>
+			<div class="row">
+				<div class="col-md-6 col-lg-3 mb-4">
+					<div class="card card-consejo">
+						<img src="assets/IMG/Alimetacion.png" class="card-img-top" alt="Alimentación saludable">
+						<div class="card-body">
+							<h5 class="card-title">Alimentación Saludable</h5>
+							<p class="card-text">Proporciónale una dieta equilibrada y acorde a su especie, edad y
+								tamaño. Evita
+								darle
+								comida humana que puede ser tóxica como chocolate, uvas o cebolla ya que pueden ser
+								dañinas para su
+								salud. Consulta con un veterinario sobre el
+								alimento más adecuado. </p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-lg-3 mb-4">
+					<div class="card card-consejo">
+						<img src="assets/IMG/agua.png" class="card-img-top" alt="Agua Fresca">
+						<div class="card-body">
+							<h5 class="card-title">Agua fresca siempre disponible</h5>
+							<p class="card-text">Asegúrate de que tu mascota tenga acceso constante a agua limpia y
+								fresca,
+								especialmente en climas cálidos.</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-lg-3 mb-4">
+					<div class="card card-consejo">
+						<img src="assets/IMG/ejercicioM.png" class="card-img-top" alt="Ejercicio diario">
+						<div class="card-body">
+							<h5 class="card-title">Ejercicio Diario</h5>
+							<p class="card-text">Proporciónale momentos de juego y ejercicio diario para evitar el
+								sobrepeso y el
+								aburrimiento. Jugar también fortalece el vínculo con tu mascota.
+
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-lg-3 mb-4">
+					<div class="card card-consejo">
+						<img src="assets/IMG/Chequeo.png" class="card-img-top" alt="Visitas al veterinario">
+						<div class="card-body">
+							<h5 class="card-title">Chequeos Regulares</h5>
+							<p class="card-text">Lleva a tu mascota a chequeos regulares, cumple con el calendario de
+								vacunación y
+								desparasitación. Un control periódico previene enfermedades y detecta a tiempo cualquier
+								problema de
+								salud.</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-lg-3 mb-4">
+					<div class="card card-consejo">
+						<img src="assets/IMG/Higiene.png" class="card-img-top" alt="Higiene y Aseo">
+						<div class="card-body">
+							<h5 class="card-title">Higiene y Aseo</h5>
+							<p class="card-text">Baña a tu mascota con la frecuencia adecuada, mantén limpios sus
+								espacios como
+								cama,
+								plato y juguetes; y cepilla su pelaje regularmente. También es importante revisar sus
+								uñas, oídos y
+								dientes.</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-lg-3 mb-4">
+					<div class="card card-consejo">
+						<img src="assets/IMG/Esterilizacion.png" class="card-img-top"
+							alt="Esterilización o Castración">
+						<div class="card-body">
+							<h5 class="card-title">Esterilización o Castración</h5>
+							<p class="card-text">Consulta con el veterinario si este procedimiento es adecuado. Ayuda a
+								prevenir
+								enfermedades y a controlar la sobrepoblación.</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-lg-3 mb-4">
+					<div class="card card-consejo">
+						<img src="assets/IMG/Humanizar.png" class="card-img-top" alt="No Humanices en Exceso">
+						<div class="card-body">
+							<h5 class="card-title">No Humanices En Exceso</h5>
+							<p class="card-text">Trata a tu mascota con cariño, pero respeta su naturaleza animal. No
+								todos los
+								comportamientos humanos son adecuados para ellos.</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-lg-3 mb-4">
+					<div class="card card-consejo">
+						<img src="assets/IMG/Respeto.png" class="card-img-top" alt="Respeto y paciencia">
+						<div class="card-body">
+							<h5 class="card-title">Respeto y Paciencia</h5>
+							<p class="card-text">Recuerda que cada animal tiene su personalidad. Respeta sus tiempos,
+								sus espacios y
+								trata con paciencia sus miedos o comportamientos.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Curiosidades -->
+	<section class="section curiosidades" data-searchable>
+		<div class="container">
+			<div class="section-title">
+				<h2>Curiosidades sobre Mascotas</h2>
+			</div>
+			<div class="row">
+				<div class="col-md-4 mb-4">
+					<div class="curiosidad-card">
+						<div class="curiosidad-img">
+							<i class="fas fa-dog"></i>
+						</div>
+						<h4>Olfato Canino</h4>
+						<p>El olfato de un perro es entre 10,000 y 100,000 veces más sensible que el de los humanos.
+							Algunas razas
+							pueden detectar enfermedades como el cáncer, la diabetes hasta crisis epilépticas con su
+							olfato.</p>
+					</div>
+				</div>
+				<div class="col-md-4 mb-4">
+					<div class="curiosidad-card">
+						<div class="curiosidad-img">
+							<i class="fas fa-cat"></i>
+						</div>
+						<h4>Ronroneo Felino</h4>
+						<p>Los gatos no solo ronronean cuando están contentos. También lo hacen cuando sienten dolor o
+							estrés,
+							como
+							un mecanismo de auto-curación que libera endorfinas.</p>
+					</div>
+				</div>
+				<div class="col-md-4 mb-4">
+					<div class="curiosidad-card">
+						<div class="curiosidad-img">
+							<i class="fas fa-fish"></i>
+						</div>
+						<h4>Linea Lateral En Peces</h4>
+						<p>Los peces tienen una línea lateral en sus costados que les permite detectar vibraciones y
+							movimientos
+							en
+							el agua. Funciona como un radar natural que les ayuda a evitar obstáculos, nadar en grupo,
+							detectar
+							presas
+							o depredadores y orientarse, incluso en la oscuridad o aguas turbias.</p>
+					</div>
+				</div>
+				<div class="col-md-4 mb-4">
+					<div class="curiosidad-card">
+						<div class="curiosidad-img">
+							<i class="fas fa-cow"></i>
+						</div>
+						<h4>Vacas Con Buena Memoria</h4>
+						<p>Las vacas no solo pueden recordar rostros humanos y de otras vacas durante años, sino que
+							también
+							reconocen patrones y rutinas. También recuerdan rutas para ir a pastar, horarios de ordeño y
+							hasta cómo
+							abrir ciertos tipos de puertas o cercas si lo han aprendido antes. Esta buena memoria las
+							hace más
+							inteligentes y sensibles de lo que muchas personas piensan.</p>
+					</div>
+				</div>
+				<div class="col-md-4 mb-4">
+					<div class="curiosidad-card">
+						<div class="curiosidad-img">
+							<i class="fas fa-crow"></i>
+						</div>
+						<h4>Loros longevos</h4>
+						<p>Los loros pueden vivir más de 50 años, algunas especies como el guacamayo azul pueden superar
+							los 70
+							años.</p>
+					</div>
+				</div>
+				<div class="col-md-4 mb-4">
+					<div class="curiosidad-card">
+						<div class="curiosidad-img">
+							<i class="fas fa-horse"></i>
+						</div>
+						<h4>Caballos Detectan Emociones Humanas</h4>
+						<p>Los caballos pueden reconocer expresiones faciales humanas y tonos de voz reaccionando según
+							cómo los
+							trates. Pueden recordar si alguien fue amable o agresivo y ajustar su comportamiento en
+							futuras
+							interacciones.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Veterinarios - Carrusel -->
+	<!--<section class="section veterinarios" data-searchable>
+		<div class="container">
+			<div class="section-title">
+				<h2>Nuestro Equipo Veterinario</h2>
+			</div>
+			<div class="owl-carousel owl-theme">
+				<div class="item">
+					<div class="vet-card">
+						<img src="assets/IMG/veterinaria1.png" class="vet-img" alt="Dra. Laura Martínez">
+						<div class="vet-info">
+							<h4 class="vet-name">Dra. Laura Martínez</h4>
+							<div class="vet-rating">
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star-half-alt"></i>
+								<span>(4.7)</span>
+							</div>
+							<p><strong>Especialidad:</strong> Cirugía y Traumatología</p>
+							<p><strong>Tarjeta Profesional:</strong> TP-12345</p>
+							<p><strong>Experiencia:</strong> 12 años</p>
+						</div>
+					</div>
+				</div>
+				<div class="item">
+					<div class="vet-card">
+						<img src="assets/IMG/veterinario1.png" class="vet-img" alt="Dr. Carlos Rodríguez">
+						<div class="vet-info">
+							<h4 class="vet-name">Dr. Carlos Rodríguez</h4>
+							<div class="vet-rating">
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<span>(5.0)</span>
+							</div>
+							<p><strong>Especialidad:</strong> Medicina Interna</p>
+							<p><strong>Tarjeta Profesional:</strong> TP-23456</p>
+							<p><strong>Experiencia:</strong> 15 años</p>
+						</div>
+					</div>
+				</div>
+				<div class="item">
+					<div class="vet-card">
+						<img src="assets/IMG/veterinaria2.png" class="vet-img" alt="Dra. Sofía Vargas">
+						<div class="vet-info">
+							<h4 class="vet-name">Dra. Sofía Vargas</h4>
+							<div class="vet-rating">
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="far fa-star"></i>
+								<span>(4.2)</span>
+							</div>
+							<p><strong>Especialidad:</strong> Dermatología y Alergias</p>
+							<p><strong>Tarjeta Profesional:</strong> TP-34567</p>
+							<p><strong>Experiencia:</strong> 8 años</p>
+						</div>
+					</div>
+				</div>
+				<div class="item">
+					<div class="vet-card">
+						<img src="assets/IMG/veterinario2 (2).png" class="vet-img" alt="Dr. Javier Ramírez">
+						<div class="vet-info">
+							<h4 class="vet-name">Dr. Javier Ramírez</h4>
+							<div class="vet-rating">
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star-half-alt"></i>
+								<span>(4.6)</span>
+							</div>
+							<p><strong>Especialidad:</strong> Oftalmología</p>
+							<p><strong>Tarjeta Profesional:</strong> TP-45678</p>
+							<p><strong>Experiencia:</strong> 10 años</p>
+						</div>
+					</div>
+				</div>
+				<div class="item">
+					<div class="vet-card">
+						<img src="assets/IMG/veterinaria3.png" class="vet-img" alt="Dra. Ana Gómez">
+						<div class="vet-info">
+							<h4 class="vet-name">Dra. Ana Gómez</h4>
+							<div class="vet-rating">
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<span>(4.9)</span>
+							</div>
+							<p><strong>Especialidad:</strong> Cardiología</p>
+							<p><strong>Tarjeta Profesional:</strong> TP-56789</p>
+							<p><strong>Experiencia:</strong> 14 años</p>
+						</div>
+
+	</div>-->
+
+
+	<!-- Eventos y Campañas-->
+	<section id="eventos-section" class="section eventos" data-searchable>
+		<div class="container">
+			<div class="section-title">
+				<h2>Eventos Y Campañas</h2>
+			</div>
+			<div class="row">
+				<!-- Loop dinámico para mostrar eventos de la base de datos -->
+				<div class="col-md-4 mb-4">
+					<div class="eventos">
+						<img src="assets/IMG/Desparasitacion1.png"
+							class="card-img-top" alt="Evento">
+						<h4 class="card-title">Título del Evento</h4>
+						<p class="card-text">
+							<span>Fecha inicio</span> -
+							<span>Fecha fin</span><br>
+							<span>Descripción del evento</span>
+						</p>
+
+						<button class="btn btn-primary open-modal-btn">
+							Más Información
+						</button>
+
+
+					</div>
+				</div>
+
+				<!-- Mensaje si no hay eventos -->
+				<div class="col-12 text-center">
+					<p class="text-muted">No hay eventos disponibles en este momento.</p>
+				</div>
+			</div>
+
+			<!-- Paginación -->
+			<div class="row">
+				<div class="col-12">
+					<nav aria-label="Paginación de eventos">
+						<ul class="pagination justify-content-center">
+							<!-- Botón Anterior -->
+							<li class="page-item">
+								<a class="page-link" href="#"
+									aria-label="Anterior">
+									<span aria-hidden="true">&laquo;</span>
+								</a>
+							</li>
+
+							<!-- Números de página -->
+							<li class="page-item">
+								<a class="page-link" href="#">1</a>
+							</li>
+
+							<!-- Botón Siguiente -->
+							<li class="page-item">
+								<a class="page-link" href="#"
+									aria-label="Siguiente">
+									<span aria-hidden="true">&raquo;</span>
+								</a>
+							</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+	<a href="#inicio" class="btn btn-inicio">
+		<i class="fa-solid fa-up-long"></i>
+	</a>
+
+	<!-- Modal de SERVICIOS -->
+	<div id="serviciosModal" class="modal-servicios">
+		<div class="modal-servicios-content">
+			<span class="close-servicios" onclick="cerrarServicios()">&times;</span>
+
+			<h2 class="modal-servicios-title">Nuestros Servicios</h2>
+
+			<!-- Software Features -->
+			<section class="servicios-section">
+				<h3>Funcionalidades Principales</h3>
+				<div class="servicios-grid">
+					<!-- Card 1 -->
+					<div class="servicio-card">
+						<div class="servicio-icon">
+							<i class="fas fa-file-medical"></i>
+						</div>
+						<h4>Historias Clínicas Digitales</h4>
+						<ul>
+							<li>Historial médico completo</li>
+							<li>Registro de vacunas</li>
+							<li>Alergias y condiciones</li>
+							<li>Archivos multimedia</li>
+							<li>Acceso remoto seguro</li>
+						</ul>
+					</div>
+
+					<!-- Card 2 -->
+					<div class="servicio-card">
+						<div class="servicio-icon">
+							<i class="fas fa-calendar-check"></i>
+						</div>
+						<h4>Agenda Inteligente</h4>
+						<ul>
+							<li>Reservas online 24/7</li>
+							<li>Recordatorios automáticos</li>
+							<li>Calendario por veterinario</li>
+							<li>Confirmación de citas</li>
+							<li>Videoconsultas integradas</li>
+						</ul>
+					</div>
+
+					<!-- Card 4 -->
+					<div class="servicio-card">
+						<div class="servicio-icon">
+							<i class="fas fa-cash-register"></i>
+						</div>
+						<h4>Punto de Venta</h4>
+						<ul>
+							<li>Facturación electrónica</li>
+							<li>Control de inventario</li>
+							<li>Múltiples métodos de pago</li>
+							<li>Reportes de ventas</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+			<!-- Medical Services -->
+			<section class="servicios-section">
+				<h3>Servicios Médicos</h3>
+				<div class="servicios-grid">
+					<div class="servicio-card">
+						<div class="servicio-icon">
+							<i class="fas fa-heartbeat"></i>
+						</div>
+						<h4>Medicina Preventiva</h4>
+						<ul>
+							<li>Exámenes de bienestar</li>
+							<li>Programas de vacunación</li>
+							<li>Control de parásitos</li>
+							<li>Nutrición y dieta</li>
+							<li>Chequeos geriátricos</li>
+						</ul>
+					</div>
+
+					<div class="servicio-card">
+						<div class="servicio-icon">
+							<i class="fas fa-bone"></i>
+						</div>
+						<h4>Cirugías</h4>
+						<ul>
+							<li>Esterilización/castración</li>
+							<li>Cirugía dental</li>
+							<li>Procedimientos ortopédicos</li>
+							<li>Cirugía de tejidos blandos</li>
+							<li>Cirugía reconstructiva</li>
+						</ul>
+					</div>
+
+					<div class="servicio-card">
+						<div class="servicio-icon">
+							<i class="fas fa-eye"></i>
+						</div>
+						<h4>Diagnóstico Avanzado</h4>
+						<ul>
+							<li>Radiografía digital</li>
+							<li>Ecografía</li>
+							<li>Endoscopia</li>
+							<li>Análisis de laboratorio</li>
+							<li>Electrocardiograma</li>
+						</ul>
+
+					</div>
+
+					<div class="servicio-card">
+						<div class="servicio-icon">
+							<i class="fas fa-ambulance"></i>
+						</div>
+						<h4>Urgencias 24/7</h4>
+						<ul>
+							<li>Atención inmediata</li>
+							<li>Hospitalización</li>
+							<li>Fluidoterapia</li>
+							<li>Monitoreo constante</li>
+							<li>Cuidados intensivos</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+			<!-- Grooming Services -->
+			<section class="servicios-section">
+				<h3>Estética y Bienestar</h3>
+				<div class="servicios-grid">
+					<div class="servicio-card">
+						<div class="servicio-icon">
+							<i class="fas fa-bath"></i>
+						</div>
+						<h4>Baño Profesional</h4>
+						<ul>
+							<li>Baño higiénico</li>
+							<li>Baño medicado</li>
+							<li>Tratamientos dermatológicos</li>
+							<li>Secado profesional</li>
+							<li>Control de olores</li>
+						</ul>
+
+					</div>
+
+					<div class="servicio-card">
+						<div class="servicio-icon">
+							<i class="fas fa-cut"></i>
+						</div>
+						<h4>Peluquería</h4>
+						<ul>
+							<li>Corte por raza</li>
+							<li>Arreglo estético</li>
+							<li>Deslanado</li>
+							<li>Corte sanitario</li>
+							<li>Estilizado creativo</li>
+						</ul>
+					</div>
+
+					<div class="servicio-card">
+						<div class="servicio-icon">
+							<i class="fas fa-spa"></i>
+						</div>
+						<h4>Spa Mascotas</h4>
+						<ul>
+							<li>Masajes relajantes</li>
+							<li>Aromaterapia</li>
+							<li>Tratamientos capilares</li>
+							<li>Terapia de relajación</li>
+							<li>Paquetes premium</li>
+						</ul>
+					</div>
+
+					<div class="servicio-card">
+						<div class="servicio-icon">
+							<i class="fas fa-paw"></i>
+						</div>
+						<h4>Cuidados Especiales</h4>
+						<ul>
+							<li>Limpieza dental</li>
+							<li>Corte de uñas</li>
+							<li>Limpieza de oídos</li>
+							<li>Extracción de garrapatas</li>
+							<li>Tratamiento antipulgas</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+		</div>
+	</div>
+
+	<!-- Footer -->
+	<footer class="footer">
+		<div class="footer-container">
+			<div class="footer-top">
+				<div class="footer-logo">
+					<img src="assets/IMG/logofotter.png" alt="logo" style="height: 90px;">
+					<div class="footer-brand" style="font-family: 'fira sans'; font-size: 1.8rem; margin-top: 10px;">
+						HelpYourPet</div>
+				</div>
+
+				<div class="footer-about" style="max-width: 400px;">
+					<p style="font-style: italic; opacity: 0.8;">"Simplifica tu trabajo, mejora su salud"</p>
+					<p>Nuestra plataforma digital está diseñada para optimizar la gestión clínica.</p>
+					<!--<div class="social-links" style="margin-top: 20px;">
+						<a href="#"><i class="fab fa-facebook-f"></i></a>
+						<a href="#"><i class="fab fa-instagram"></i></a>
+						<a href="#"><i class="fab fa-twitter"></i></a>
+						<a href="#"><i class="fab fa-youtube"></i></a>
+						<a href="#"><i class="fab fa-whatsapp"></i></a>
+					</div>-->
+				</div>
+
+				<div class="footer-contact">
+					<h5 style="font-size: 1.3rem; margin-bottom: 15px;">Contacto</h5>
+					<div style="display: flex; flex-direction: column; gap: 10px;">
+						<a href="#" style="color: #ccc; text-decoration: none;"><i class="fas fa-map-marker-alt"></i>
+							Duitama, Boyacá</a>
+						<a href="tel:018000457890" style="color: #ccc; text-decoration: none;"><i
+								class="fas fa-phone"></i> 018000
+							45 78 90</a>
+						<a href="mailto:info@clinicpet.com" style="color: #ccc; text-decoration: none;"><i
+								class="fas fa-envelope"></i> info@clinicpet.com</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="copyright">
+				<p>&copy; 2025 HelpYourPet. Todos los derechos reservados. Desarrollado en Duitama, Boyacá</p>
+			</div>
+		</div>
+	</footer>
+	<!-- Modal de Información -->
+	<div class="modal-overlay" id="modalOverlay">
+		<div class="modal-container">
+			<button class="close-btn" id="closeModal">
+				<i class="fas fa-times"></i>
+			</button>
+
+			<div class="modal-body">
+				<div class="icon-header">
+					<i class="fas fa-store"></i>
+				</div>
+
+				<h2 class="vet-name">Bigotes Felices</h2>
+
+				<div class="info-container">
+					<div class="info-left">
+						<div class="info-row">
+							<div class="icon-circle icon-location">
+								<i class="fas fa-map-marker-alt"></i>
+							</div>
+							<div class="info-text">
+								<div class="info-text-content">Calle 123 #45-67, Barrio Los Laureles</div>
+							</div>
+						</div>
+
+						<div class="info-row">
+							<div class="icon-circle icon-phone">
+								<i class="fas fa-phone"></i>
+							</div>
+							<div class="info-text">
+								<div class="info-text-content">0000098878</div>
+							</div>
+						</div>
+
+						<div class="info-row">
+							<div class="icon-circle icon-email">
+								<i class="fas fa-envelope"></i>
+							</div>
+							<div class="info-text">
+								<div class="info-text-content">contacto@bigotesfelices.com</div>
+							</div>
+						</div>
+
+						<div class="info-row">
+							<div class="icon-circle icon-clock">
+								<i class="fas fa-clock"></i>
+							</div>
+							<div class="info-text">
+								<div class="schedule-details">
+									<div class="schedule-line">Lunes a Martes: 10:00 - 9:00</div>
+									<div class="schedule-line">Miércoles: Cerrado</div>
+									<div class="schedule-line">Jueves a Domingo: 10:00 - 9:00</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="description-section">
+						<div class="description-title">
+							<i class="fas fa-info-circle"></i>
+							Acerca de Nosotros
+						</div>
+						<div class="description-text">
+							Somos una clínica veterinaria dedicada al cuidado integral de tus mascotas. Con más de 15
+							años de experiencia, ofrecemos servicios de consulta general, cirugía, hospitalización,
+							laboratorio clínico, vacunación y grooming. Nuestro equipo de profesionales está
+							comprometido con el bienestar y la salud de tu mejor amigo.
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+	<script src="assets/JS/Scrips-Home.js"></script>
+
+	<!-- JavaScript del Modal -->
+	<script>
+		// Esperar a que el DOM esté completamente cargado
+		document.addEventListener('DOMContentLoaded', function () {
+			const openModalBtns = document.querySelectorAll('.open-modal-btn');
+			const closeModalBtn = document.getElementById('closeModal');
+			const modalOverlay = document.getElementById('modalOverlay');
+
+			function openModal() {
+				if (modalOverlay) {
+					modalOverlay.classList.add('active');
+					document.body.style.overflow = 'hidden';
+				}
+			}
+
+			function closeModal() {
+				if (modalOverlay) {
+					modalOverlay.classList.remove('active');
+					document.body.style.overflow = 'auto';
+				}
+			}
+
+			// Agregar event listener a todos los botones "Más Información"
+			openModalBtns.forEach(function (btn) {
+				btn.addEventListener('click', function (e) {
+					e.preventDefault();
+
+					// Obtener los datos de la veterinaria del botón
+					const vetNombre = btn.getAttribute('data-vet-nombre') || 'No disponible';
+					const vetDireccion = btn.getAttribute('data-vet-direccion') || 'No disponible';
+					const vetTelefono = btn.getAttribute('data-vet-telefono') || 'No disponible';
+					const vetCorreo = btn.getAttribute('data-vet-correo') || 'No disponible';
+					const vetHorario = btn.getAttribute('data-vet-horario') || 'No disponible';
+					const vetDescripcion = btn.getAttribute('data-vet-descripcion') || 'No disponible';
+
+					// Actualizar el contenido del modal con los datos de la veterinaria
+					document.querySelector('.vet-name').textContent = vetNombre;
+					document.querySelector('.info-row:nth-child(1) .info-text-content').textContent = vetDireccion;
+					document.querySelector('.info-row:nth-child(2) .info-text-content').textContent = vetTelefono;
+					document.querySelector('.info-row:nth-child(3) .info-text-content').textContent = vetCorreo;
+
+					// Actualizar el horario (puede tener formato especial)
+					const scheduleContainer = document.querySelector('.schedule-details');
+					if (scheduleContainer) {
+						scheduleContainer.innerHTML = `<div class="schedule-line">${vetHorario}</div>`;
+					}
+
+					// Actualizar la descripción
+					document.querySelector('.description-text').textContent = vetDescripcion;
+
+					openModal();
+				});
+			});
+
+			// Botón de cerrar
+			if (closeModalBtn) {
+				closeModalBtn.addEventListener('click', closeModal);
+			}
+
+			// Cerrar al hacer clic fuera del modal
+			if (modalOverlay) {
+				modalOverlay.addEventListener('click', function (e) {
+					if (e.target === modalOverlay) {
+						closeModal();
+					}
+				});
+			}
+
+			// Cerrar con la tecla Escape
+			document.addEventListener('keydown', function (e) {
+				if (e.key === 'Escape' && modalOverlay && modalOverlay.classList.contains('active')) {
+					closeModal();
+				}
+			});
+		});
+	</script>
+
+</body>
+
+</html>

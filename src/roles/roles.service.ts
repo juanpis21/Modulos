@@ -88,6 +88,10 @@ export class RolesService {
     return this.rolesRepository.findByIds(ids);
   }
 
+  async findByName(name: string): Promise<Role | null> {
+    return this.rolesRepository.findOne({ where: { name } }) || null;
+  }
+
   async remove(id: number): Promise<void> {
     const role = await this.findOne(id);
     await this.rolesRepository.remove(role);

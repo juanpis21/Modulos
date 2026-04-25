@@ -19,19 +19,16 @@ export class TokenRecuperacionService {
   ) { }
 
   async solicitarRecuperacion(dto: SolicitarRecuperacionDto): Promise<{ mensaje: string, tokenSimulado: string }> {
-    // 1. Buscamos el usuario por su email usando el módulo que ya existe
     const usuario = await this.usersService.findByEmail(dto.email);
     if (!usuario) {
       throw new NotFoundException(`El correo electrónico ${dto.email} no está registrado en la base de datos.`);
     }
 
-    // 2. Destruimos tokens viejos (para evitar spam o acumulación de basura en la DB)
     await this.tokenRepository.delete({ usuarioId: usuario.id });
 
-    // 3. Generamos token y establecemos caducidad a 10 MINUTOS
     const nuevoToken = crypto.randomBytes(32).toString('hex');
     const fechaExpiracion = new Date();
-    fechaExpiracion.setMinutes(fechaExpiracion.getMinutes() + 10);
+    fechaExpiracion.setMinutes(fechaExpiracion.getMinutes() + 5);
 
     const ticket = this.tokenRepository.create({
       token: nuevoToken,
@@ -41,14 +38,13 @@ export class TokenRecuperacionService {
 
     await this.tokenRepository.save(ticket);
 
-    // Envío oficial de correo
     try {
       await this.mailerService.sendMail({
         to: usuario.email,
-        subject: 'Recuperación de Contraseña - ClinicPet',
+        subject: 'Recuperación de Contraseña - HelpyourPet',
         html: `
           <div style="font-family: Arial, sans-serif; text-align: center; color: #333;">
-            <h2 style="color: #4CAF50;">Clínica Veterinaria ClinicPet</h2>
+            <h2 style="color: #4CAF50;">Clínica Veterinaria HelpyourPet</h2>
             <p>Hemos recibido una solicitud para restablecer tu contraseña.</p>
             <p>Por favor, usa el siguiente código de seguridad en tu aplicación. Recuerda que expirará en <b>10 MINUTOS</b>.</p>
             <div style="margin: 20px auto; padding: 15px; background: #f2f2f2; border-radius: 5px; font-size: 24px; font-weight: bold; letter-spacing: 2px;">
@@ -77,24 +73,18 @@ export class TokenRecuperacionService {
       throw new BadRequestException('El Token de Recuperación es inválido o nunca fue creado.');
     }
 
-    // 2. Validamos que sigamos dentro de los 10 minutos (Tiempo local <= Fecha estipulada de muerte)
     const hoy = new Date();
     if (hoy > ticket.fechaExpiracion) {
-      // Limpiamos la basura automáticamente
       await this.tokenRepository.delete(ticket.id);
       throw new BadRequestException('El Token ha superado sus 10 minutos de vida. Debe solicitar uno nuevo.');
     }
 
-    // 3. ¡Todo correcto! Buscamos al usuario físicamente
     const usuario = await this.usersService.findOne(ticket.usuarioId);
     if (!usuario) {
       throw new NotFoundException('Usuario asociado al token ya no existe.');
     }
     
-    // (Aprovechamos que ya tienes un método de update en usersService que hashea automáticamente la clave)
     await this.usersService.update(usuario.id, { password: dto.nuevaContrasena });
-
-    // 4. QUEMAR Y DESTRUIR: Un ticket canjeado no puede volver a usarse por hackers.
     await this.tokenRepository.delete(ticket.id);
 
     return { mensaje: 'Contraseña actualizada con éxito!' };

@@ -1,0 +1,214 @@
+<!-- NAVBAR ESTÁTICO - Estilo HelpYourPet -->
+<nav class="navbar">
+  <div class="navbar-container">
+    <!-- Logo + Nombre (izquierda) -->
+    <div class="brand-section">
+      <img src="assets/IMG/logo.png" alt="HelpYourPet" class="logo-img">
+      <span class="brand-name">HelpYourPet</span>
+    </div>
+
+    <!-- Botón de perfil (derecha) -->
+    <div class="profile-section">
+      <button class="profile-btn" (click)="toggleProfileMenu()" aria-label="Menú de perfil">
+        <img
+          [src]="usuarioLogueado?.avatar || 'assets/images/Default.png'"
+          alt="Perfil" class="profile-avatar">
+        <i class="fas fa-chevron-down profile-arrow"></i>
+      </button>
+      
+      <!-- Menú desplegable de perfil -->
+      <div class="profile-dropdown" [class.active]="profileMenuAbierto">
+        <div class="dropdown-header">
+          <img
+            [src]="usuarioLogueado?.avatar || 'assets/images/Default.png'"
+            alt="Perfil" class="dropdown-avatar">
+          <div class="dropdown-user-info">
+            <span class="dropdown-username">{{ usuarioLogueado?.nombre || 'Usuario' }}</span>
+            <span class="dropdown-email">{{ usuarioLogueado?.email || '' }}</span>
+          </div>
+        </div>
+        <nav class="dropdown-nav">
+          <a (click)="irAPerfil(); toggleProfileMenu()" class="dropdown-item">
+            <i class="fas fa-user"></i>
+            <span>Mi Perfil</span>
+          </a>
+          <a (click)="irATienda(); toggleProfileMenu()" class="dropdown-item">
+            <i class="fas fa-shopping-cart"></i>
+            <span>PetShop</span>
+          </a>
+          
+          <a (click)="irASobreNosotros(); toggleProfileMenu()" class="dropdown-item">
+            <i class="fas fa-users"></i>
+            <span>Sobre Nosotros</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a (click)="logout(); toggleProfileMenu()" class="dropdown-item logout">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Cerrar Sesión</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- LAYOUT PRINCIPAL: Centrado -->
+<div class="layout-principal">
+
+  <!-- CONTENEDOR PRINCIPAL DEL FEED -->
+  <section class="main-content">
+
+    <!-- CABECERA DEL FEED -->
+    <header class="feed-header">
+      <h1 class="feed-title">🐾 HelpYourPet Community</h1>
+      <p class="feed-subtitle">Comparte momentos con tu mascota y conecta con otros amantes de los animales 🐶🐱</p>
+    </header>
+
+    <!-- CREAR PUBLICACIÓN -->
+    <article class="crear-publicacion">
+      <div class="publicacion-header">
+        <div class="user-avatar">
+          <img
+            [src]="usuarioLogueado?.avatar || 'assets/images/Default.png'"
+            alt="Avatar de usuario">
+        </div>
+        <div class="publicacion-input-area">
+          <textarea [(ngModel)]="nuevaPublicacion" [placeholder]="currentPlaceholder" rows="3"
+            class="textarea-publicacion"></textarea>
+        </div>
+      </div>
+
+      <!-- Preview de imagen -->
+      <div *ngIf="imagenPreview" class="imagen-preview-container">
+        <div class="imagen-preview">
+          <img [src]="imagenPreview" alt="Vista previa de imagen">
+          <button class="btn-eliminar-imagen" (click)="eliminarImagen()" aria-label="Eliminar imagen">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="publicacion-acciones">
+        <div class="acciones-izquierda">
+          <label class="btn-accion" for="file-input">
+            <i class="fas fa-image"></i>
+            <span>Foto</span>
+            <input type="file" id="file-input" accept="image/*" (change)="onFileSelected($event)" hidden>
+          </label>
+        </div>
+        <div class="acciones-derecha">
+          <button class="btn-publicar" (click)="publicar()" [disabled]="!nuevaPublicacion.trim() && !imagenPreview">
+            <i class="fas fa-paper-plane"></i>
+            <span>Publicar</span>
+          </button>
+        </div>
+      </div>
+    </article>
+
+    <!-- FEED DE PUBLICACIONES -->
+    <section class="feed">
+      <div *ngFor="let pub of publicaciones" class="publicacion-card" [class.just-published]="pub.justPublished">
+
+        <!-- Header de publicación -->
+        <header class="pub-card-header">
+          <div class="usuario-info">
+            <img [src]="pub.usuario.avatar" alt="{{pub.usuario.nombre}}" class="avatar">
+            <div class="info-usuario">
+              <h3 class="nombre-usuario">{{pub.usuario.nombre}}</h3>
+              <time class="tiempo-publicacion">{{getTiempoTranscurrido(pub.fecha)}}</time>
+            </div>
+          </div>
+          <button class="btn-opciones" aria-label="Opciones de publicación">
+            <i class="fas fa-ellipsis-h"></i>
+          </button>
+        </header>
+
+        <!-- Contenido -->
+        <div class="publicacion-contenido">
+          <p class="texto-publicacion">{{pub.contenido}}</p>
+          <div *ngIf="pub.imagen" class="imagen-contenedor">
+            <img [src]="pub.imagen" alt="Imagen de publicación" class="publicacion-imagen">
+          </div>
+        </div>
+
+        <!-- Estadísticas -->
+        <div class="publicacion-stats">
+          <span class="stat-item">
+            <i class="fas fa-heart" [class.liked]="pub.likedByUser"></i>
+            <span class="stat-number">{{pub.likes}}</span>
+          </span>
+          <span class="stat-item">
+            <i class="fas fa-comment"></i>
+            <span class="stat-number">{{pub.comentarios.length}} comentarios</span>
+          </span>
+          <span class="stat-item">
+            <i class="fas fa-share"></i>
+            <span class="stat-number">{{pub.compartidos}}</span>
+          </span>
+        </div>
+
+        <!-- Acciones -->
+        <footer class="publicacion-acciones-footer">
+          <button class="btn-accion-footer" (click)="darLike(pub)" [class.active]="pub.likedByUser"
+            [class.like-bounce]="pub.likeAnimating">
+            <i class="fas fa-heart"></i>
+            <span>Me gusta</span>
+          </button>
+          <button class="btn-accion-footer" (click)="toggleComentarios(pub)">
+            <i class="fas fa-comment"></i>
+            <span>Comentar</span>
+          </button>
+          <button class="btn-accion-footer" (click)="compartir(pub)" [class.share-animate]="pub.shareAnimating">
+            <i class="fas fa-share"></i>
+            <span>Compartir</span>
+          </button>
+        </footer>
+
+        <!-- Sección de comentarios -->
+        <section *ngIf="pub.mostrarComentarios" class="comentarios-section">
+          <div class="comentarios-lista">
+            <article *ngFor="let comentario of pub.comentarios" class="comentario-item"
+              [class.comment-new]="comentario.justAdded">
+              <img [src]="comentario.usuario.avatar" alt="{{comentario.usuario.nombre}}" class="avatar-comentario">
+              <div class="comentario-contenido">
+                <div class="comentario-bubble">
+                  <strong class="autor-comentario">{{comentario.usuario.nombre}}</strong>
+                  <p class="texto-comentario">{{comentario.contenido}}</p>
+                </div>
+                <time class="comentario-tiempo">{{getTiempoTranscurrido(comentario.fecha)}}</time>
+              </div>
+            </article>
+          </div>
+
+          <div class="agregar-comentario">
+            <img
+              [src]="usuarioLogueado?.avatar || 'assets/images/Default.png'"
+              alt="Tu avatar" class="avatar-comentario">
+            <div class="input-comentario-container">
+              <input type="text" [(ngModel)]="nuevoComentario[pub.id]" (keyup.enter)="agregarComentario(pub)"
+                placeholder="Escribe un comentario... 💬" class="input-comentario">
+              <button class="btn-enviar-comentario" (click)="agregarComentario(pub)" aria-label="Enviar comentario">
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </section>
+
+  </section>
+
+</div>
+
+<!-- BOTÓN SUBIR (Scroll to top) -->
+<button class="btn-scroll-top" [class.visible]="showScrollTop" (click)="scrollToTop()" aria-label="Volver arriba">
+  <i class="fas fa-arrow-up"></i>
+</button>
+
+<!-- BOTÓN MODO OSCURO (Esquina inferior izquierda) -->
+<button class="theme-toggle-bottom" (click)="toggleModoOscuro()"
+  [attr.aria-label]="modoOscuro ? 'Activar modo claro' : 'Activar modo oscuro'"
+  [class.dark-mode]="modoOscuro">
+  <i class="fas" [ngClass]="modoOscuro ? 'fa-sun' : 'fa-moon'"></i>
+</button>

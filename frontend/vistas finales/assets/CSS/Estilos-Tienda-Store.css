@@ -1,0 +1,220 @@
+/* ===== BOTÓN VOLVER A TIENDAS - SOLO ICONO ===== */
+.btn-back-to-stores {
+	position: fixed;
+	bottom: 30px;
+	left: 30px;
+	background: #018099;
+	color: white;
+	border: none;
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 4px 12px rgba(1, 128, 153, 0.4);
+	transition: all 0.3s ease;
+	z-index: 999;
+}
+
+.btn-back-to-stores:hover {
+	background: #015f73;
+	transform: scale(1.1) translateX(-3px);
+	box-shadow: 0 6px 20px rgba(1, 128, 153, 0.6);
+}
+
+.btn-back-to-stores i {
+	font-size: 1.3rem;
+	transition: transform 0.3s ease;
+}
+
+.btn-back-to-stores:hover i {
+	transform: rotate(-15deg);
+}
+
+.btn-back-to-stores span {
+	display: none;
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+	.btn-back-to-stores {
+		bottom: 20px;
+		left: 20px;
+		width: 45px;
+		height: 45px;
+	}
+	
+	.btn-back-to-stores i {
+		font-size: 1.1rem;
+	}
+}
+
+/* ===== SECCIÓN DE SELECCIÓN DE TIENDA ===== */
+.store-selection-section {
+	min-height: calc(100vh - 100px);
+	padding: 60px 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.store-selection-container {
+	max-width: 1400px;
+	width: 100%;
+	margin: 0 auto;
+}
+
+.store-selection-header {
+	text-align: center;
+	margin-bottom: 50px;
+}
+
+.store-selection-title {
+	font-family: "Baloo 2";
+	font-size: 3rem;
+	color: var(--text-color);
+	margin-bottom: 15px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 15px;
+}
+
+.store-selection-title i {
+	color: var(--color-price);
+	font-size: 2.5rem;
+}
+
+.store-selection-subtitle {
+	font-size: 1.2rem;
+	color: var(--text-color);
+	opacity: 0.8;
+	font-family: "Fredoka";
+}
+
+.stores-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+	gap: 30px;
+	margin-top: 40px;
+}
+
+.store-card {
+	background: var(--card-bg);
+	border-radius: 20px;
+	overflow: hidden;
+	box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+	transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+	cursor: pointer;
+	position: relative;
+}
+
+.store-card:hover {
+	transform: translateY(-10px);
+	box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.store-card-image {
+	height: 200px;
+	background: linear-gradient(135deg, var(--product-image-bg-start) 0%, var(--product-image-bg-end) 100%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	overflow: hidden;
+}
+
+.store-card-image i {
+	font-size: 5rem;
+	color: var(--color-price);
+	opacity: 0.7;
+	transition: all 0.3s ease;
+}
+
+.store-card:hover .store-card-image i {
+	transform: scale(1.2);
+	opacity: 1;
+}
+
+.store-card-content {
+	padding: 25px;
+}
+
+.store-card-name {
+	font-family: "Baloo 2";
+	font-size: 1.8rem;
+	color: var(--text-color);
+	margin-bottom: 10px;
+	font-weight: 600;
+}
+
+.store-card-info {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	margin-bottom: 20px;
+}
+
+.store-info-item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	color: var(--text-color);
+	opacity: 0.8;
+	font-size: 0.95rem;
+}
+
+.store-info-item i {
+	color: var(--color-price);
+	width: 20px;
+}
+
+.store-card-button {
+	width: 100%;
+	background: linear-gradient(135deg, #42a3c6 0%, #018099 100%);
+	color: white;
+	border: none;
+	padding: 15px;
+	border-radius: 12px;
+	font-size: 1.1rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+}
+
+.store-card-button:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 5px 15px rgba(66, 163, 198, 0.4);
+}
+
+.store-badge {
+	position: absolute;
+	top: 15px;
+	right: 15px;
+	background: linear-gradient(135deg, #f1322b 0%, #ff7417 100%);
+	color: white;
+	padding: 8px 15px;
+	border-radius: 20px;
+	font-size: 0.85rem;
+	font-weight: 600;
+	z-index: 2;
+}
+
+/* ===== HERO SECTION ===== */
+.hero-section {
+	top: -7px;
+	color: #000000de;
+	position: relative;
+	height: 600px;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+}

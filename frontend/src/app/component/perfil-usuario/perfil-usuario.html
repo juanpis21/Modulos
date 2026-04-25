@@ -1,0 +1,393 @@
+<!-- Overlay para cerrar sidebar en móviles -->
+<div class="sidebar-overlay" [class.active]="sidebarAbierto" (click)="cerrarSidebar()"></div>
+
+<div class="perfil-layout">
+  <!-- ===== SIDEBAR ===== -->
+  <nav class="sidebar" [class.active]="sidebarAbierto">
+    <div class="sidebar-header">
+      <h3>HelpYourPet</h3>
+      <div class="user-profile">
+        <img [src]="usuario.imagen || 'assets/images/Default.png'"
+          alt="Foto de perfil" class="profile-avatar">
+        <h5>{{ usuario.nombres }} {{ usuario.apellidos }}</h5>
+        <p>{{ getRoleName() | titlecase }}</p>
+      </div>
+    </div>
+
+    <ul class="nav-menu">
+      <li>
+        <a [class.active]="seccionActiva === 'dashboard'" (click)="cambiarSeccion('dashboard')">
+          <i class="fas fa-home"></i><span>Inicio</span>
+        </a>
+      </li>
+      <li>
+        <a [class.active]="seccionActiva === 'mascotas'" (click)="cambiarSeccion('mascotas')">
+          <i class="fas fa-paw"></i><span>Mis Mascotas</span>
+        </a>
+      </li>
+      <li>
+        <a [class.active]="seccionActiva === 'compras'" (click)="cambiarSeccion('compras')">
+          <i class="fas fa-shopping-cart"></i><span>Mis Compras</span>
+        </a>
+      </li>
+      <li>
+        <a [class.active]="seccionActiva === 'adopciones'" (click)="cambiarSeccion('adopciones')">
+          <i class="fas fa-heart"></i><span>Mis publicaciones</span>
+        </a>
+      </li>
+      <li>
+        <a [class.active]="seccionActiva === 'configuracion'" (click)="cambiarSeccion('configuracion')">
+          <i class="fas fa-cog"></i><span>Configuración</span>
+        </a>
+      </li>
+      <li class="separator">
+        <a class="logout-link" (click)="cerrarSesion()">
+          <i class="fas fa-sign-out-alt"></i><span>Cerrar Sesión</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- ===== CONTENIDO PRINCIPAL ===== -->
+  <main class="main-content">
+
+    <!-- ===== DASHBOARD ===== -->
+    <section *ngIf="seccionActiva === 'dashboard'" class="content-section animate-in">
+      <div class="section-header">
+        <h1>Hola, {{ usuario.nombres }} 👋</h1>
+        <div class="header-actions">
+          <button class="menu-toggle" (click)="toggleSidebar()"><i class="fas fa-bars"></i></button>
+          <button class="theme-btn" (click)="toggleDarkMode()">
+            <i class="fas" [ngClass]="darkMode ? 'fa-sun' : 'fa-moon'"></i>
+          </button>
+          <button class="home-btn" (click)="irAInicio()"><i class="fas fa-home"></i></button>
+        </div>
+      </div>
+
+      <!-- Preview mascotas -->
+      <div class="card">
+        <div class="card-header">
+          <h5><i class="fas fa-paw"></i> Mis Mascotas</h5>
+        </div>
+        <div class="card-body">
+          <div *ngIf="mascotas.length === 0" class="empty-state">
+            <i class="fas fa-paw"></i>
+            <p>No tienes mascotas registradas aún.</p>
+          </div>
+          <div class="pets-grid" *ngIf="mascotas.length > 0">
+            <div *ngFor="let mascota of mascotas" class="pet-card">
+              <div class="pet-image-container">
+                <img *ngIf="mascota.foto" [src]="mascota.foto" [alt]="mascota.nombre" class="pet-image">
+                <div *ngIf="!mascota.foto" class="pet-image-placeholder">
+                  <i class="fas fa-paw"></i>
+                </div>
+              </div>
+              <div class="pet-info">
+                <h5 class="pet-name">{{ mascota.nombre }}</h5>
+                <div class="pet-details">
+                  <div class="pet-detail"><i class="fas fa-paw"></i><span>{{ mascota.especie }}</span></div>
+                  <div class="pet-detail"><i class="fas fa-calendar"></i><span>{{ getEdadTexto(mascota) }}</span></div>
+                  <div class="pet-detail" *ngIf="mascota.raza"><i class="fas fa-dna"></i><span>{{ mascota.raza }}</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== MIS MASCOTAS ===== -->
+    <section *ngIf="seccionActiva === 'mascotas'" class="content-section animate-in">
+      <div class="section-header">
+        <h1><i class="fas fa-paw"></i> Mis Mascotas</h1>
+        <div class="header-actions">
+          <button class="menu-toggle" (click)="toggleSidebar()"><i class="fas fa-bars"></i></button>
+          <button class="theme-btn" (click)="toggleDarkMode()">
+            <i class="fas" [ngClass]="darkMode ? 'fa-sun' : 'fa-moon'"></i>
+          </button>
+          <button class="home-btn" (click)="irAInicio()"><i class="fas fa-home"></i></button>
+          <button class="btn-primary" (click)="openAddPetModal()"><i class="fas fa-plus"></i> Agregar Mascota</button>
+        </div>
+      </div>
+
+      <div *ngIf="mascotas.length === 0" class="empty-state large">
+        <i class="fas fa-paw"></i>
+        <h4>No tienes mascotas registradas.</h4>
+        <p>¡Agrega tu primera mascota haciendo clic en el botón arriba!</p>
+      </div>
+
+      <div *ngIf="mascotas.length > 0" class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Foto</th>
+              <th>Nombre</th>
+              <th>Especie</th>
+              <th>Edad</th>
+              <th>Género</th>
+              <th>Raza</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let mascota of mascotas">
+              <td>
+                <img *ngIf="mascota.foto" [src]="mascota.foto" [alt]="mascota.nombre" class="table-pet-img">
+                <span *ngIf="!mascota.foto" class="no-photo"><i class="fas fa-paw"></i></span>
+              </td>
+              <td><strong>{{ mascota.nombre }}</strong></td>
+              <td>{{ mascota.especie }}</td>
+              <td>{{ getEdadTexto(mascota) }}</td>
+              <td>{{ getGeneroTexto(mascota.genero) }}</td>
+              <td>{{ mascota.raza }}</td>
+              <td>
+                <div class="action-buttons">
+                  <button class="btn-edit" (click)="openEditPetModal(mascota)"><i class="fas fa-edit"></i> Editar</button>
+                  <button class="btn-delete" (click)="eliminarMascota(mascota.id)"><i class="fas fa-trash"></i> Eliminar</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===== MIS COMPRAS ===== -->
+    <section *ngIf="seccionActiva === 'compras'" class="content-section animate-in">
+      <div class="section-header">
+        <h1><i class="fas fa-shopping-cart"></i> Mis Compras</h1>
+        <div class="header-actions">
+          <button class="menu-toggle" (click)="toggleSidebar()"><i class="fas fa-bars"></i></button>
+          <button class="theme-btn" (click)="toggleDarkMode()">
+            <i class="fas" [ngClass]="darkMode ? 'fa-sun' : 'fa-moon'"></i>
+          </button>
+          <button class="home-btn" (click)="irAInicio()"><i class="fas fa-home"></i></button>
+          <button class="btn-primary" (click)="irATienda()"><i class="fas fa-store"></i> Ir a la Tienda</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h5><i class="fas fa-history"></i> Historial de Compras</h5></div>
+        <div class="card-body">
+          <div class="empty-state">
+            <i class="fas fa-shopping-bag"></i>
+            <p>No tienes compras registradas aún. ¡Visita nuestra tienda! 🛍️</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== MIS ADOPCIONES ===== -->
+    <section *ngIf="seccionActiva === 'adopciones'" class="content-section animate-in">
+      <div class="section-header">
+        <h1><i class="fas fa-heart"></i> Mis publicaciones</h1>
+        <div class="header-actions">
+          <button class="menu-toggle" (click)="toggleSidebar()"><i class="fas fa-bars"></i></button>
+          <button class="theme-btn" (click)="toggleDarkMode()">
+            <i class="fas" [ngClass]="darkMode ? 'fa-sun' : 'fa-moon'"></i>
+          </button>
+          <button class="home-btn" (click)="irAInicio()"><i class="fas fa-home"></i></button>
+          <button class="btn-primary" (click)="irATienda()"><i class="fas fa-plus"></i> Publicar Mascota</button>
+        </div>
+      </div>
+      <div class="empty-state-card">
+        <i class="fas fa-heart"></i>
+        <h3>No has publicado mascotas en publicación</h3>
+        <p>¡Ayuda a encontrar un hogar a una mascota que necesite amor! 🐾</p>
+        <button class="btn-primary large" (click)="irATienda()"><i class="fas fa-plus"></i> Publicar Primera Mascota</button>
+      </div>
+    </section>
+
+    <!-- ===== CONFIGURACIÓN ===== -->
+    <section *ngIf="seccionActiva === 'configuracion'" class="content-section animate-in">
+      <div class="section-header">
+        <h1><i class="fas fa-cog"></i> Configuración de Perfil</h1>
+        <div class="header-actions">
+          <button class="menu-toggle" (click)="toggleSidebar()"><i class="fas fa-bars"></i></button>
+          <button class="theme-btn" (click)="toggleDarkMode()">
+            <i class="fas" [ngClass]="darkMode ? 'fa-sun' : 'fa-moon'"></i>
+          </button>
+          <button class="home-btn" (click)="irAInicio()"><i class="fas fa-home"></i></button>
+        </div>
+      </div>
+
+      <!-- Información Personal -->
+      <div class="card">
+        <div class="card-header"><h5><i class="fas fa-user-edit"></i> Información Personal</h5></div>
+        <div class="card-body">
+          <div class="config-layout">
+            <!-- Foto de perfil -->
+            <div class="config-photo">
+              <img [src]="usuario.imagen || 'assets/images/Default.png'"
+                alt="Foto de perfil" class="config-avatar">
+              <p class="photo-hint">JPG, PNG</p>
+              <label class="btn-outline small">
+                <i class="fas fa-upload"></i> Cambiar
+                <input type="file" accept="image/*" (change)="onProfileImageSelected($event)" hidden>
+              </label>
+            </div>
+
+            <!-- Formulario -->
+            <div class="config-form">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Nombres</label>
+                  <input type="text" [(ngModel)]="usuario.nombres" placeholder="Ingresa tus nombres">
+                </div>
+                <div class="form-group">
+                  <label>Edad</label>
+                  <input type="number" [(ngModel)]="usuario.edad" placeholder="Tu edad">
+                </div>
+                <div class="form-group">
+                  <label>Apellidos</label>
+                  <input type="text" [(ngModel)]="usuario.apellidos" placeholder="Ingresa tus apellidos">
+                </div>
+                <div class="form-group">
+                  <label>Dirección</label>
+                  <input type="text" [(ngModel)]="usuario.direccion" placeholder="Ingresa tu dirección">
+                </div>
+                <div class="form-group">
+                  <label>Correo Electrónico</label>
+                  <input type="email" [(ngModel)]="usuario.correo" placeholder="correo&#64;ejemplo.com">
+                </div>
+                <div class="form-group">
+                  <label>Tipo Documento</label>
+                  <select [(ngModel)]="usuario.tipoDocumento">
+                    <option value="" disabled>Selecciona</option>
+                    <option value="Cédula">Cédula</option>
+                    <option value="DNI">DNI</option>
+                    <option value="Pasaporte">Pasaporte</option>
+                    <option value="Tarjeta de Identidad">Tarjeta de Identidad</option>
+                    <option value="Cédula de Extranjería">Cédula de Extranjería</option>
+                    <option value="Permiso de Residencia">Permiso de Residencia</option>
+                    <option value="Documento Nacional">Documento Nacional</option>
+                    <option value="Licencia de Conducir">Licencia de Conducir</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Teléfono</label>
+                  <input type="tel" [(ngModel)]="usuario.telefono" placeholder="+57 123 456 7890">
+                </div>
+                <div class="form-group">
+                  <label>Número Documento</label>
+                  <input type="text" [(ngModel)]="usuario.numDocumento" placeholder="Número de documento">
+                </div>
+              </div>
+              <div class="form-actions">
+                <button class="btn-primary" (click)="guardarPerfil()"><i class="fas fa-save"></i> Guardar Cambios</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seguridad y Zona de Peligro -->
+      <div class="config-bottom-row">
+        <div class="card card-warning">
+          <div class="card-header warning"><h6><i class="fas fa-key"></i> Seguridad</h6></div>
+          <div class="card-body center">
+            <p>Cambia tu contraseña regularmente</p>
+            <button class="btn-warning"><i class="fas fa-lock"></i> Cambiar Contraseña</button>
+          </div>
+        </div>
+        <div class="card card-danger">
+          <div class="card-header danger"><h6><i class="fas fa-exclamation-triangle"></i> Zona de Peligro</h6></div>
+          <div class="card-body center">
+            <p>Desactivación de cuenta</p>
+            <button class="btn-danger" (click)="eliminarCuenta()"><i class="fas fa-user-slash"></i> Desactivar Cuenta</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ===== MODAL AGREGAR MASCOTA ===== -->
+<div class="modal-overlay" *ngIf="showAddPetModal" (click)="closeAddPetModal()">
+  <div class="modal-dialog" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h5><i class="fas fa-plus-circle"></i> Agregar Nueva Mascota</h5>
+      <button class="modal-close" (click)="closeAddPetModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-form-grid">
+        <div class="form-group"><label>Nombre *</label><input type="text" [(ngModel)]="newPet.nombre" placeholder="Ej: Max, Luna"></div>
+        <div class="form-group"><label>Especie *</label>
+          <select [(ngModel)]="newPet.especie">
+            <option value="" disabled>Selecciona</option>
+            <option value="Perro">Perro</option><option value="Gato">Gato</option>
+            <option value="Ave">Ave</option><option value="Otro">Otro</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Raza</label><input type="text" [(ngModel)]="newPet.raza" placeholder="Ej: Labrador"></div>
+        <div class="form-group"><label>Edad *</label>
+          <div class="input-row">
+            <input type="number" [(ngModel)]="newPet.edad" min="0" max="50" placeholder="0">
+            <select [(ngModel)]="newPet.unidadEdad"><option value="años">Años</option><option value="meses">Meses</option></select>
+          </div>
+        </div>
+        <div class="form-group"><label>Género</label>
+          <select [(ngModel)]="newPet.genero"><option value="M">Macho</option><option value="F">Hembra</option></select>
+        </div>
+        <div class="form-group"><label>Tamaño</label>
+          <select [(ngModel)]="newPet.tamano"><option value="" disabled>Selecciona</option>
+            <option value="pequeño">Pequeño</option><option value="mediano">Mediano</option><option value="grande">Grande</option>
+          </select>
+        </div>
+        <div class="form-group full-width"><label>Descripción</label>
+          <textarea [(ngModel)]="newPet.descripcion" rows="3" placeholder="Características, comportamiento..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeAddPetModal()"><i class="fas fa-times"></i> Cancelar</button>
+      <button class="btn-primary" (click)="guardarMascota()"><i class="fas fa-save"></i> Guardar Mascota</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL EDITAR MASCOTA ===== -->
+<div class="modal-overlay" *ngIf="showEditPetModal" (click)="closeEditPetModal()">
+  <div class="modal-dialog" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h5><i class="fas fa-edit"></i> Editar Mascota</h5>
+      <button class="modal-close" (click)="closeEditPetModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-form-grid">
+        <div class="form-group"><label>Nombre *</label><input type="text" name="nombre" [(ngModel)]="editingPet.nombre" placeholder="Ej: Max, Luna"></div>
+        <div class="form-group"><label>Especie *</label>
+          <select name="especie" [(ngModel)]="editingPet.especie">
+            <option value="" disabled>Selecciona</option>
+            <option value="Perro">Perro</option><option value="Gato">Gato</option>
+            <option value="Ave">Ave</option><option value="Otro">Otro</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Raza</label><input type="text" name="raza" [(ngModel)]="editingPet.raza" placeholder="Ej: Labrador"></div>
+        <div class="form-group"><label>Edad</label>
+          <div class="input-row">
+            <input type="number" name="edad" [(ngModel)]="editingPet.edad" min="0" max="50" placeholder="0">
+            <select name="unidadEdad" [(ngModel)]="editingPet.unidadEdad"><option value="años">Años</option><option value="meses">Meses</option></select>
+          </div>
+        </div>
+        <div class="form-group"><label>Género</label>
+          <select name="genero" [(ngModel)]="editingPet.genero">
+            <option value="" disabled>Selecciona</option>
+            <option value="M">Macho</option><option value="F">Hembra</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Tamaño</label>
+          <select name="tamano" [(ngModel)]="editingPet.tamano">
+            <option value="" disabled>Selecciona</option>
+            <option value="pequeño">Pequeño</option><option value="mediano">Mediano</option><option value="grande">Grande</option>
+          </select>
+        </div>
+        <div class="form-group full-width"><label>Descripción</label><textarea name="descripcion" [(ngModel)]="editingPet.descripcion" rows="3" placeholder="Características, comportamiento..."></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeEditPetModal()"><i class="fas fa-times"></i> Cancelar</button>
+      <button class="btn-primary" (click)="guardarEdicionMascota()"><i class="fas fa-save"></i> Guardar Cambios</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,769 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>HelpYourPet - Panel Administrador</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+	<link rel="stylesheet" href="assets/CSS/CSS-Admin.css">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+	<!-- Header -->
+	<header class="header">
+		<div class="logo-container">
+			<img src="assets/IMG/logo.png" alt="Logo HelpYourPet" class="logo-img">
+			<div class="logo-text">
+				<h1>HelpYourPet</h1>
+				<span>Panel Administrador</span>
+			</div>
+		</div>
+		<div class="user-controls">
+			<!-- Botón de notificaciones 
+			<button id="notificationBell" class="theme-toggle-btn notification-bell" aria-label="Notificaciones"
+				title="Notificaciones">
+				<i class="bi bi-bell-fill"></i>
+				<span class="notification-badge">0</span>
+			</button>-->
+			<!-- Botón de cambio de tema -->
+			<button id="themeToggle" class="theme-toggle-btn" aria-label="Cambiar tema">
+				<i class="bi bi-moon-fill theme-icon"></i>
+			</button>
+			<div class="user-profile">
+				<img src="assets/IMG/Desparasitacion1.png" alt="imagen de perfil" class="profile-pic" id="headerProfilePic">
+				<span>Administrador</span>
+			</div>
+		</div>
+	</header>
+
+	<!-- Contenido principal -->
+	<main class="main-container">
+		<!-- Sidebar -->
+		<nav class="sidebar">
+			<ul class="nav-menu">
+				<li><a href="#" class="nav-link active" data-section="dashboard">Inicio</a></li>
+				<li><a href="#" class="nav-link" data-section="users">Gestión de Usuarios</a></li>
+				<li><a href="#" class="nav-link" data-section="pets">Gestión de Mascotas</a></li>
+				<li><a href="#" class="nav-link" data-section="vets">Gestión Veterinaria</a></li>
+				<!--<li><a href="#" class="nav-link" data-section="settings">Configuración General</a></li>
+				<li><a href="#" class="nav-link" data-section="security">Control y Seguridad</a></li>-->
+				<li><a href="#" class="nav-link" data-section="profile">Perfil Administrador</a></li>
+				<li><a href="#" class="nav-link logout-nav-btn" onclick="cerrarSesion(event)"><i
+							class="bi bi-box-arrow-right"></i>Cerrar Sesión</a>
+				</li>
+			</ul>
+		</nav>
+
+		<!-- Contenido -->
+		<div class="content-area">
+			<!-- Mensajes -->
+			<div class="alert alert-success">
+				<span></span>
+			</div>
+			<div class="alert alert-error">
+				<span></span>
+			</div>
+
+			<!-- Dashboard -->
+			<section id="dashboard" class="content-section active">
+				<h2>Inicio</h2>
+				<div class="dashboard-cards">
+					<div class="card">
+						<h3>Usuarios Activos</h3>
+						<p class="stat-number">0</p>
+					</div>
+					<div class="card">
+						<h3>Mascotas Registradas</h3>
+						<p class="stat-number">0</p>
+					</div>
+					<div class="card">
+						<h3>Veterinarias Activas</h3>
+						<p class="stat-number">0</p>
+					</div>
+					<!--<div class="card">
+						<h3>Reportes Pendientes</h3>
+						<p class="stat-number">0</p>
+					</div>-->
+				</div>
+			</section>
+
+			<!-- Gestión de Usuarios -->
+			<section id="users" class="content-section">
+				<h2>Gestión de Usuarios</h2>
+				<div class="section-actions">
+					<button class="btn-primary" onclick="abrirModal('vetModal')">Registrar Veterinario</button>
+					<button class="btn-primary" onclick="abrirModal('clinicModal')">Registrar Veterinaria</button>
+				</div>
+
+				<table class="data-table">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Nombre</th>
+							<th>Email</th>
+							<th>Rol</th>
+							<th>Estado</th>
+							<th>Acciones</th>
+						</tr>
+					</thead>
+					<tbody id="tablaUsuarios">
+						<tr>
+							<td>1</td>
+							<td>Nombre</td>
+							<td>Email</td>
+							<td>
+								<span>Rol</span>
+								<span>Sin rol</span>
+							</td>
+							<td>
+								<span class="status active">Activo</span>
+								<span class="status inactive">Desactivado</span>
+							</td>
+							<td>
+								<a href="#" class="btn-action">Ver</a>
+								<form method="post"
+									style="display:inline;">
+									<input type="hidden" name="activo" />
+									<button type="submit" class="btn-action"></button>
+								</form>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+
+			<!-- Gestión de Mascotas -->
+			<section id="pets" class="content-section">
+				<h2>Gestión de Mascotas</h2>
+				<div class="tabs">
+					<button class="tab-btn active" data-tab="pets-tab">Mascotas Registradas</button>
+					<!--<button class="tab-btn" data-tab="abuse-tab">Reportes de Maltrato</button>-->
+				</div>
+
+				<div class="tab-content active" id="pets-tab">
+					<table class="data-table">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Nombre</th>
+								<th>Especie</th>
+								<th>Raza</th>
+								<th>Dueño</th>
+								<th>Acciones</th>
+							</tr>
+						</thead>
+						<tbody id="tablaMascotas">
+							<tr>
+								<td>1</td>
+								<td>Toby</td>
+								<td>Canino</td>
+								<td>Labrador</td>
+								<td>Dueño</td>
+								<td>
+									<a href="#" class="btn-action">Ver</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<!-- REPORTES -->
+
+				<div class="tab-content" id="abuse-tab">
+					<table class="data-table">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Fecha</th>
+								<th>Usuario</th>
+								<th>Estado</th>
+								<th>Acciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td colspan="5" class="text-center">No hay reportes de maltrato registrados</td>
+							</tr>
+							<tr>
+								<td>1</td>
+								<td>15/10/2023</td>
+								<td>
+									Usuario</td>
+								<td>
+									<span
+										class="status pending">Pendiente</span>
+									<span class="status medium">Asignado</span>
+									<span
+										class="status active">Completado</span>
+								</td>
+								<td>
+									<a href="#" class="btn-action">Ver</a>
+
+									<form method="post"
+										style="display:inline;">
+										<select name="autoridad" class="authority-select" required>
+											<option value="">Asignar autoridad...</option>
+											<option value="Policía Nacional">Policía Nacional</option>
+											<option value="Seguridad Animal">Seguridad Animal</option>
+											<option value="Defensa Animal Municipal">Defensa Animal Municipal</option>
+											<option value="Policía Ambiental">Policía Ambiental</option>
+											<option value="Fiscalía">Fiscalía</option>
+										</select>
+										<button type="submit" class="btn-action btn-assign">Asignar</button>
+									</form>
+
+									<form method="post"
+										style="display:inline;">
+										<input type="hidden" name="estado" value="completado" />
+										<button type="submit" class="btn-action">Marcar Completado</button>
+									</form>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</section>
+
+			<!-- Gestión Veterinaria -->
+			<section id="vets" class="content-section">
+				<h2>Gestión Veterinaria</h2>
+
+				<div class="tabs">
+					<button class="tab-btn active" data-tab="clinics-vet-tab">Clínicas</button>
+					<!--<button class="tab-btn" data-tab="reviews-tab">Calificaciones y Comentarios</button>-->
+				</div>
+
+				<div class="tab-content active" id="clinics-vet-tab">
+					<table class="data-table">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Nombre</th>
+								<th>Tipo</th>
+								<th>Contacto</th>
+								<th>Estado</th>
+								<th>Acciones</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr>
+								<td>1</td>
+								<td>Veterinaria</td>
+								<td>Veterinaria</td>
+								<td>Teléfono</td>
+								<td>
+									<span class="status active">Activa</span>
+									<span
+										class="status inactive">Desactivada</span>
+								</td>
+								<td>
+									<a href="#" class="btn-action">Ver</a>
+									<form
+										method="post" style="display:inline;">
+										<input type="hidden" name="estado" />
+										<button type="submit" class="btn-action">
+										</button>
+									</form>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="tab-content" id="reviews-tab">
+					<table class="data-table">
+						<thead>
+							<tr>
+								<th>Usuario</th>
+								<th>Veterinaria/Veterinario</th>
+								<th>Calificación</th>
+								<th>Comentario</th>
+								<th>Estado</th>
+								<th>Acciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Ana García</td>
+								<td>Veterinaria Central</td>
+								<td>5/5</td>
+								<td>Excelente servicio</td>
+								<td><span class="status approved">Aprobado</span></td>
+								<td>
+									<button class="btn-action">Editar</button>
+									<button class="btn-action btn-reject">Rechazar</button>
+								</td>
+							</tr>
+							<tr>
+								<td>Carlos Rodríguez</td>
+								<td>Clínica PetCare</td>
+								<td>4/5</td>
+								<td>Muy buen trato con mi mascota</td>
+								<td><span class="status approved">Aprobado</span></td>
+								<td>
+									<button class="btn-action">Editar</button>
+									<button class="btn-action btn-reject">Rechazar</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</section>
+
+			<!-- Configuración General -->
+			<section id="settings" class="content-section">
+				<h2>Configuración General del Sistema</h2>
+				<div class="settings-options">
+					<div class="setting-item">
+						<h3>Gestión de Permisos por Rol</h3>
+						<button class="btn-action">Configurar</button>
+					</div>
+					<div class="setting-item">
+						<h3>Políticas de Privacidad y Términos de Uso</h3>
+						<button class="btn-action">Editar</button>
+					</div>
+					<div class="setting-item">
+						<h3>Copias de Seguridad y Restauración</h3>
+						<button class="btn-action">Programar</button>
+					</div>
+					<div class="setting-item">
+						<h3>Configuración de Idioma y Moneda</h3>
+						<button class="btn-action">Configurar</button>
+					</div>
+				</div>
+			</section>
+
+			<!-- Control y Seguridad -->
+			<section id="security" class="content-section">
+				<h2>Zona de Control y Seguridad</h2>
+				<div class="tabs">
+					<button class="tab-btn active" data-tab="suspicious-tab">Actividades Sospechosas</button>
+					<button class="tab-btn" data-tab="legal-tab">Solicitudes Legales</button>
+				</div>
+				<div class="tab-content active" id="suspicious-tab">
+					<table class="data-table">
+						<thead>
+							<tr>
+								<th>Fecha</th>
+								<th>Usuario</th>
+								<th>Actividad</th>
+								<th>Nivel de Riesgo</th>
+								<th>Acciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>16/10/2023</td>
+								<td>user123</td>
+								<td>Múltiples intentos de login fallidos</td>
+								<td><span class="status medium">Medio</span></td>
+								<td><button class="btn-action">Investigar</button></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="tab-content" id="legal-tab">
+					<table class="data-table">
+						<thead>
+							<tr>
+								<th>Fecha</th>
+								<th>Tipo</th>
+								<th>Descripción</th>
+								<th>Estado</th>
+								<th>Acciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>14/10/2023</td>
+								<td>Denuncia</td>
+								<td>Uso indebido de datos personales</td>
+								<td><span class="status pending">Pendiente</span></td>
+								<td><button class="btn-action">Revisar</button></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</section>
+
+			<!-- Perfil Administrador -->
+			<section id="profile" class="content-section">
+				<h2>Perfil Administrador</h2>
+				<div class="profile-container">
+					<div class="profile-header">
+						<div class="profile-image-section">
+							<div class="image-upload-container">
+								<img src="assets/IMG/Desparasitacion1.png" alt="Foto de perfil"
+									class="profile-large" id="profileImage">
+								<div class="profile-image-placeholder" id="profileImage">
+									<i class="bi bi-person-circle"></i>
+								</div>
+
+								<form action="#" method="post" enctype="multipart/form-data"
+									id="imageUploadForm">
+									<div class="file-upload-wrapper">
+										<input type="file" name="imagen" id="fileInput" accept="image/*"
+											class="file-input" required>
+										<label for="fileInput" class="file-upload-btn">
+											<i class="bi bi-cloud-arrow-up"></i>
+										</label>
+										<span class="file-name" id="fileName"></span>
+									</div>
+									<button type="submit" class="btn-upload">
+										<i class="bi bi-upload"></i> Subir Imagen
+									</button>
+								</form>
+							</div>
+						</div>
+						<div class="profile-info">
+							<h3>Información Personal</h3>
+							<div class="info-grid">
+								<div class="info-item">
+									<label>Nombre:</label>
+									<span>Administrador</span>
+								</div>
+
+								<div class="info-item">
+									<label>Email:</label>
+									<span>admin@HelpYourPet.com</span>
+								</div>
+								<div class="info-item">
+									<label>Teléfono:</label>
+									<span>+57 300 123 4567</span>
+								</div>
+							</div>
+							<button class="btn-primary" onclick="abrirModal('profileModal')">Editar
+								Información</button>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</main>
+
+	<!-- Modal Editar Perfil -->
+	<div id="profileModal" class="modal">
+		<div class="modal-contenido">
+			<span class="close" onclick="cerrarModal('profileModal')">&times;</span>
+			<h2>Editar Perfil</h2>
+			<form id="profileForm" action="#" method="post">
+				<div class="form-group">
+					<label for="profileName">Nombres:</label>
+					<input type="text" id="profileName" name="nombres" required>
+				</div>
+				<div class="form-group">
+					<label for="profileEmail">Email:</label>
+					<input type="email" id="profileEmail" name="correo" required>
+				</div>
+				<div class="form-group">
+					<label for="profilePhone">Teléfono:</label>
+					<input type="tel" id="profilePhone" name="telefono" required>
+				</div>
+				<button type="submit" class="btn-primary">Guardar Cambios</button>
+			</form>
+		</div>
+	</div>
+
+	<!-- Modal Registrar Veterinario -->
+	<div id="vetModal" class="modale">
+		<div class="modal-content">
+			<span class="close" onclick="cerrarModal('vetModal')">&times;</span>
+			<h2>Registrar Nuevo Veterinario</h2>
+			<form id="vetForm" action="#" method="post">
+				<div class="form-group">
+					<label for="vetNombres">Nombres:</label>
+					<input type="text" id="vetNombres" name="nombres" required>
+				</div>
+				<div class="form-group">
+					<label for="vetApellidos">Apellidos:</label>
+					<input type="text" id="vetApellidos" name="apellidos" required>
+				</div>
+				<div class="form-group">
+					<label for="vetEdad">Edad:</label>
+					<input type="number" id="vetEdad" name="edad" required min="18" max="100">
+				</div>
+				<div class="form-group">
+					<label for="vetTipoDocumento">Tipo Documento:</label>
+					<select id="vetTipoDocumento" name="tipoDocumento" required>
+						<option value="CC">Cédula de Ciudadanía</option>
+						<option value="CE">Cédula de Extranjería</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="vetNumDocumento">Número de Documento:</label>
+					<input type="text" id="vetNumDocumento" name="numDocumento" required>
+				</div>
+				<div class="form-group">
+					<label for="vetDireccion">Dirección:</label>
+					<input type="text" id="vetDireccion" name="direccion" required>
+				</div>
+				<div class="form-group">
+					<label for="vetCorreo">Correo:</label>
+					<input type="email" id="vetCorreo" name="correo" required>
+				</div>
+				<div class="form-group">
+					<label for="vetTelefono">Teléfono:</label>
+					<input type="tel" id="vetTelefono" name="telefono" required>
+				</div>
+				<div class="form-group">
+					<label for="vetPassword">Contraseña:</label>
+					<input type="password" id="vetPassword" name="password" required minlength="6">
+				</div>
+				<div class="form-group">
+					<label for="vetEspecialidad">Especialidad:</label>
+					<input type="text" id="vetEspecialidad" name="especialidad" required>
+				</div>
+				<div class="form-group">
+					<label for="vetTarjetaProfesional">Tarjeta Profesional:</label>
+					<input type="text" id="vetTarjetaProfesional" name="tarjetaProfesional" required>
+				</div>
+				<div class="form-group">
+					<label for="vetExperiencia">Experiencia (años):</label>
+					<input type="number" id="vetExperiencia" name="experiencia" required min="0">
+				</div>
+				<div class="form-group">
+					<label for="vetClinic">Veterinaria Asociada:</label>
+					<select id="vetClinic" name="veterinariaId">
+						<option value="">Seleccionar Veterinaria</option>
+						<option></option>
+					</select>
+				</div>
+				<button type="submit" class="btn-primary">Registrar Veterinario</button>
+			</form>
+		</div>
+	</div>
+
+	<!-- Modal Registrar Veterinaria -->
+	<div id="clinicModal" class="modal">
+		<div class="modal-content">
+			<span class="close" onclick="cerrarModal('clinicModal')">&times;</span>
+			<h2>Registrar Nueva Veterinaria</h2>
+			<form id="clinicForm" action="#" method="post">
+				<div class="form-group">
+					<label for="clinicNombre">Nombre:</label>
+					<input type="text" id="clinicNombre" name="nombre" required>
+				</div>
+				<div class="form-group">
+					<label for="clinicRUT">NIT:</label>
+					<input type="text" id="clinicRUT" name="rut" required>
+					<small style="display: block; margin-top: 5px; color: #666;">
+						<a href="https://muisca.dian.gov.co/WebRutMuisca/DefConsultaEstadoRUT.faces" target="_blank"
+							style="color: var(--primary-color); text-decoration: none;">
+							<i class="bi bi-link-45deg"></i> Compruebe el NIT de la veterinaria aquí
+						</a>
+					</small>
+				</div>
+				<div class="form-group">
+					<label for="clinicDireccion">Dirección:</label>
+					<input type="text" id="clinicDireccion" name="direccion" required>
+				</div>
+				<div class="form-group">
+					<label for="clinicTelefono">Teléfono:</label>
+					<input type="tel" id="clinicTelefono" name="telefono" required>
+				</div>
+				<div class="form-group">
+					<label for="clinicCorreo">Correo:</label>
+					<input type="email" id="clinicCorreo" name="correo" required>
+				</div>
+				<div class="form-group">
+					<label for="clinicHorario">Horario:</label>
+					<input type="text" id="clinicHorario" name="horario" placeholder="Ej: Lunes a Viernes 8:00-18:00">
+				</div>
+				<div class="form-group">
+					<label for="clinicDescripcion">Descripción:</label>
+					<textarea id="clinicDescripcion" name="descripcion"
+						placeholder="Descripción de servicios..."></textarea>
+				</div>
+				<div class="form-group">
+					<label for="clinicServices">Servicios Ofrecidos:</label>
+					<textarea id="clinicServices" name="servicios" rows="3"></textarea>
+				</div>
+				<div class="form-group">
+					<label for="clinicEstado">Estado:</label>
+					<select id="clinicEstado" name="estado">
+						<option value="Activa">Activa</option>
+						<option value="Inactiva">Inactiva</option>
+					</select>
+				</div>
+				<button type="submit" class="btn-primary">Registrar Veterinaria</button>
+			</form>
+		</div>
+	</div>
+
+	<!-- 	MODALES PARA LOS DETALLES -->
+	<!-- Modal Detalle Usuario -->
+	<div id="detalleUsuarioModal" class="modal">
+		<div class="modal-contenido">
+			<a href="#" class="close">&times;</a>
+			<h2>Detalles de Usuario</h2>
+			<div style="display: grid; gap: 1rem;">
+				<div style="text-align: center; margin-bottom: 1rem;">
+					<img src="assets/IMG/Desparasitacion1.png" alt="Foto de perfil"
+						style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 3px solid var(--primary-color);" />
+					<img src="https://via.placeholder.com/150?text=Sin+Foto"
+						alt="Sin foto"
+						style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 3px solid var(--primary-color);" />
+				</div>
+				<p><strong>Nombre Completo:</strong> <span>N/A</span></p>
+				<p><strong>Correo:</strong> <span>N/A</span></p>
+				<p><strong>Teléfono:</strong> <span>N/A</span></p>
+				<p><strong>Edad:</strong> <span>N/A</span> años</p>
+				<p><strong>Tipo Documento:</strong> <span>N/A</span></p>
+				<p><strong>Número Documento:</strong> <span>N/A</span></p>
+				<p><strong>Dirección:</strong> <span>N/A</span></p>
+				<p><strong>Rol:</strong> <span>N/A</span></p>
+				<p><strong>Estado:</strong>
+					<span class="status active">Activo</span>
+					<span class="status inactive">Inactivo</span>
+				</p>
+			</div>
+			<a href="#" class="btn-primary"
+				style="margin-top: 1rem; display: inline-block; text-decoration: none; text-align: center;">Cerrar</a>
+		</div>
+	</div>
+
+	<!-- Modal Detalle Mascota -->
+	<div id="detalleMascotaModal" class="modal">
+		<div class="modal-contenido">
+			<a href="#" class="close">&times;</a>
+			<h2>Detalles de Mascota</h2>
+			<div style="display: grid; gap: 1rem;">
+				<div style="text-align: center; margin-bottom: 1rem;">
+					<img src="assets/IMG/Desparasitacion1.png" alt="Foto de mascota"
+						style="width: 200px; height: 200px; object-fit: cover; border-radius: 12px; border: 3px solid var(--primary-color);" />
+					<img src="https://via.placeholder.com/200?text=Sin+Foto"
+						alt="Sin foto"
+						style="width: 200px; height: 200px; object-fit: cover; border-radius: 12px; border: 3px solid var(--primary-color);" />
+				</div>
+				<p><strong>Nombre:</strong> <span>N/A</span></p>
+				<p><strong>Especie:</strong> <span>N/A</span></p>
+				<p><strong>Raza:</strong> <span>N/A</span></p>
+				<p><strong>Edad:</strong> <span>N/A</span> años</p>
+				<p><strong>Género:</strong> <span>N/A</span></p>
+				<p><strong>Tamaño:</strong> <span>N/A</span></p>
+				<p><strong>Peso:</strong> <span>N/A</span> kg</p>
+				<p><strong>Color:</strong> <span>N/A</span></p>
+				<p><strong>Descripción:</strong> <span>N/A</span></p>
+				<p><strong>Dueño:</strong> <span>N/A</span>
+				</p>
+				<p><strong>Correo Dueño:</strong> <span>N/A</span></p>
+				<p><strong>Teléfono Dueño:</strong> <span>N/A</span></p>
+			</div>
+			<a href="#" class="btn-primary"
+				style="margin-top: 1rem; display: inline-block; text-decoration: none; text-align: center;">Cerrar</a>
+		</div>
+	</div>
+
+	<!-- Modal Detalle Veterinario -->
+	<div id="detalleVeterinarioModal" class="modal">
+		<div class="modal-contenido">
+			<a href="#" class="close">&times;</a>
+			<h2>Detalles de Veterinario</h2>
+			<div style="display: grid; gap: 1rem;">
+				<h3
+					style="color: var(--primary-color); border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem;">
+					Información Personal</h3>
+				<p><strong>Nombre Completo:</strong> <span>N/A</span>
+				</p>
+				<p><strong>Edad:</strong> <span>N/A</span> años</p>
+				<p><strong>Tipo Documento:</strong> <span>N/A</span></p>
+				<p><strong>Número Documento:</strong> <span>N/A</span></p>
+				<p><strong>Dirección:</strong> <span>N/A</span></p>
+
+				<h3
+					style="color: var(--primary-color); border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; margin-top: 1rem;">
+					Contacto</h3>
+				<p><strong>Teléfono:</strong> <span>N/A</span></p>
+				<p><strong>Correo:</strong> <span>N/A</span></p>
+
+				<h3
+					style="color: var(--primary-color); border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; margin-top: 1rem;">
+					Información Profesional</h3>
+				<p><strong>Especialidad:</strong> <span>N/A</span></p>
+				<p><strong>Tarjeta Profesional:</strong> <span>N/A</span></p>
+				<p><strong>Experiencia:</strong> <span>N/A</span> años</p>
+				<p><strong>Estado:</strong>
+					<span class="status active">Activo</span>
+					<span class="status inactive">Inactivo</span>
+				</p>
+			</div>
+			<a href="#" class="btn-primary"
+				style="margin-top: 1rem; display: inline-block; text-decoration: none; text-align: center;">Cerrar</a>
+		</div>
+	</div>
+
+	<!-- Modal Detalle Veterinaria -->
+	<div id="detalleVeterinariaModal" class="modal">
+		<div class="modal-contenido">
+			<a href="#" class="close">&times;</a>
+			<h2>Detalles de Veterinaria</h2>
+			<div style="display: grid; gap: 1rem;">
+				<h3
+					style="color: var(--primary-color); border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem;">
+					Información General</h3>
+				<p><strong>Nombre:</strong> <span>N/A</span></p>
+				<p><strong>NIT:</strong> <span>N/A</span></p>
+				<p><strong>Estado:</strong>
+					<span class="status active">Activa</span>
+					<span class="status inactive">Inactiva</span>
+				</p>
+
+				<h3
+					style="color: var(--primary-color); border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; margin-top: 1rem;">
+					Ubicación y Contacto</h3>
+				<p><strong>Dirección:</strong> <span>N/A</span></p>
+				<p><strong>Teléfono:</strong> <span>N/A</span></p>
+				<p><strong>Correo:</strong> <span>N/A</span></p>
+
+				<h3
+					style="color: var(--primary-color); border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; margin-top: 1rem;">
+					Información de Servicio</h3>
+				<p><strong>Horario:</strong> <span>N/A</span></p>
+				<p><strong>Descripción:</strong> <span>N/A</span></p>
+			</div>
+			<a href="#" class="btn-primary"
+				style="margin-top: 1rem; display: inline-block; text-decoration: none; text-align: center;">Cerrar</a>
+		</div>
+	</div>
+
+	<!-- Modal Detalle Reporte -->
+	<div id="detalleReporteModal" class="modal">
+		<div class="modal-contenido">
+			<a href="#" class="close">&times;</a>
+			<h2>Detalles del Reporte de Maltrato</h2>
+			<div class="modal-reporte-content" style="display: grid; gap: 1rem;">
+				<div style="background: #f8f9fa; padding: 1rem; border-radius: 8px;">
+					<p><strong>ID del Reporte:</strong> <span>N/A</span></p>
+					<p><strong>Fecha de Reporte:</strong> <span>N/A</span></p>
+					<p><strong>Estado:</strong>
+						<span class="status pending">Pendiente</span>
+						<span class="status medium">Asignado</span>
+						<span class="status active">Completado</span>
+					</p>
+					<p><strong>Usuario que reporta:</strong>
+						<span>N/A</span>
+					</p>
+				</div>
+
+				<div style="background: #fff; padding: 1rem; border: 1px solid #dee2e6; border-radius: 8px;">
+					<h4 style="color: var(--primary-color); margin-bottom: 1rem;">Descripción Completa del Reporte</h4>
+					<pre style="white-space: pre-wrap; font-family: inherit;">Descripción del reporte</pre>
+				</div>
+
+				<div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1rem;">
+					<a href="#" class="btn-primary"
+						style="text-decoration: none; text-align: center;">Cerrar</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+	<script src="assets/JS/JS-Admin.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,185 @@
+
+
+	<!-- Navbar -->
+	
+
+	<!-- Sección de Selección de Tienda -->
+	<section class="store-selection-section" id="storeSelection">
+		<div class="store-selection-container">
+			<div class="store-selection-header">
+				<h1 class="store-selection-title">
+					<i class="fas fa-store"></i> Selecciona tu Tienda Preferida
+				</h1>
+				<p class="store-selection-subtitle">Elige la tienda más cercana para ver sus productos disponibles</p>
+			</div>
+			<div class="stores-grid" id="storesGrid">
+				<!-- Las tiendas se cargarán dinámicamente aquí -->
+			</div>
+		</div>
+	</section>
+
+	<!-- Botón para volver a selección de tiendas -->
+	<button class="btn-back-to-stores" id="btnBackToStores" style="display: none;" onclick="backToStoreSelection()">
+		<i class="fas fa-store"></i>
+		<span>Ver Tiendas</span>
+	</button>
+
+	<!-- Hero Section  -->
+	<div class="hero-section" id="inicio" style="display: none;">
+		<div class="hero-carousel">
+			<div class="carousel-slide active">
+				<div class="hero-content">
+					<h1 class="hero-title">¡Bienvenidos a Nuestra PetShop!</h1>
+					<p class="hero-subtitle">Tu mascota merece lo mejor, nosotros te lo ofrecemos</p>
+				</div>
+				<img src="assets/IMG/carrusel1 (2).jpg" alt="Perro feliz" class="img-hero">
+				<div class="hero-overlay"></div>
+			</div>
+			<div class="carousel-slide">
+				<div class="hero-content">
+					<h1 class="hero-title">Productos de Calidad </h1>
+					<p class="hero-subtitle">Encuentra todo lo que tu mascota necesita</p>
+				</div>
+				<img src="assets/IMG/carrusel2.jpg" alt="Gato jugando" class="img-hero">
+				<div class="hero-overlay"></div>
+			</div>
+			<div class="carousel-slide">
+				<div class="hero-content">
+					<h1 class="hero-title">Ofertas Especiales </h1>
+					<p class="hero-subtitle">Descuentos exclusivos cada semana</p>
+				</div>
+				<img src="assets/IMG/carrusel3.jpg" alt="Mascotas felices" class="img-hero">
+				<div class="hero-overlay"></div>
+			</div>
+		</div>
+		<div class="carousel-controls">
+			<button class="carousel-btn prev-btn" onclick="prevSlide()">
+				<i class="fas fa-chevron-left"></i>
+			</button>
+			<button class="carousel-btn next-btn" onclick="nextSlide()">
+				<i class="fas fa-chevron-right"></i>
+			</button>
+		</div>
+		<div class="carousel-indicators">
+			<span class="indicator active" onclick="goToSlide(0)"></span>
+			<span class="indicator" onclick="goToSlide(1)"></span>
+			<span class="indicator" onclick="goToSlide(2)"></span>
+		</div>
+	</div>
+
+	<!-- Sección de Beneficios -->
+	<section class="benefits-section" id="benefitsSection" style="display: none;">
+		<div class="benefits-grid">
+			<div class="benefit-card">
+				<div class="benefit-icon">
+					<i class="fas fa-shield-heart"></i>
+				</div>
+				<h3 class="benefit-title">Calidad Garantizada</h3>
+				<p>Productos certificados y seguros</p>
+			</div>
+			<div class="benefit-card">
+				<div class="benefit-icon">
+					<i class="fas fa-headset"></i>
+				</div>
+				<h3 class="benefit-title">Atención 24/7</h3>
+				<p>Siempre disponibles para ayudarte</p>
+			</div>
+			<div class="benefit-card">
+				<div class="benefit-icon">
+					<i class="fas fa-percent"></i>
+				</div>
+				<h3 class="benefit-title">Ofertas Exclusivas</h3>
+				<p>Descuentos especiales cada semana</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- Filtros Modernos -->
+	<section class="filters-section" id="filtersSection" style="display: none;">
+		<div class="filters-container">
+			<div class="filter-group">
+				<label class="filter-label">
+					<i class="fas fa-filter"></i> Categoría
+				</label>
+				<select class="filter-select" id="categoryFilter">
+					<option value="all">Todas las categorías</option>
+					<option value="food">Alimentos</option>
+					<option value="accessories">Accesorios</option>
+					<option value="medicine">Medicamentos</option>
+				</select>
+			</div>
+
+			<div class="filter-group">
+				<label class="filter-label">
+					<i class="fas fa-sort-amount-down"></i> Ordenar por
+				</label>
+				<select class="filter-select" id="sortFilter">
+					<option value="featured">Destacados</option>
+					<option value="price-low">Precio: Menor a Mayor</option>
+					<option value="price-high">Precio: Mayor a Menor</option>
+					<option value="name">Nombre A-Z</option>
+				</select>
+			</div>
+
+			<div class="filtro-group">
+				<button id="filtrar" class="btn-filtrar">
+					<i class="fas fa-search"></i> Buscar productos
+				</button>
+			</div>
+		</div>
+	</section>
+
+	<!-- Productos Destacados -->
+	<section class="featured-section" id="featuredSection" style="display: none;">
+		<div class="section-header">
+			<h2 class="section-title">🌟 Productos Destacados</h2>
+			<p class="section-subtitle">Los favoritos de nuestros clientes</p>
+		</div>
+		<div class="products-grid" id="featuredProducts"></div>
+	</section>
+
+	<!-- Todos los Productos -->
+	<section class="featured-section" id="allProductsSection" style="display: none;">
+		<div class="section-header">
+			<h2 class="section-title">🛍️ Todos Nuestros Productos</h2>
+			<p class="section-subtitle">Explora nuestro catálogo completo</p>
+		</div>
+		<div class="products-grid" id="allProducts"></div>
+	</section>
+
+	<!-- Carrito Lateral Mejorado -->
+	<div class="cart-overlay" id="cartOverlay"></div>
+	<div class="cart-sidebar" id="cartSidebar">
+		<div class="cart-header">
+			<h2><i class="fas fa-shopping-bag"></i> Mi Carrito</h2>
+			<button class="close-cart" id="closeCart">
+				<i class="fas fa-times"></i>
+			</button>
+		</div>
+		<div class="cart-items" id="cartItems">
+			<div class="empty-cart-message">
+				<div class="empty-cart-icon">
+					<i class="fas fa-shopping-cart"></i>
+				</div>
+				<p>Tu carrito está vacío</p>
+				<p style="font-size: 0.9rem; color: #999;">¡Agrega productos para empezar!</p>
+			</div>
+		</div>
+		<div class="cart-footer">
+			<div class="cart-summary">
+				<div class="summary-row">
+					<span>Subtotal:</span>
+					<span id="subtotal">$0.00</span>
+				</div>
+				<div class="summary-row total">
+					<span>Total:</span>
+					<span id="total">$0.00</span>
+				</div>
+			</div>
+			<button class="checkout-btn" id="checkoutBtn">
+				<i class="fas fa-credit-card"></i> Proceder al Pago
+			</button>
+		</div>
+	</div>
+	<!-- Footer -->
+	

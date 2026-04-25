@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { PerfilVeterinario } from '../../perfiles-veterinarios/entities/perfil-veterinario.entity';
 import { Emergencia } from '../../emergencias/entities/emergencia.entity';
@@ -20,7 +20,7 @@ export class Role {
   description: string;
 
   @ApiProperty({ description: 'Usuarios con este rol', type: () => [User] })
-  @ManyToMany(() => User, user => user.roles)
+  @OneToMany(() => User, user => user.role)
   users: User[];
 
   @ApiProperty({ description: 'Perfiles veterinarios con este rol', type: () => [PerfilVeterinario] })
