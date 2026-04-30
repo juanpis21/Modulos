@@ -1,0 +1,334 @@
+<!-- Font Awesome CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- Navbar (igual que inicio) -->
+<nav class="navbar">
+	<div class="navbar-container">
+		<!-- Logo + Nombre (izquierda) -->
+		<div class="brand-section">
+			<img src="assets/IMG/logo.png" alt="HelpYourPet" class="logo-img">
+			<span class="brand-name">HelpYourPet</span>
+		</div>
+
+		<!-- Botones derecha -->
+		<div class="nav-right-section">
+			<!-- Carrito -->
+			<button class="cart-nav-button" (click)="toggleCarrito()">
+				<i class="fas fa-shopping-cart"></i>
+				<span class="cart-badge" *ngIf="carrito.length > 0">{{ carrito.length }}</span>
+			</button>
+
+			<!-- Botón de perfil -->
+			<div class="profile-section">
+				<button class="profile-btn" (click)="profileMenuAbierto = !profileMenuAbierto"
+					aria-label="Menú de perfil">
+					<img src="assets/images/Default.png" alt="Perfil" class="profile-avatar">
+					<i class="fas fa-chevron-down profile-arrow"></i>
+				</button>
+
+				<!-- Menú desplegable de perfil -->
+				<div class="profile-dropdown" [class.active]="profileMenuAbierto">
+					<div class="dropdown-header">
+						<img src="assets/images/Default.png" alt="Perfil" class="dropdown-avatar">
+						<div class="dropdown-user-info">
+							<span class="dropdown-username">Usuario</span>
+						</div>
+					</div>
+					<nav class="dropdown-nav">
+						<a routerLink="/inicio" class="dropdown-item" (click)="profileMenuAbierto = false">
+							<i class="fas fa-home"></i>
+							<span>Inicio</span>
+						</a>
+						<a routerLink="/perfil-usuario" class="dropdown-item" (click)="profileMenuAbierto = false">
+							<i class="fas fa-user"></i>
+							<span>Mi Perfil</span>
+						</a>
+						<a routerLink="/adopcion" class="dropdown-item" (click)="profileMenuAbierto = false">
+							<i class="fas fa-heart"></i>
+							<span>Publicaciones</span>
+						</a>
+						<a routerLink="/sobre-nosotros" class="dropdown-item" (click)="profileMenuAbierto = false">
+							<i class="fas fa-users"></i>
+							<span>Sobre Nosotros</span>
+						</a>
+						<div class="dropdown-divider"></div>
+						<a routerLink="/login" class="dropdown-item logout" (click)="profileMenuAbierto = false">
+							<i class="fas fa-sign-out-alt"></i>
+							<span>Cerrar Sesión</span>
+						</a>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</div>
+</nav>
+
+
+
+<!-- Sección de Selección de Tienda -->
+<section class="store-selection-section" id="storeSelection" *ngIf="vista === 'tiendas'">
+	<div class="store-selection-container">
+		<div class="store-selection-header">
+			<h1 class="store-selection-title">
+				<i class="fas fa-store"></i> Selecciona tu Tienda Preferida
+			</h1>
+			<p class="store-selection-subtitle">Elige la tienda más cercana para ver sus productos disponibles</p>
+		</div>
+		<div class="stores-grid" id="storesGrid">
+			<div class="store-card" *ngFor="let tienda of tiendas" (click)="seleccionarTienda(tienda)">
+				<div class="store-card-image">
+					<i class="fas fa-store-alt"></i>
+				</div>
+				<div class="store-card-content">
+					<h3 class="store-card-name">{{ tienda.nombre || 'Tienda' }}</h3>
+					<div class="store-card-info">
+						<div class="store-info-item">
+							<i class="fas fa-map-marker-alt"></i>
+							<span>{{ tienda.direccion || 'Dirección no disponible' }}</span>
+						</div>
+						<div class="store-info-item">
+							<i class="fas fa-phone"></i>
+							<span>{{ tienda.telefono || 'Teléfono no disponible' }}</span>
+						</div>
+						<div class="store-info-item">
+							<i class="fas fa-clock"></i>
+							<span>{{ tienda.horario || 'Horario no disponible' }}</span>
+						</div>
+					</div>
+					<button class="store-card-button">
+						<i class="fas fa-shopping-bag"></i>
+						Ver Productos
+					</button>
+				</div>
+			</div>
+			<div *ngIf="tiendas.length === 0" style="grid-column: 1/-1; text-align: center; padding: 40px;">
+				<i class="fas fa-store-slash"
+					style="font-size: 3rem; color: var(--text-secondary); margin-bottom: 20px;"></i>
+				<h3 style="color: var(--text-color);">No hay tiendas disponibles</h3>
+				<p style="color: var(--text-secondary);">Por favor, contacta al administrador</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- Botón para volver a selección de tiendas -->
+<button class="btn-back-to-stores" id="btnBackToStores" *ngIf="vista === 'productos'" (click)="volverATiendas()">
+	<i class="fas fa-store"></i>
+	<span>Ver Tiendas</span>
+</button>
+
+<!-- Hero Section  -->
+<div class="hero-section" id="inicio" *ngIf="vista === 'productos'">
+	<div class="hero-carousel">
+		<div class="carousel-slide" [class.active]="slideActual === 0">
+			<div class="hero-content">
+				<h1 class="hero-title">¡Bienvenidos a Nuestra PetShop!</h1>
+				<p class="hero-subtitle">Tu mascota merece lo mejor, nosotros te lo ofrecemos</p>
+			</div>
+			<img src="assets/IMG/carrusel1 (2).jpg" alt="Perro feliz" class="img-hero">
+			<div class="hero-overlay"></div>
+		</div>
+		<div class="carousel-slide" [class.active]="slideActual === 1">
+			<div class="hero-content">
+				<h1 class="hero-title">Productos de Calidad </h1>
+				<p class="hero-subtitle">Encuentra todo lo que tu mascota necesita</p>
+			</div>
+			<img src="assets/IMG/carrusel2.jpg" alt="Gato jugando" class="img-hero">
+			<div class="hero-overlay"></div>
+		</div>
+		<div class="carousel-slide" [class.active]="slideActual === 2">
+			<div class="hero-content">
+				<h1 class="hero-title">Ofertas Especiales </h1>
+				<p class="hero-subtitle">Descuentos exclusivos cada semana</p>
+			</div>
+			<img src="assets/IMG/carrusel3.jpg" alt="Mascotas felices" class="img-hero">
+			<div class="hero-overlay"></div>
+		</div>
+	</div>
+	<div class="carousel-controls">
+		<button class="carousel-btn prev-btn" (click)="anteriorSlide()">
+			<i class="fas fa-chevron-left"></i>
+		</button>
+		<button class="carousel-btn next-btn" (click)="siguienteSlide()">
+			<i class="fas fa-chevron-right"></i>
+		</button>
+	</div>
+	<div class="carousel-indicators">
+		<span class="indicator" [class.active]="slideActual === 0" (click)="irASlide(0)"></span>
+		<span class="indicator" [class.active]="slideActual === 1" (click)="irASlide(1)"></span>
+		<span class="indicator" [class.active]="slideActual === 2" (click)="irASlide(2)"></span>
+	</div>
+</div>
+
+<!-- Sección de Beneficios -->
+<section class="benefits-section" id="benefitsSection" *ngIf="vista === 'productos'">
+	<div class="benefits-grid">
+		<div class="benefit-card">
+			<div class="benefit-icon">
+				<i class="fas fa-shield-heart"></i>
+			</div>
+			<h3 class="benefit-title">Calidad Garantizada</h3>
+			<p>Productos certificados y seguros</p>
+		</div>
+		<div class="benefit-card">
+			<div class="benefit-icon">
+				<i class="fas fa-headset"></i>
+			</div>
+			<h3 class="benefit-title">Atención 24/7</h3>
+			<p>Siempre disponibles para ayudarte</p>
+		</div>
+		<div class="benefit-card">
+			<div class="benefit-icon">
+				<i class="fas fa-percent"></i>
+			</div>
+			<h3 class="benefit-title">Ofertas Exclusivas</h3>
+			<p>Descuentos especiales cada semana</p>
+		</div>
+	</div>
+</section>
+
+<!-- Filtros Modernos -->
+<section class="filters-section" id="filtersSection" *ngIf="vista === 'productos'">
+	<div class="filters-container">
+		<div class="filter-group">
+			<label class="filter-label">
+				<i class="fas fa-filter"></i> Categoría
+			</label>
+			<select class="filter-select" id="categoryFilter" [(ngModel)]="filtroCategoria">
+				<option value="all">Todas las categorías</option>
+				<option value="food">Alimentos</option>
+				<option value="accessories">Accesorios</option>
+				<option value="medicine">Medicamentos</option>
+			</select>
+		</div>
+
+		<div class="filter-group">
+			<label class="filter-label">
+				<i class="fas fa-sort-amount-down"></i> Ordenar por
+			</label>
+			<select class="filter-select" id="sortFilter" [(ngModel)]="filtroOrden">
+				<option value="featured">Destacados</option>
+				<option value="price-low">Precio: Menor a Mayor</option>
+				<option value="price-high">Precio: Mayor a Menor</option>
+				<option value="name">Nombre A-Z</option>
+			</select>
+		</div>
+
+		<div class="filtro-group">
+			<button id="filtrar" class="btn-filtrar" (click)="aplicarFiltros()">
+				<i class="fas fa-search"></i> Buscar productos
+			</button>
+		</div>
+	</div>
+</section>
+
+<!-- Productos Destacados -->
+<section class="featured-section" id="featuredSection" *ngIf="vista === 'productos'">
+	<div class="section-header">
+		<h2 class="section-title">🌟 Productos Destacados</h2>
+		<p class="section-subtitle">Los favoritos de nuestros clientes</p>
+	</div>
+	<div class="products-grid" id="featuredProducts">
+		<div class="product-card" *ngFor="let producto of productos | slice:0:3">
+			<div class="product-image">
+				<img [src]="producto.imagen || 'assets/IMG/default.png'" [alt]="producto.nombre">
+			</div>
+			<div class="product-info">
+				<div class="product-category">{{ producto.categoria || 'General' }}</div>
+				<h3 class="product-name">{{ producto.nombre }}</h3>
+				<p class="product-description">{{ producto.descripcion }}</p>
+				<div class="product-bottom">
+					<span class="product-price">${{ producto.precio }}</span>
+					<button class="add-to-cart" (click)="agregarAlCarrito(producto)">
+						<i class="fas fa-cart-plus"></i> Agregar
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- Todos los Productos -->
+<section class="featured-section" id="allProductsSection" *ngIf="vista === 'productos'">
+	<div class="section-header">
+		<h2 class="section-title">🛍️ Todos Nuestros Productos</h2>
+		<p class="section-subtitle">Explora nuestro catálogo completo</p>
+	</div>
+	<div class="products-grid" id="allProducts">
+		<div class="product-card" *ngFor="let producto of productos">
+			<div class="product-image">
+				<img [src]="producto.imagen || 'assets/IMG/default.png'" [alt]="producto.nombre">
+			</div>
+			<div class="product-info">
+				<div class="product-category">{{ producto.categoria || 'General' }}</div>
+				<h3 class="product-name">{{ producto.nombre }}</h3>
+				<p class="product-description">{{ producto.descripcion }}</p>
+				<div class="product-bottom">
+					<span class="product-price">${{ producto.precio }}</span>
+					<button class="add-to-cart" (click)="agregarAlCarrito(producto)">
+						<i class="fas fa-cart-plus"></i> Agregar
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- Carrito Lateral Mejorado -->
+<div class="cart-overlay" id="cartOverlay" [class.active]="carritoVisible" (click)="toggleCarrito()"></div>
+<div class="cart-sidebar" id="cartSidebar" [class.active]="carritoVisible">
+	<div class="cart-header">
+		<h2><i class="fas fa-shopping-bag"></i> Mi Carrito</h2>
+		<button class="close-cart" id="closeCart" (click)="toggleCarrito()">
+			<i class="fas fa-times"></i>
+		</button>
+	</div>
+	<div class="cart-items" id="cartItems">
+		<div *ngIf="carrito.length === 0" class="empty-cart-message">
+			<div class="empty-cart-icon">
+				<i class="fas fa-shopping-cart"></i>
+			</div>
+			<p>Tu carrito está vacío</p>
+			<p style="font-size: 0.9rem; color: #999;">¡Agrega productos para empezar!</p>
+		</div>
+		<div class="cart-item" *ngFor="let item of carrito">
+			<div class="cart-item-image">
+				<img [src]="item.imagen || 'assets/IMG/default.png'" [alt]="item.nombre">
+			</div>
+			<div class="cart-item-details">
+				<div class="cart-item-name">{{ item.nombre }}</div>
+				<div class="cart-item-price">${{ item.precio }}</div>
+				<div class="cart-item-controls">
+					<button class="quantity-btn" (click)="actualizarCantidad(item.id, -1)">-</button>
+					<span class="quantity-display">{{ item.quantity }}</span>
+					<button class="quantity-btn" (click)="actualizarCantidad(item.id, 1)">+</button>
+					<button class="remove-item" (click)="eliminarDelCarrito(item.id)">
+						<i class="fas fa-trash"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="cart-footer">
+		<div class="cart-summary">
+			<div class="summary-row">
+				<span>Subtotal:</span>
+				<span id="subtotal">${{ obtenerTotal() }}</span>
+			</div>
+			<div class="summary-row total">
+				<span>Total:</span>
+				<span id="total">${{ obtenerTotal() }}</span>
+			</div>
+		</div>
+		<button class="checkout-btn" id="checkoutBtn" (click)="procederPago()">
+			<i class="fas fa-credit-card"></i> Proceder al Pago
+		</button>
+	</div>
+</div>
+<!-- Footer -->
+
+<!-- BOTÓN MODO OSCURO (Esquina inferior izquierda - igual que inicio) -->
+<button class="theme-toggle-bottom" (click)="toggleModoOscuro()"
+	[attr.aria-label]="modoOscuro ? 'Activar modo claro' : 'Activar modo oscuro'" [class.dark-mode]="modoOscuro">
+	<i class="fas" [ngClass]="modoOscuro ? 'fa-sun' : 'fa-moon'"></i>
+</button>

@@ -1,0 +1,35 @@
+<div class="perfil-container">
+
+    <h2>Mi Perfil</h2>
+
+    <div class="perfil-foto">
+        <img id="fotoPerfil" src="/img/default.png" alt="Foto de perfil">
+        <input type="file" id="inputFoto">
+        <button onclick="actualizarFotoPerfil()">Cambiar Foto</button>
+        <button onclick="eliminarFotoPerfil()">Eliminar Foto</button>
+    </div>
+
+    <div class="perfil-info">
+        <label>Nombres</label>
+        <input id="nombrePerfil">
+
+        <label>Apellidos</label>
+        <input id="apellidoPerfil">
+
+        <label>Email</label>
+        <input id="correoPerfil">
+
+        <label>Teléfono</label>
+        <input id="telefonoPerfil">
+
+        <label>Dirección</label>
+        <input id="direccionPerfil">
+
+        <button onclick="actualizarPerfil()">Guardar Cambios</button>
+    </div>
+
+    <h3>Cambiar Contraseña</h3>
+    <input id="passwordNueva" type="password" placeholder="Nueva contraseña">
+    <button onclick="actualizarPassword()">Cambiar Contraseña</button>
+
+</div>

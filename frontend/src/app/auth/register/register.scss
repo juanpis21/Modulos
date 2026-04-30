@@ -1,0 +1,601 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Fredoka:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Fredoka:wght@300..700&display=swap');
+
+.register-container {
+    display: flex;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Fredoka', 'Baloo 2', 'Fira Sans', sans-serif;
+    overflow: hidden;
+    position: relative;
+}
+
+/* ===== LADO IZQUIERDO - FORMULARIO ===== */
+.left {
+    width: 62%;
+    background: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 30px;
+    overflow: hidden;
+    animation: panelSlideFromLeft 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+/* ===== LADO DERECHO - IMAGEN ===== */
+.right {
+    width: 60%;
+    position: relative;
+    overflow: hidden;
+    animation: panelSlideFromRight 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.Mascotas {
+    position: absolute;
+    top: 65%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    max-height: 90%;
+    animation: imageFadeIn 1.2s ease-out 0.4s both;
+}
+
+/* overlay ENCIMA de la imagen */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(1, 51, 167, 0.547) 0%, rgba(100, 100, 100, 0) 30%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 2rem;
+    animation: overlayFadeIn 1.4s ease-out 0.3s both;
+}
+
+.overlay h1 {
+    color: #112055;
+    font-size: 4rem;
+    margin: 1%;
+    animation: titleReveal 0.8s ease-out 0.6s both;
+}
+
+.overlay p {
+    font-size: 1.4rem;
+    animation: titleReveal 0.8s ease-out 0.8s both;
+}
+
+/* ===== LINEA DIVISORA VERTICAL ===== */
+.vertical-divider {
+    width: 1px;
+    background-color: #ddd;
+    height: 100%;
+    margin: auto 0;
+    animation: dividerGrow 0.8s ease-out 0.5s both;
+}
+
+/* ===== FORMULARIO ===== */
+.form-box {
+    background: white;
+    padding: 20px;
+    border-radius: 25px;
+    width: 700px;
+    max-height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    animation: formBoxAppear 0.8s ease-out 0.5s both;
+}
+
+.titulo {
+    font-size: 35px;
+    font-weight: bold;
+    font-family: 'Baloo 2';
+    text-align: center;
+    color: #303854;
+    animation: elementFadeUp 0.6s ease-out 0.6s both;
+}
+
+/* ===== FORM GRID ===== */
+.form-grid {
+    display: grid;
+    grid-template-columns: 2fr 2fr;
+    gap: 13px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    animation: elementFadeUp 0.5s ease-out both;
+}
+
+// Staggered animation for each form group
+.form-group:nth-child(1) {
+    animation-delay: 0.7s;
+}
+
+.form-group:nth-child(2) {
+    animation-delay: 0.75s;
+}
+
+.form-group:nth-child(3) {
+    animation-delay: 0.8s;
+}
+
+.form-group:nth-child(4) {
+    animation-delay: 0.85s;
+}
+
+.form-group:nth-child(5) {
+    animation-delay: 0.9s;
+}
+
+.form-group:nth-child(6) {
+    animation-delay: 0.95s;
+}
+
+.form-group:nth-child(7) {
+    animation-delay: 1.0s;
+}
+
+.form-group:nth-child(8) {
+    animation-delay: 1.05s;
+}
+
+.form-group:nth-child(9) {
+    animation-delay: 1.1s;
+}
+
+/*COLUMNAS COMPLETAS*/
+.form-group.full-width {
+    grid-column: 2 / -2;
+}
+
+.form-group label {
+    font-family: 'Fira Sans';
+    margin-bottom: 5px;
+    color: #000000;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* ===== INPUTS Y SELECT ===== */
+.form-group input,
+.form-group select {
+    padding: 15px;
+    border-radius: 17px;
+    border: 1px solid #ccc;
+    outline: none;
+    transition: all 0.3s ease;
+    font-family: 'Fira Sans';
+}
+
+.form-group input:hover,
+.form-group select:hover {
+    border-color: #4ade80;
+    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.15);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: 2px solid rgba(11, 90, 58, 0.5);
+    box-shadow: 0 0 0 3px rgba(11, 90, 58, 0.1);
+}
+
+/* ===== PASSWORD CONTAINER ===== */
+.password-input-container {
+    position: relative;
+    width: 100%;
+}
+
+.password-input-container input {
+    width: 100%;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+    transition: color 0.3s ease;
+}
+
+.password-toggle:hover {
+    color: #258e48;
+}
+
+/* ===== BOTÓN REGISTRO ===== */
+.register-btn {
+    background: #258e48;
+    color: white;
+    padding: 12px 55px;
+    border: none;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Baloo 2';
+    display: block;
+    margin: 0 auto;
+    animation: elementFadeUp 0.6s ease-out 1.2s both;
+    position: relative;
+    overflow: hidden;
+}
+
+.register-btn:hover {
+    background: #187eb9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(24, 126, 185, 0.35);
+}
+
+.register-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(24, 126, 185, 0.25);
+}
+
+.register-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* ===== TERMINOS Y CONDICIONES ===== */
+.terms-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 15px 0;
+    font-family: 'Fira Sans';
+    animation: elementFadeUp 0.6s ease-out 1.15s both;
+}
+
+.terms-section input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #258e48;
+}
+
+.terms-section label {
+    font-size: 14px;
+    margin: 0;
+}
+
+.terms-section a {
+    color: #005999;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.terms-section a:hover {
+    text-decoration: underline;
+    color: #003d6b;
+}
+
+/* ===== DIVISOR ===== */
+.divider {
+    height: 1px;
+    background: #ddd;
+    margin: 10px 0;
+    animation: elementFadeUp 0.6s ease-out 1.25s both;
+}
+
+/* ===== TEXTO LOGIN ===== */
+.login-text {
+    text-align: center;
+    color: #3b82f6;
+    font-family: 'Fredoka';
+    animation: elementFadeUp 0.6s ease-out 1.3s both;
+}
+
+.login-text a {
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.login-text a:hover {
+    text-decoration: underline;
+    color: #1d4ed8;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.885);
+    color: white;
+    text-align: center;
+    padding: 0.18rem;
+    font-size: 0.9rem;
+    z-index: 10;
+    animation: footerSlideUp 0.6s ease-out 1.3s both;
+}
+
+/* ===== Modal con efecto blur mejorado ===== */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: rgba(245, 245, 245, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 2rem;
+    border-radius: 1rem;
+    width: 90%;
+    max-width: 600px;
+    font-family: 'Fira Sans', sans-serif;
+    position: relative;
+    max-height: 80vh;
+    overflow-y: auto;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    animation: modalSlideUp 0.4s ease-out;
+}
+
+.modal-content h2 {
+    font-family: 'Baloo 2';
+    color: #000;
+    margin-bottom: 15px;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #666;
+    transition: all 0.3s ease;
+}
+
+.close:hover {
+    color: #000;
+    transform: rotate(90deg);
+}
+
+/* ========================================
+   ANIMACIONES PROFESIONALES
+   ======================================== */
+
+/* Panel izquierdo (formulario) entra deslizándose desde la izquierda */
+@keyframes panelSlideFromLeft {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+/* Panel derecho (imagen) entra deslizándose desde la derecha */
+@keyframes panelSlideFromRight {
+    0% {
+        transform: translateX(100%);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+/* Imagen aparece suavemente */
+@keyframes imageFadeIn {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -45%) scale(0.95);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* Overlay aparece suavemente */
+@keyframes overlayFadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Texto aparece */
+@keyframes titleReveal {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Línea divisora crece */
+@keyframes dividerGrow {
+    0% {
+        transform: scaleY(0);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scaleY(1);
+        opacity: 1;
+    }
+}
+
+/* Form box aparece */
+@keyframes formBoxAppear {
+    0% {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Elementos entran desde abajo */
+@keyframes elementFadeUp {
+    0% {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Footer sube */
+@keyframes footerSlideUp {
+    0% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Modal aparece */
+@keyframes modalSlideUp {
+    0% {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .register-container {
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .right {
+        display: none !important;
+    }
+
+    .overlay {
+        display: none !important;
+    }
+
+    .vertical-divider {
+        display: none;
+    }
+
+    /* Form section below */
+    .left {
+        width: 100%;
+        padding: 20px 0 40px;
+        align-items: center;
+        overflow: visible;
+        order: 1;
+    }
+
+    .form-box {
+        width: 92%;
+        max-height: none;
+        overflow: visible;
+        padding: 20px 16px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .form-group.full-width {
+        grid-column: 1 / -1;
+    }
+
+    .titulo {
+        font-size: 26px;
+    }
+
+    .register-btn {
+        padding: 12px 40px;
+        width: 100%;
+    }
+
+    .footer {
+        position: relative;
+        order: 2;
+    }
+}
+
+@media (max-width: 480px) {
+    .right {
+        height: 160px;
+        min-height: 160px;
+    }
+
+    .overlay h1 {
+        font-size: 1.8rem;
+    }
+
+    .overlay p {
+        font-size: 0.85rem;
+    }
+
+    .form-box {
+        width: 95%;
+        padding: 16px 12px;
+    }
+
+    .titulo {
+        font-size: 22px;
+    }
+
+    .form-group input,
+    .form-group select {
+        padding: 12px;
+        font-size: 14px;
+    }
+}

@@ -1,0 +1,438 @@
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="brand-section">
+      <div class="logo">
+        <img src="assets/images/logo.png" alt="logo" class="logo">
+      </div>
+      <a routerLink="/inicio" style="text-decoration: none;">
+        <span class="brand-name">HelpYourPet</span>
+      </a>
+    </div>
+
+    <div class="botones-finales">
+      <div class="nav-buttons">
+        <button class="theme-toggle-btn" (click)="toggleDarkMode()" [attr.aria-label]="darkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'">
+          <i class="bi" [class.bi-sun-fill]="darkMode" [class.bi-moon-stars-fill]="!darkMode"></i>
+        </button>
+      </div>
+
+      <div class="hamburger-menu">
+        <button class="hamburger-btn" (click)="toggleSidebar()">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="menu-content" [class.active]="sidebarAbierto">
+          <div class="menu-item">
+            <a routerLink="/inicio" style="text-decoration: none;">
+              <i class="fas fa-home"></i>
+              <span>Inicio</span>
+            </a>
+          </div>
+          <div class="menu-item">
+            <a routerLink="/perfil-usuario" style="text-decoration: none;">
+              <i class="fas fa-user"></i>
+              <span>Mi Perfil</span>
+            </a>
+          </div>
+          <div class="menu-item">
+            <a routerLink="/tienda" style="text-decoration: none;">
+              <i class="fas fa-shop"></i>
+              <span>PetShop</span>
+            </a>
+          </div>
+          <div class="menu-item">
+            <a routerLink="/sobre-nosotros" style="text-decoration: none;">
+              <i class="fas fa-info-circle"></i>
+              <span>Sobre Nosotros</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Mensajes de alerta -->
+<div class="container mt-3" *ngIf="showAlert">
+  <div [class]="'alert alert-' + alertType + ' alert-dismissible fade show'" role="alert">
+    <i [class]="alertType === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle'"></i> 
+    <span>{{ alertMessage }}</span>
+    <button type="button" class="btn-close" (click)="cerrarAlerta()"></button>
+  </div>
+</div>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>Encuentra a tu compañero perfecto</h1>
+    <p>Miles de mascotas buscan un hogar amoroso. ¡Ayúdalas a encontrarlo!</p>
+    <div class="hero-buttons">
+      <button class="btn-hero btn-hero-primary" (click)="abrirModalAdopcion()">
+        <i class="fas fa-heart"></i> Dar en Adopción
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Estadísticas -->
+<section class="stats-section">
+  <div class="stats-container">
+    <div class="stat-item">
+      <div class="stat-number">{{ estadisticas.adoptadas || 127 }}</div>
+      <div class="stat-label">Mascotas Adoptadas</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">{{ estadisticas.esperando || 45 }}</div>
+      <div class="stat-label">Esperando Hogar</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">24/7</div>
+      <div class="stat-label">Atención Disponible</div>
+    </div>
+  </div>
+</section>
+
+<!-- Filtros -->
+<section class="filtros-section">
+  <div class="filtros-container">
+    <h2 class="filtros-title"><i class="fas fa-filter"></i> Encuentra tu mascota ideal</h2>
+    <div class="filtros-grid">
+      <div class="filtro-group">
+        <label class="filtro-label">
+          <i class="fas fa-paw"></i> Tipo de Mascota
+        </label>
+        <select id="tipo-mascota" class="filtro-select" [(ngModel)]="filtroTipo">
+          <option value="todos">Todas las mascotas</option>
+          <option value="perro">Perros</option>
+          <option value="gato">Gatos</option>
+          <option value="otro">Otros</option>
+        </select>
+      </div>
+
+      <div class="filtro-group">
+        <label class="filtro-label">
+          <i class="fas fa-ruler-vertical"></i> Tamaño
+        </label>
+        <select id="tamanio-mascota" class="filtro-select" [(ngModel)]="filtroTamano">
+          <option value="todos">Todos los tamaños</option>
+          <option value="pequeno">Pequeño</option>
+          <option value="mediano">Mediano</option>
+          <option value="grande">Grande</option>
+        </select>
+      </div>
+
+      <div class="filtro-group">
+        <button id="filtrar" class="btn-filtrar" (click)="filtrarMascotas()">
+          <i class="fas fa-search"></i> Buscar Mascotas
+        </button>
+      </div>
+      <div class="filtro-group" *ngIf="filtroTipo !== 'todos' || filtroTamano !== 'todos'">
+        <button class="btn-filtrar" style="background: #6c757d;" (click)="limpiarFiltros()">
+          <i class="fas fa-redo"></i> Limpiar Filtros
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MIS MASCOTAS EN ADOPCIÓN -->
+<section class="mascotas-section" *ngIf="misMascotas && misMascotas.length > 0">
+  <div class="mascotas-container">
+    <h2 class="titulo-seccion"><i class="fas fa-paw"></i> Mis Mascotas en Adopción</h2>
+    <div class="lista-mascotas">
+      <div class="card-mascota" *ngFor="let adopcion of misMascotas">
+        <div class="mascota-imagen-container">
+          <span class="badge-estado"
+            [ngClass]="adopcion.estado === 'DISPONIBLE' ? 'bg-success' : (adopcion.estado === 'EN_PROCESO' ? 'bg-warning text-dark' : 'bg-secondary')">
+            {{ adopcion.estado === 'DISPONIBLE' ? 'En espera' : (adopcion.estado === 'EN_PROCESO' ? 'En Proceso' : 'Adoptado') }}
+          </span>
+          <img [src]="adopcion.imagen || 'assets/images/default.jpg'" [alt]="adopcion.nombre"
+            onerror="this.src='assets/images/default.jpg'">
+        </div>
+        <div class="mascota-info">
+          <h3 class="mascota-nombre">{{ adopcion.nombre }}</h3>
+          <div class="mascota-detalles">
+            <span>{{ adopcion.tipo }}</span>
+            <span *ngIf="adopcion.tamano">{{ adopcion.tamano }}</span>
+            <span *ngIf="adopcion.edad">{{ adopcion.edad }} Año{{ adopcion.edad > 1 ? 's' : '' }}</span>
+          </div>
+          <h6 class="mascota-raza">Raza: {{ adopcion.raza }}</h6>
+          <p class="mascota-descripcion">{{ adopcion.descripcion.substring(0, 100) }}...</p>
+          <div class="mascota-acciones">
+            <button class="btn-ver-detalles" (click)="verDetalles(adopcion)">
+              <i class="fas fa-eye"></i> Ver Detalles
+            </button>
+            <div class="dropdown" style="display: inline-block;">
+              <button class="btn-cambiar-estado dropdown-toggle" type="button" (click)="adopcion.id && toggleDropdown(adopcion.id)">
+                <i class="fas fa-edit"></i> Estado
+              </button>
+              <ul class="dropdown-menu" *ngIf="dropdownAbierto === adopcion.id">
+                <li>
+                  <button class="dropdown-item" (click)="cambiarEstado(adopcion, 'DISPONIBLE')">
+                    <i class="fas fa-check-circle text-success"></i> En espera
+                  </button>
+                </li>
+                <li>
+                  <button class="dropdown-item" (click)="cambiarEstado(adopcion, 'EN_PROCESO')">
+                    <i class="fas fa-clock text-warning"></i> En Proceso
+                  </button>
+                </li>
+                <li>
+                  <button class="dropdown-item" (click)="cambiarEstado(adopcion, 'ADOPTADO')">
+                    <i class="fas fa-heart text-danger"></i> Adoptado
+                  </button>
+                </li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li>
+                  <button class="dropdown-item text-danger" (click)="eliminarMascota(adopcion)">
+                    <i class="fas fa-trash"></i> Eliminar
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MASCOTAS DISPONIBLES DE OTROS USUARIOS -->
+<section class="mascotas-section">
+  <div class="mascotas-container">
+    <h2 class="titulo-seccion">
+      <i class="fas fa-home"></i> Mascotas Disponibles para Adopción
+    </h2>
+    <div class="lista-mascotas" *ngIf="mascotasDisponibles && mascotasDisponibles.length > 0">
+      <div class="card-mascota" *ngFor="let adopcion of mascotasDisponibles">
+        <div class="mascota-imagen-container">
+          <span class="badge-estado bg-success">En espera</span>
+          <img [src]="adopcion.imagen || 'assets/images/default.jpg'" [alt]="adopcion.nombre"
+            onerror="this.src='assets/images/default.jpg'">
+        </div>
+        <div class="mascota-info">
+          <h3 class="mascota-nombre">{{ adopcion.nombre }}</h3>
+          <div class="mascota-detalles">
+            <span>{{ adopcion.tipo }}</span>
+            <span *ngIf="adopcion.tamano">{{ adopcion.tamano }}</span>
+            <span *ngIf="adopcion.edad">{{ adopcion.edad }} Año{{ adopcion.edad > 1 ? 's' : '' }}</span>
+          </div>
+          <h6 class="mascota-raza">Raza: {{ adopcion.raza }}</h6>
+          <p class="mascota-descripcion">{{ adopcion.descripcion.substring(0, 150) }}...</p>
+          <div class="mascota-acciones">
+            <button class="btn-ver-detalles" (click)="verDetalles(adopcion)">
+              <i class="fas fa-eye"></i> Ver Detalles
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="no-mascotas" *ngIf="!mascotasDisponibles || mascotasDisponibles.length === 0">
+      <i class="fas fa-sad-tear fa-3x"></i>
+      <p>No hay mascotas en este momento</p>
+    </div>
+  </div>
+</section>
+
+<!-- Modal para Dar en Adopción -->
+<div class="modal-overlay" *ngIf="showAdopcionModal" (click)="cerrarModalAdopcion()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2 class="modal-title">Dar una Mascota en Adopción</h2>
+      <button type="button" class="close-modal" (click)="cerrarModalAdopcion()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form class="formulario-grid">
+        <div class="grupo-formulario">
+          <label for="nombreMascota">Nombre de la mascota *</label>
+          <input type="text" id="nombreMascota" [(ngModel)]="nuevaMascota.nombre" required
+            placeholder="Ej: Max, Luna, Copito...">
+        </div>
+
+        <div class="grupo-formulario">
+          <label for="tipoMascota">Tipo de mascota *</label>
+          <select id="tipoMascota" [(ngModel)]="nuevaMascota.tipo" required>
+            <option value="">Selecciona un tipo</option>
+            <option value="Perro">Perro</option>
+            <option value="Gato">Gato</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+
+        <div class="grupo-formulario">
+          <label for="raza">Raza</label>
+          <input type="text" id="raza" [(ngModel)]="nuevaMascota.raza" placeholder="Ej: Labrador, Siamés, Mestizo...">
+        </div>
+
+        <div class="grupo-formulario">
+          <label for="edad">Edad (años) *</label>
+          <input type="number" id="edad" [(ngModel)]="nuevaMascota.edad" min="0" max="30" required placeholder="0">
+        </div>
+
+        <div class="grupo-formulario">
+          <label for="genero">Género</label>
+          <select id="genero" [(ngModel)]="nuevaMascota.genero">
+            <option value="">Seleccione...</option>
+            <option value="Macho">Macho</option>
+            <option value="Hembra">Hembra</option>
+          </select>
+        </div>
+
+        <div class="grupo-formulario">
+          <label for="tamano">Tamaño *</label>
+          <select id="tamano" [(ngModel)]="nuevaMascota.tamano" required>
+            <option value="">Seleccione...</option>
+            <option value="Pequeño">Pequeño</option>
+            <option value="Mediano">Mediano</option>
+            <option value="Grande">Grande</option>
+          </select>
+        </div>
+
+        <div class="grupo-formulario" style="grid-column: 1 / -1;">
+          <label for="descripcion">Descripción *</label>
+          <textarea id="descripcion" [(ngModel)]="nuevaMascota.descripcion" rows="2" required
+            placeholder="Cuéntanos sobre su personalidad, comportamiento, necesidades especiales..."></textarea>
+        </div>
+
+        <div class="grupo-formulario" style="grid-column: 1 / -1;">
+          <label for="archivoImagen">Foto de la mascota *</label>
+          <div class="file-input-wrapper">
+            <input type="file" id="archivoImagen" (change)="onFileSelected($event)"
+              accept="image/jpeg,image/jpg,image/png" class="file-input">
+            <label for="archivoImagen" class="file-input-label">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <span>Seleccionar imagen (JPG, PNG, JPEG) *</span>
+            </label>
+            <div class="file-name">{{ selectedFile ? selectedFile.name : 'Ningún archivo seleccionado' }}</div>
+          </div>
+          <small class="text-muted">* La imagen es obligatoria. Formato: JPG, PNG. Máx: 5MB</small>
+        </div>
+
+        <div class="grupo-formulario" style="grid-column: 1 / -1;">
+          <label for="contacto">Teléfono de contacto *</label>
+          <input type="tel" id="contacto" [(ngModel)]="nuevaMascota.contacto" required placeholder="Ej: 3201234567"
+            pattern="[0-9]{10}">
+          <small class="text-muted">10 dígitos</small>
+        </div>
+
+        <button type="button" class="boton-publicar" style="grid-column: 1 / -1;" (click)="publicarMascota()">
+          <i class="fas fa-paper-plane"></i> Publicar Mascota
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para Ver Detalles -->
+<div class="modal-overlay" *ngIf="showDetallesModal" (click)="cerrarModalDetalles()">
+  <div class="modal-dialog" (click)="$event.stopPropagation()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">
+          <i class="fas fa-paw"></i> Detalles de la Mascota
+        </h2>
+        <button type="button" class="close-modal" (click)="cerrarModalDetalles()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="modal-body" *ngIf="mascotaDetalles">
+        <!-- Imagen y nombre en la parte superior -->
+        <div class="imagen-superior-container">
+          <div class="imagen-cuadrada-pequena">
+            <img [src]="mascotaDetalles.imagen || 'assets/images/default.jpg'" [alt]="mascotaDetalles.nombre">
+          </div>
+
+          <div class="nombre-al-lado">
+            <h3>{{ mascotaDetalles.nombre }}</h3>
+            <span class="estado-mejorado">
+              <i class="fas fa-check-circle"></i>
+              <span>{{ mascotaDetalles.estadoTexto }}</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Grid de información compacta -->
+        <div class="info-grid-compacto">
+          <div class="info-item-compacto">
+            <strong>
+              <i class="fas fa-user-circle"></i>
+              Publicado por
+            </strong>
+            <span>{{ mascotaDetalles.publicador }}</span>
+          </div>
+
+          <div class="info-item-compacto">
+            <strong>
+              <i class="fas fa-tag"></i>
+              Tipo
+            </strong>
+            <span>{{ mascotaDetalles.tipo }}</span>
+          </div>
+
+          <div class="info-item-compacto">
+            <strong>
+              <i class="fas fa-paw"></i>
+              Raza
+            </strong>
+            <span>{{ mascotaDetalles.raza }}</span>
+          </div>
+
+          <div class="info-item-compacto">
+            <strong>
+              <i class="fas fa-birthday-cake"></i>
+              Edad
+            </strong>
+            <span>{{ mascotaDetalles.edad }} Año{{ mascotaDetalles.edad > 1 ? 's' : '' }}</span>
+          </div>
+
+          <div class="info-item-compacto">
+            <strong>
+              <i class="fas fa-venus-mars"></i>
+              Género
+            </strong>
+            <span>{{ mascotaDetalles.genero }}</span>
+          </div>
+
+          <div class="info-item-compacto">
+            <strong>
+              <i class="fas fa-ruler-vertical"></i>
+              Tamaño
+            </strong>
+            <span>{{ mascotaDetalles.tamano }}</span>
+          </div>
+
+          <div class="info-item-compacto contacto-item">
+            <strong>
+              <i class="fas fa-phone-alt"></i>
+              Contacto
+            </strong>
+            <span>{{ mascotaDetalles.contacto }}</span>
+          </div>
+        </div>
+
+        <!-- Descripción debajo del grid -->
+        <div class="descripcion-compacta">
+          <strong>
+            <i class="fas fa-align-left"></i>
+            Descripción
+          </strong>
+          <p>{{ mascotaDetalles.descripcion }}</p>
+        </div>
+
+        <!-- Información adicional en la parte inferior -->
+        <div class="info-adicional">
+          <div class="fecha-publicacion">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Publicado el: {{ mascotaDetalles.fechaPublicacion }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

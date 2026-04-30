@@ -1,0 +1,51 @@
+<!-- recovery.html -->
+<div class="recovery-container">
+
+   <div class="paws"></div>
+  <div class="recovery-card">
+
+    <!-- IZQUIERDA -->
+    <div class="left-side">
+      <div class="circle-bg">
+        <img src="assets/images/perrito-recuperar.png" alt="Mascota">
+      </div>
+    </div>
+
+    <!-- DERECHA -->
+    <div class="right-side">
+
+      <div class="mail-icon">✉️</div>
+
+      <h2>Recuperar contraseña</h2>
+
+      <p>
+        Te enviaremos un enlace a tu correo electrónico
+        para que puedas crear una nueva contraseña.
+      </p>
+
+      <div class="input-wrapper">
+        <input
+          type="email"
+          placeholder="Correo electrónico"
+          [(ngModel)]="email"
+        />
+        <span>📩</span>
+      </div>
+
+      <button (click)="onSubmit()" [disabled]="isLoading">
+        {{ isLoading ? 'Enviando...' : 'Enviar enlace' }}
+      </button>
+
+      <div *ngIf="message" class="message" [ngClass]="messageType">
+        {{ message }}
+      </div>
+
+      <!-- VOLVER -->
+      <p class="login-link">
+        ¿Recordaste tu contraseña? <a (click)="goToLogin()">Inicia sesión</a>
+      </p>
+
+    </div>
+
+  </div>
+</div>

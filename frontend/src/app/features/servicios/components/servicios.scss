@@ -1,0 +1,564 @@
+/* General Styles */
+body {
+    line-height: 1.6;
+}
+
+/* Navbar */
+.navbar {
+    background: linear-gradient(105deg, #d0defa, #30468f);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.brand-section {
+    display: flex;
+    align-items: center;
+    margin-right: auto;
+}
+
+.logo {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+.brand-name {
+    font-family: 'Baloo2', sans-serif;
+    font-weight: 700;
+    font-size: 2.8rem;
+    color: #0e0f2b;
+}
+
+.search-section {
+    margin-left: auto;
+    /* Empuja el buscador hacia la derecha */
+    margin-right: 20px;
+    /* Espacio entre buscador y botones */
+}
+
+
+/* Buscador */
+.search-container {
+    position: relative;
+    flex-grow: 1;
+    max-width: 300px;
+    margin: 0 10px;
+}
+
+.search-input {
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 8px 15px 8px 40px;
+    outline: none;
+    width: 100%;
+    transition: all 0.3s;
+}
+
+.search-input:focus {
+    border-color: var(--azul-oscuro);
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+}
+
+/* Resultados de búsqueda */
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    max-height: 300px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1000;
+}
+
+.search-results.active {
+    display: block;
+}
+
+.search-result-item {
+    padding: 10px 15px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+}
+
+.search-result-item:hover {
+    background-color: var(--azul-pastel);
+}
+
+.search-result-item h6 {
+    margin-bottom: 5px;
+    color: var(--azul-oscuro);
+}
+
+.search-result-item p {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-bottom: 0;
+}
+
+.highlight {
+    background-color: rgb(255, 251, 0);
+    font-weight: bold;
+    padding: 0 1px;
+    display: inline;
+    /* Asegura que no rompa el layout */
+    line-height: inherit;
+    /* Mantiene la línea de base */
+}
+
+
+.botones-finales {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.nav-button {
+    background: white;
+    border: none;
+    border-radius: 30px;
+    padding: 8px 15px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+}
+
+.nav-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+
+.btn-calendar {
+    background: #f0c1e0;
+    color: rgb(0, 0, 0);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+}
+
+.btn-calendar:hover {
+    background: #e08ac4;
+    transform: scale(1.1);
+}
+
+/* Calendario flotante */
+.calendar-popup {
+    position: absolute;
+    right: 0;
+    top: 50px;
+    background: linear-gradient(135deg, #fdeef9);
+
+
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    z-index: 1000;
+    display: none;
+    width: 350px;
+}
+
+.calendar-popup.active {
+    display: block;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.calendar-title {
+    font-weight: 600;
+    color: #1f3b42;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.calendar-day-header {
+    text-align: center;
+    font-weight: 600;
+    color: #3b707e;
+    padding: 5px;
+}
+
+.calendar-day {
+    text-align: center;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.calendar-day:hover {
+    background: var(--azul-pastel);
+}
+
+.current-day {
+    background: #428da0;
+    color: white;
+}
+
+.other-month {
+    color: #aaa;
+}
+
+.btn-agendar {
+    background: var(--verde-oscuro);
+    border: none;
+}
+
+.btn-agendar:hover {
+    background: #048348;
+}
+
+.btn-registro {
+    background: #f6b9f8;
+    color: rgb(0, 0, 0) !important;
+}
+
+.btn-registro:hover {
+    background: #ff9fcf;
+}
+
+/* Menú Hamburguesa */
+.hamburger-menu {
+    position: relative;
+}
+
+.hamburger-btn {
+    background: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    font-size: 1.2rem;
+    margin-left: 10px;
+}
+
+.menu-content {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    width: 250px;
+    padding: 15px;
+    z-index: 100;
+    display: none;
+}
+
+.menu-content.active {
+    display: block;
+}
+
+.menu-item {
+    padding: 10px 15px;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s;
+    cursor: pointer;
+    text-decoration: none;
+    color: #333;
+}
+
+.menu-item:hover {
+    background: var(--azul-pastel);
+    padding-left: 20px;
+}
+
+.menu-divider {
+    height: 1px;
+    background: #eee;
+    margin: 10px 0;
+}
+
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1583337130417-3346a1be7dee');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: white;
+    padding: 150px 0;
+    margin-bottom: 50px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Section Titles */
+.section-title {
+    position: relative;
+    margin-bottom: 50px !important;
+    font-weight: 700 !important;
+    color: #333;
+    font-family: 'Baloo2',sans-serif;
+}
+
+.section-title:after {
+    content: "";
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background-color: #0d6efd;
+    font-family: 'Baloo2',sans-serif;
+
+}
+
+/* Service Cards */
+.service-card {
+    transition: all 0.3s ease;
+    height: 100%;
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.service-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.card-title {
+    font-weight: 600;
+    font-family: 'fredoka',sans-serif;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.service-card ul {
+    padding-left: 20px;
+}
+
+.service-card ul li {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    font-family: 'fira sans',sans-serif;
+}
+
+.card-text{
+    font-family: 'fredoka',sans-serif;
+}
+
+
+/* Background Colors for Cards */
+.bg-soft-blue {
+    background-color: #e6f0fd;
+    border-left: 4px solid #0d6efd;
+}
+
+.bg-soft-green {
+    background-color: #e6f7ed;
+    border-left: 4px solid #198754;
+}
+
+.bg-soft-purple {
+    background-color: #f0e6fd;
+    border-left: 4px solid #6f42c1;
+}
+
+.bg-soft-orange {
+    background-color: #fef0e6;
+    border-left: 4px solid #fd7e14;
+}
+
+.bg-soft-red {
+    background-color: #fee6e6;
+    border-left: 4px solid #dc3545;
+}
+
+.bg-soft-pink {
+    background-color: #fee6f4;
+    border-left: 4px solid #d63384;
+}
+
+.bg-soft-yellow {
+    background-color: #fff8e6;
+    border-left: 4px solid #ffc107;
+}
+
+.bg-soft-teal {
+    background-color: #e6faf7;
+    border-left: 4px solid #20c997;
+}
+
+/* Price Badge */
+.price-badge {
+    display: inline-block;
+    background-color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: 600;
+    margin-top: 15px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Footer */
+.footer {
+    background: linear-gradient(135deg, #2c3e50, #1a252f);
+    color: white;
+    position: relative;
+    padding: 2rem 0;
+}
+
+.footer-logo {
+    height: 90px;
+    margin-right: 200px;
+    display: inline-block;
+    vertical-align: middle;
+    transform: translateY(1px);
+}
+
+.row {
+    justify-content: right;
+    margin-left: 40px;
+}
+
+.footer-brand {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    color: white;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.footer-lema {
+    padding: 0;
+    font-style: italic;
+    opacity: 0.8;
+    margin-bottom: 20px;
+}
+
+footer p {
+    justify-content: center;
+}
+
+.footer-title {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    position: relative;
+    padding-bottom: 1px;
+}
+
+
+.footer-links a {
+    display: block;
+    color: #ccc;
+    margin-bottom: 10px;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+/*contacto*/
+.footer .col-lg-3 {
+    margin-top: -60px;
+    /* Sube el bloque (ajusta este valor) */
+}
+
+.footer-links a:hover {
+    color: white;
+    padding-left: 5px;
+}
+
+.social-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: white;
+    margin-right: 10px;
+    transition: all 0.3s;
+}
+
+.social-links a:hover {
+    background: var(--rosa-fuerte);
+    transform: translateY(-3px);
+}
+
+.copyright {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 20px;
+    margin-top: 40px;
+    text-align: center;
+    opacity: 0.7;
+}
+
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 80px 0;
+    }
+
+    .section-title:after {
+        bottom: -10px;
+    }
+}

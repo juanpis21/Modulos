@@ -1,0 +1,156 @@
+
+	<div class="register-container">
+
+    <!-- LADO IZQUIERDO -->
+    <div class="left">
+
+        <div class="form-box">
+
+            <div class="titulo">Crear Cuenta</div>
+
+            <form (submit)="onSubmit($event)">
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="nombres">Nombres</label>
+                        <input type="text" id="nombres" name="nombres" required [(ngModel)]="formData.nombres" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="apellidos">Apellidos</label>
+                        <input type="text" id="apellidos" name="apellidos" required [(ngModel)]="formData.apellidos" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="correo">Correo</label>
+                        <input type="email" id="correo" name="correo" required [(ngModel)]="formData.correo" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tipoDocumento">Tipo de Documento</label>
+                        <select id="tipoDocumento" name="tipoDocumento" required [(ngModel)]="formData.tipoDocumento" (change)="onDocumentTypeChange()">
+                            <option value="">Selecciona tu tipo de documento</option>
+                            <option value="Cédula">Cédula</option>
+                            <option value="DNI">DNI</option>
+                            <option value="Pasaporte">Pasaporte</option>
+                            <option value="Tarjeta de Identidad">Tarjeta de Identidad</option>
+                            <option value="Cédula de Extranjería">Cédula de Extranjería</option>
+                            <option value="Permiso de Residencia">Permiso de Residencia</option>
+                            <option value="Documento Nacional">Documento Nacional</option>
+                            <option value="Licencia de Conducir">Licencia de Conducir</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="numDocumento">N° Documento</label>
+                        <input type="text" id="numDocumento" name="numDocumento" required [(ngModel)]="formData.numDocumento" [placeholder]="placeholderDoc" [pattern]="patternDoc" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefono">Teléfono</label>
+                        <input type="tel" id="telefono" name="telefono" required [(ngModel)]="formData.celular"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="direccion">Direccion</label>
+                        <input type="text" id="direccion" name="direccion" required [(ngModel)]="formData.direccion" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edad">Edad</label>
+                        <input type="number" id="edad" name="edad" required min="18" max="120"
+                            placeholder="Solo mayores de 18 años" [(ngModel)]="formData.edad" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Contraseña</label>
+                        <div class="password-input-container">
+                            <input [type]="showPassword ? 'text' : 'password'" id="password" name="password" required [(ngModel)]="formData.password" />
+                            <i class="fas password-toggle" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"
+                                (click)="togglePasswordVisibility('password')"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="confirmPassword">Confirmar Contraseña</label>
+                        <div class="password-input-container">
+                            <input [type]="showConfirmPassword ? 'text' : 'password'" id="confirmPassword" name="confirmPassword" required [(ngModel)]="formData.confirmPassword" />
+                            <i class="fas password-toggle" [ngClass]="showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'"
+                                (click)="togglePasswordVisibility('confirm')"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="terms-section">
+                    <input type="checkbox" id="acepto" name="acepto" required [(ngModel)]="formData.acepto">
+                    <label for="acepto">
+                        Acepto los <a href="#" id="open-terms" (click)="openTermsModal($event)">Términos y Condiciones</a>
+                    </label>
+                </div>
+
+                <button type="submit" class="register-btn" [disabled]="isSubmitting">
+                    <i *ngIf="isSubmitting" class="fas fa-spinner fa-spin me-2"></i>
+                    {{ isSubmitting ? 'Registrando...' : 'Registrarse' }}
+                </button>
+
+                <div class="divider"></div>
+
+                <div class="login-text">
+                    ¿Ya tienes cuenta? <a routerLink="/" id="show-register">Inicia sesión</a>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- LINEA DIVISORA -->
+    <div class="vertical-divider"></div>
+
+    <!-- LADO DERECHO -->
+    <div class="right">
+
+        <!-- IMAGEN -->
+        <img src="assets/images/cute-animals-group-white-background.jpg" class="Mascotas">
+
+        <!-- TEXTO ENCIMA -->
+        <div class="overlay">
+            <h1>Helpyourpet</h1>
+            <p>Únete a nuestra comunidad</p>
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <p>&copy; 2024 Helpyourpet - Todos los derechos reservados</p>
+    </div>
+
+</div>
+
+    <!-- Modal de Términos y Condiciones -->
+    <div id="termsModal" class="modal" [style.display]="isTermsModalOpen ? 'flex' : 'none'" (click)="closeTermsModal()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <span class="close" (click)="closeTermsModal()">&times;</span>
+            <h2>Términos y Condiciones</h2>
+            <p>
+                Al registrarte en nuestra plataforma aceptas que tus datos serán utilizados
+                únicamente para la creación y gestión de tu cuenta. No compartiremos tu información
+                con terceros sin tu consentimiento. Debes proporcionar datos reales y mantenerlos actualizados.
+            </p>
+            <p>
+                El incumplimiento de estos términos puede resultar en la suspensión de tu cuenta.
+                Nos reservamos el derecho de actualizar estos términos en cualquier momento,
+                notificando a los usuarios registrados.
+            </p>
+            <p>
+                Si no estás de acuerdo con estos términos, por favor no completes el registro.
+            </p>
+        </div>
+    </div>
+
+	
+	
+
+
